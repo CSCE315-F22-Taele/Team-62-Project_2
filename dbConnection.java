@@ -17,18 +17,18 @@ public class dbConnection {
 
     // Connecting to the database
     try {
-        conn = DriverManager.getConnection(dbConnectionString, dbSetup.user, dbSetup.pswd);
-     } catch (Exception e) {
-        e.printStackTrace();
-        System.err.println(e.getClass().getName()+": "+e.getMessage());
-        System.exit(0);
-     }
+			conn = DriverManager.getConnection(dbConnectionString, dbSetup.user, dbSetup.pswd);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getClass().getName()+": "+e.getMessage());
+			System.exit(0);
+    }
 
-     System.out.println("Opened database successfully");
+    System.out.println("Opened database successfully");
   }
 
-  public void sendCommand(String cmd){
-     try{
+  public void sendCommand(String cmd) {
+		try {
        // create a statement object
        Statement stmt = conn.createStatement();
 
