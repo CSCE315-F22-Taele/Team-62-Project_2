@@ -1,13 +1,16 @@
 import java.sql.*;
+import java.util.Arrays;
 
 /*
 CSCE 331
 9-28-2022 Lab
  */
+
+// MAKE SURE YOU ARE ON VPN or TAMU WIFI TO ACCESS DATABASE
+
 public class dbConnection {
   private Connection conn;
-  // MAKE SURE YOU ARE ON VPN or TAMU WIFI TO ACCESS DATABASE
-  public void connect() {
+    public void connect() {
     // Building the connection with your credentials
     String teamNumber = "62"; // Your team number
     String sectionNumber = "905"; // Your section number
@@ -27,37 +30,59 @@ public class dbConnection {
     System.out.println("Opened database successfully");
   }
 
-  public void sendCommand(String cmd) {
-		try {
-       // create a statement object
-       Statement stmt = conn.createStatement();
+    public void printResultSet(ResultSet result){
+      // You will need to output the results differently depeninding on which function you use
+      System.out.println("--------------------Query Results--------------------");
+      // while (result.next()) {
+      // System.out.println(result.getString("column_name"));
+      // }
+      // OR
+      System.out.println(result);
+  }
 
-       // Running a query
-       String sqlStatement = cmd;
-
-       // send statement to DBMS
-       // This executeQuery command is useful for data retrieval
-       ResultSet result = stmt.executeQuery(sqlStatement);
-       // OR
-       // This executeUpdate command is useful for updating data
-       // int result = stmt.executeUpdate(sqlStatement);
-
-       // OUTPUT
-       // You will need to output the results differently depeninding on which function you use
-       System.out.println("--------------------Query Results--------------------");
-       // while (result.next()) {
-       // System.out.println(result.getString("column_name"));
-       // }
-       // OR
-       System.out.println(result);
-     }
-     catch (Exception e){
-         e.printStackTrace();
-         System.err.println(e.getClass().getName()+": "+e.getMessage());
-     }
+    public ResultSet sendCommand(String cmd) throws SQLException{
+        ResultSet result;
+        // create a statement object
+        Statement stmt = conn.createStatement();
+        // Running a query
+        String sqlStatement = cmd;
+        // send statement to DBMS
+        // This executeQuery command is useful for data retrieval
+        result = stmt.executeQuery(sqlStatement);
+        return result;
    }
 
-   public void close(){
+    public int addProductToDatabase(String name, double price, int itemList[], double portionList[]){
+        int id = 0;
+        try{
+            ResultSet r = sendCommand("SELECT MAX(id) FROM productstest");
+            r.next();
+            System.out.println(r.getInt("max"));
+            id = r.getInt("max")+1;
+        } catch (Exception e){
+            e.printStackTrace();
+            System.err.println(e.getClass().getName()+": "+e.getMessage());
+            System.exit(0);
+        }
+
+        String cmd = "";
+        cmd += id + ", ";
+        cmd += "'" + name + "', ";
+        cmd += (price + ", ");
+        cmd += "'" + Arrays.toString(itemList).replace("[","{").replace("]","}") + "', ";
+        cmd += "'" + Arrays.toString(portionList).replace("[","{").replace("]","}") + "'";
+        String full = "INSERT INTO productstest VALUES (" + cmd + ")";
+        System.out.println(full);
+        try {
+            sendCommand(full);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return id;
+    }
+
+    public void close(){
       try {
         conn.close();
         System.out.println("Connection Closed.");
