@@ -17,23 +17,23 @@ public class jdbcpostgreSQL {
     //MAKE SURE YOU ARE ON VPN or TAMU WIFI TO ACCESS DATABASE
 
     public static void main(String args[]) {
-      dbConnection db = new dbConnection();
-      db.connect();
-      double price = 0;
-      int num = 0;
-      for(int day = 9;day<=30;day++){
-          int orderCount;
-          if(day == 24 || day == 17){
-              orderCount = 800;
-          }
-          else{
-              orderCount = 200;
-          }
-          for(int i=0;i<orderCount;i++){
-              num += 1;
-              price += testGeneration.addRandomOrderToDatabase(db, "2022-08-" + String.format("%2d", day).replace(" ", "0"));
-          }
-      }
-      db.close();
+        dbConnection db = new dbConnection();
+        String[] cmds = {
+                "SELECT SUM(total) FROM orders", // total sales
+                "SELECT AVG(total) FROM orders", // average spend per order
+                "SELECT COUNT(*) FROM products WHERE name='Grain Bowl'" // number of grain bowls sold
+        };
+        db.connect();
+        for(int i=0;i<cmds.length;i++){
+            String cmd = cmds[i];
+            System.out.println("Executing command: " + cmd);
+            try{
+                db.printResultSet(db.sendCommand(cmd));
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        db.close();
     }
 }

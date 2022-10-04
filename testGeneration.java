@@ -44,8 +44,26 @@ public class testGeneration {
           int id = addRandomProductToDatabase(db);
           productList[i] = id;
       }
-      
+
       return db.addOrderToDatabase(productList, discount, subtotal, date);
+  }
+
+  public static void populateDatabaseWithOrders(dbConnection db){
+      double price = 0;
+      int num = 0;
+      for(int day = 9;day<=30;day++){
+          int orderCount;
+          if(day == 24 || day == 17){
+              orderCount = 800;
+          }
+          else{
+              orderCount = 200;
+          }
+          for(int i=0;i<orderCount;i++){
+              num += 1;
+              price += addRandomOrderToDatabase(db, "2022-08-" + String.format("%2d", day).replace(" ", "0"));
+          }
+      }
   }
 
 }

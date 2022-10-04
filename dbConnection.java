@@ -30,14 +30,20 @@ public class dbConnection {
     System.out.println("Opened database successfully");
   }
 
-    public void printResultSet(ResultSet result){
-      // You will need to output the results differently depeninding on which function you use
-      System.out.println("--------------------Query Results--------------------");
-      // while (result.next()) {
-      // System.out.println(result.getString("column_name"));
-      // }
-      // OR
-      System.out.println(result);
+    public void printResultSet(ResultSet result) throws SQLException{
+        // You will need to output the results differently depeninding on which function you use
+        System.out.println("--------------------Query Results--------------------");
+        ResultSetMetaData rsmd = result.getMetaData();
+        int columnsNumber = rsmd.getColumnCount();
+
+        while (result.next()) {
+            for (int i = 1; i <= columnsNumber; i++) {
+                if (i > 1) System.out.print(",  ");
+                String columnValue = result.getString(i);
+                System.out.print(rsmd.getColumnName(i) + ": " + columnValue);
+            }
+            System.out.println("");
+        }
   }
 
     public ResultSet sendCommand(String cmd) throws SQLException{
@@ -61,7 +67,7 @@ public class dbConnection {
         // send statement to DBMS
         // This executeQuery command is useful for data retrieval
         stmt.executeUpdate(sqlStatement);
-        
+
    }
 
     public int addProductToDatabase(String name, double price, int itemList[], double portionList[]){
@@ -144,4 +150,3 @@ public class dbConnection {
       }//end try catch
     }
 }//end Class
-
