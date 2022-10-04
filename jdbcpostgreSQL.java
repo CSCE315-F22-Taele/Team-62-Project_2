@@ -31,6 +31,10 @@ public class jdbcpostgreSQL {
                 "SELECT AVG(total) FROM orders GROUP BY id",  //  the average total group by id
                 "SELECT COUNT(*) FROM item WHERE quantity > 430",   // number of quantity of food greater than 430
 
+                "SELECT MAX(total) FROM orders", // finds the max someone has payed for an order 
+                "SELECT COUNT(productlist) FROM orders WHERE cardinality(productlist) = 1", // keeps return how many orders that contain one product
+                "SELECT COUNT(orders) FROM orders WHERE date='2022-08-24'" // returns how many orders that were made on a given date, in this case 8/24/22, can be used to show game days have more sales
+
         };
         db.connect();
         for(int i=0;i<cmds.length;i++){
