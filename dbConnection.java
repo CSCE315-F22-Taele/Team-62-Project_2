@@ -52,11 +52,23 @@ public class dbConnection {
         return result;
    }
 
+   public void sendUpdate(String cmd) throws SQLException{
+        ResultSet result;
+        // create a statement object
+        Statement stmt = conn.createStatement();
+        // Running a query
+        String sqlStatement = cmd;
+        // send statement to DBMS
+        // This executeQuery command is useful for data retrieval
+        stmt.executeUpdate(sqlStatement);
+        
+   }
+
     public int addProductToDatabase(String name, double price, int itemList[], double portionList[]){
         // Returns the ID of the new product when done.
         int id = 0;
         try{
-            ResultSet r = sendCommand("SELECT MAX(id) FROM products");
+            ResultSet r = sendCommand("SELECT MAX(id) FROM productstest");
             r.next();
             id = r.getInt("max")+1;
         } catch (Exception e){
@@ -71,12 +83,21 @@ public class dbConnection {
         cmd += (price + ", ");
         cmd += "'" + Arrays.toString(itemList).replace("[","{").replace("]","}") + "', ";
         cmd += "'" + Arrays.toString(portionList).replace("[","{").replace("]","}") + "'";
-        String full = "INSERT INTO products VALUES (" + cmd + ")";
+        String full = "INSERT INTO product VALUES (" + cmd + ")";
         try {
             sendCommand(full);
         }
         catch (Exception e){
         }
+	for(int i = 0; i<itemList.length;i++){
+	try{
+            sendUpdate("UPDATE item SET quantity = quantity-1 WHERE id = "+ itemList[i]);
+        } catch (Exception e){
+          e.printStackTrace();
+            System.err.println(e.getClass().getName()+": "+e.getMessage());
+            System.exit(0);
+        }
+}
         return id;
     }
 
@@ -85,7 +106,7 @@ public class dbConnection {
         // Note that SQL Date is formatted as "YYYY-MM-DD"
         int id = 0;
         try{
-            ResultSet r = sendCommand("SELECT MAX(id) FROM orders");
+            ResultSet r = sendCommand("SELECT MAX(id) FROM orderstest");
             r.next();
             id = r.getInt("max")+1;
         } catch (Exception e){
@@ -104,7 +125,7 @@ public class dbConnection {
         cmd += total + ", ";
         cmd += "'" + date + "'";
         String full = "INSERT INTO orders VALUES (" + cmd + ")";
-        System.out.println(full);
+        //System.out.println(full);
         try {
             sendCommand(full);
         }
@@ -123,3 +144,4 @@ public class dbConnection {
       }//end try catch
     }
 }//end Class
+
