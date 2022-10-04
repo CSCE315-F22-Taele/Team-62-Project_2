@@ -22,9 +22,14 @@ public class jdbcpostgreSQL {
                 "SELECT SUM(total) FROM orders", // total sales
                 "SELECT AVG(total) FROM orders", // average spend per order
                 "SELECT COUNT(*) FROM products WHERE name='Grain Bowl'", // number of grain bowls sold
+                
                 "SELECT AVG(cardinality) FROM (SELECT cardinality(itemList) FROM products) AS size", //Average amount of items per product
                 "SELECT * FROM item WHERE quantity < 100", //Returns table of items that are below an arbitrary amount
                 "SELECT COUNT(*) FROM orders WHERE discount > 0", //Returns the amount of orders that used a discount
+
+                "SELECT MIN(subtotal) from orders",  // the minimum subtotal from order
+                "SELECT AVG(total) FROM orders GROUP BY id",  //  the average total group by id
+                "SELECT COUNT(*) FROM item WHERE quantity > 430",   // number of quantity of food greater than 430
 
         };
         db.connect();
