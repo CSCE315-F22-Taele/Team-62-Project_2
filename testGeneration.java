@@ -1,4 +1,8 @@
 public class testGeneration {
+    
+    /*
+     * 
+     */
     public static int[] randomItemList(int size) {
         int[] result = new int[size];
         for (int i = 0; i < size; i++) {
@@ -7,6 +11,9 @@ public class testGeneration {
         return result;
     }
 
+    /* 
+     * 
+    */
     public static double[] randomPortionList(int size) {
         double[] result = new double[size];
         for (int i = 0; i < size; i++) {
@@ -15,6 +22,9 @@ public class testGeneration {
         return result;
     }
 
+    /*
+     * 
+     */
     public static int addRandomProductToDatabase(dbConnection db) {
         String[] items = {"Rice Pilaf", "White Rice", "Buttered Chicken", "Lemon Chicken", "Gyro Meat", "Falafel", "Onions", "Cauliflower", "Peppers",
                 "Olives", "Couscous", "Slaw", "Tomatoes", "Cucumbers", "Hummus", "Jalepeno Feta Dressing",
@@ -31,6 +41,9 @@ public class testGeneration {
         );
     }
 
+    /*
+     * 
+     */
     public static double addRandomOrderToDatabase(dbConnection db, String date) {
         // Returns the total price of the order.
         // Assume all products are 7.69
@@ -48,6 +61,9 @@ public class testGeneration {
         return db.addOrderToDatabase(productList, discount, subtotal, date);
     }
 
+    /*
+     * 
+     */
     public static void populateDatabaseWithOrders(dbConnection db) {
         double price = 0;
         int num = 0;
