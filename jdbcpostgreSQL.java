@@ -22,6 +22,7 @@ public class jdbcpostgreSQL {
                 "SELECT SUM(total) FROM orders", // total sales
                 "SELECT AVG(total) FROM orders", // average spend per order
                 "SELECT COUNT(*) FROM products WHERE name='Grain Bowl'" // number of grain bowls sold
+
         };
         db.connect();
         for(int i=0;i<cmds.length;i++){
