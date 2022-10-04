@@ -68,7 +68,7 @@ public class dbConnection {
         // Returns the ID of the new product when done.
         int id = 0;
         try{
-            ResultSet r = sendCommand("SELECT MAX(id) FROM productstest");
+            ResultSet r = sendCommand("SELECT MAX(id) FROM products");
             r.next();
             id = r.getInt("max")+1;
         } catch (Exception e){
@@ -106,7 +106,7 @@ public class dbConnection {
         // Note that SQL Date is formatted as "YYYY-MM-DD"
         int id = 0;
         try{
-            ResultSet r = sendCommand("SELECT MAX(id) FROM orderstest");
+            ResultSet r = sendCommand("SELECT MAX(id) FROM orders");
             r.next();
             id = r.getInt("max")+1;
         } catch (Exception e){
