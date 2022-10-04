@@ -53,11 +53,11 @@ public class dbConnection {
    }
 
     public int addProductToDatabase(String name, double price, int itemList[], double portionList[]){
+        // Returns the ID of the new product when done.
         int id = 0;
         try{
-            ResultSet r = sendCommand("SELECT MAX(id) FROM productstest");
+            ResultSet r = sendCommand("SELECT MAX(id) FROM products");
             r.next();
-            System.out.println(r.getInt("max"));
             id = r.getInt("max")+1;
         } catch (Exception e){
             e.printStackTrace();
@@ -71,16 +71,48 @@ public class dbConnection {
         cmd += (price + ", ");
         cmd += "'" + Arrays.toString(itemList).replace("[","{").replace("]","}") + "', ";
         cmd += "'" + Arrays.toString(portionList).replace("[","{").replace("]","}") + "'";
-        String full = "INSERT INTO productstest VALUES (" + cmd + ")";
+        String full = "INSERT INTO products VALUES (" + cmd + ")";
+        try {
+            sendCommand(full);
+        }
+        catch (Exception e){
+        }
+        return id;
+    }
+
+    public double addOrderToDatabase(int productList[], double discount, double subtotal, String date){
+        // Returns the total price of the new order when done.
+        // Note that SQL Date is formatted as "YYYY-MM-DD"
+        int id = 0;
+        try{
+            ResultSet r = sendCommand("SELECT MAX(id) FROM orders");
+            r.next();
+            id = r.getInt("max")+1;
+        } catch (Exception e){
+            System.err.println(e.getClass().getName()+": "+e.getMessage());
+            System.exit(0);
+        }
+
+        // Apply discounts and then tax.
+        double total = subtotal * (1-discount) * 1.0825;
+
+        String cmd = "";
+        cmd += id + ", ";
+        cmd += "'" + Arrays.toString(productList).replace("[","{").replace("]","}") + "', ";
+        cmd += discount + ", ";
+        cmd += subtotal + ", ";
+        cmd += total + ", ";
+        cmd += "'" + date + "'";
+        String full = "INSERT INTO orders VALUES (" + cmd + ")";
         System.out.println(full);
         try {
             sendCommand(full);
         }
         catch (Exception e){
-            e.printStackTrace();
         }
-        return id;
+        return total;
     }
+
 
     public void close(){
       try {
