@@ -9,28 +9,29 @@ CSCE 331
 // MAKE SURE YOU ARE ON VPN or TAMU WIFI TO ACCESS DATABASE
 
 public class dbConnection {
-  private Connection conn;
-    public void connect() {
-    // Building the connection with your credentials
-    String teamNumber = "62"; // Your team number
-    String sectionNumber = "905"; // Your section number
-    String dbName = "csce331_" + sectionNumber + "_" + teamNumber;
-    String dbConnectionString = "jdbc:postgresql://csce-315-db.engr.tamu.edu/" + dbName;
-    dbSetup myCredentials = new dbSetup();
+    private Connection conn;
 
-    // Connecting to the database
-    try {
-			conn = DriverManager.getConnection(dbConnectionString, dbSetup.user, dbSetup.pswd);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName()+": "+e.getMessage());
-			System.exit(0);
+    public void connect() {
+        // Building the connection with your credentials
+        String teamNumber = "62"; // Your team number
+        String sectionNumber = "905"; // Your section number
+        String dbName = "csce331_" + sectionNumber + "_" + teamNumber;
+        String dbConnectionString = "jdbc:postgresql://csce-315-db.engr.tamu.edu/" + dbName;
+        dbSetup myCredentials = new dbSetup();
+
+        // Connecting to the database
+        try {
+            conn = DriverManager.getConnection(dbConnectionString, dbSetup.user, dbSetup.pswd);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+
+        System.out.println("Opened database successfully");
     }
 
-    System.out.println("Opened database successfully");
-  }
-
-    public void printResultSet(ResultSet result) throws SQLException{
+    public void printResultSet(ResultSet result) throws SQLException {
         // You will need to output the results differently depeninding on which function you use
         System.out.println("--------------------Query Results--------------------");
         ResultSetMetaData rsmd = result.getMetaData();
@@ -42,11 +43,11 @@ public class dbConnection {
                 String columnValue = result.getString(i);
                 System.out.print(rsmd.getColumnName(i) + ": " + columnValue);
             }
-            System.out.println("");
+            System.out.println();
         }
-  }
+    }
 
-    public ResultSet sendCommand(String cmd) throws SQLException{
+    public ResultSet sendCommand(String cmd) throws SQLException {
         ResultSet result;
         // create a statement object
         Statement stmt = conn.createStatement();
@@ -56,9 +57,9 @@ public class dbConnection {
         // This executeQuery command is useful for data retrieval
         result = stmt.executeQuery(sqlStatement);
         return result;
-   }
+    }
 
-   public void sendUpdate(String cmd) throws SQLException{
+    public void sendUpdate(String cmd) throws SQLException {
         ResultSet result;
         // create a statement object
         Statement stmt = conn.createStatement();
@@ -68,18 +69,18 @@ public class dbConnection {
         // This executeQuery command is useful for data retrieval
         stmt.executeUpdate(sqlStatement);
 
-   }
+    }
 
-    public int addProductToDatabase(String name, double price, int itemList[], double portionList[]){
+    public int addProductToDatabase(String name, double price, int[] itemList, double[] portionList) {
         // Returns the ID of the new product when done.
         int id = 0;
-        try{
+        try {
             ResultSet r = sendCommand("SELECT MAX(id) FROM products");
             r.next();
-            id = r.getInt("max")+1;
-        } catch (Exception e){
+            id = r.getInt("max") + 1;
+        } catch (Exception e) {
             e.printStackTrace();
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
 
@@ -87,45 +88,44 @@ public class dbConnection {
         cmd += id + ", ";
         cmd += "'" + name + "', ";
         cmd += (price + ", ");
-        cmd += "'" + Arrays.toString(itemList).replace("[","{").replace("]","}") + "', ";
-        cmd += "'" + Arrays.toString(portionList).replace("[","{").replace("]","}") + "'";
+        cmd += "'" + Arrays.toString(itemList).replace("[", "{").replace("]", "}") + "', ";
+        cmd += "'" + Arrays.toString(portionList).replace("[", "{").replace("]", "}") + "'";
         String full = "INSERT INTO product VALUES (" + cmd + ")";
         try {
             sendCommand(full);
+        } catch (Exception e) {
         }
-        catch (Exception e){
+        for (int i = 0; i < itemList.length; i++) {
+            try {
+                sendUpdate("UPDATE item SET quantity = quantity-1 WHERE id = " + itemList[i]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println(e.getClass().getName() + ": " + e.getMessage());
+                System.exit(0);
+            }
         }
-	for(int i = 0; i<itemList.length;i++){
-	try{
-            sendUpdate("UPDATE item SET quantity = quantity-1 WHERE id = "+ itemList[i]);
-        } catch (Exception e){
-          e.printStackTrace();
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
-            System.exit(0);
-        }
-}
         return id;
     }
 
-    public double addOrderToDatabase(int productList[], double discount, double subtotal, String date){
+    public double addOrderToDatabase(int[] productList, double discount, double subtotal, String date) {
         // Returns the total price of the new order when done.
         // Note that SQL Date is formatted as "YYYY-MM-DD"
         int id = 0;
-        try{
+        try {
             ResultSet r = sendCommand("SELECT MAX(id) FROM orders");
             r.next();
-            id = r.getInt("max")+1;
-        } catch (Exception e){
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
+            id = r.getInt("max") + 1;
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
 
         // Apply discounts and then tax.
-        double total = subtotal * (1-discount) * 1.0825;
+        double total = subtotal * (1 - discount) * 1.0825;
 
         String cmd = "";
         cmd += id + ", ";
-        cmd += "'" + Arrays.toString(productList).replace("[","{").replace("]","}") + "', ";
+        cmd += "'" + Arrays.toString(productList).replace("[", "{").replace("]", "}") + "', ";
         cmd += discount + ", ";
         cmd += subtotal + ", ";
         cmd += total + ", ";
@@ -134,19 +134,18 @@ public class dbConnection {
         //System.out.println(full);
         try {
             sendCommand(full);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
         }
         return total;
     }
 
 
-    public void close(){
-      try {
-        conn.close();
-        System.out.println("Connection Closed.");
-      } catch(Exception e) {
-        System.out.println("Connection NOT Closed.");
-      }//end try catch
+    public void close() {
+        try {
+            conn.close();
+            System.out.println("Connection Closed.");
+        } catch (Exception e) {
+            System.out.println("Connection NOT Closed.");
+        }//end try catch
     }
 }//end Class

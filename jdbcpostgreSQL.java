@@ -16,7 +16,7 @@ public class jdbcpostgreSQL {
 
     //MAKE SURE YOU ARE ON VPN or TAMU WIFI TO ACCESS DATABASE
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         dbConnection db = new dbConnection();
         String[] cmds = {
                 "SELECT SUM(total) FROM orders", // total sales
@@ -25,13 +25,12 @@ public class jdbcpostgreSQL {
 
         };
         db.connect();
-        for(int i=0;i<cmds.length;i++){
+        for (int i = 0; i < cmds.length; i++) {
             String cmd = cmds[i];
             System.out.println("Executing command: " + cmd);
-            try{
+            try {
                 db.printResultSet(db.sendCommand(cmd));
-            }
-            catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
