@@ -36,7 +36,7 @@ public class jdbcpostgreSQL {
                 "SELECT COUNT(productlist) FROM orders WHERE cardinality(productlist) = 1", // keeps return how many orders that contain one product
                 "SELECT COUNT(orders) FROM orders WHERE date='2022-08-24'", // returns how many orders that were made on a given date, in this case 8/24/22, can be used to show game days have more sales
                     
-                "SELECT COUNT(orders) FROM orders WHERE date='2022-08-23’", // returns sales of a specific day which is a  regular day 
+                "SELECT COUNT(orders) FROM orders WHERE date='2022-08-23'", // returns sales of a specific day which is a  regular day 
                 "SELECT MAX(subtotal) from orders", // find the max orders for subtotal price 
                 "SELECT COUNT(*) FROM item WHERE quantity > 200" //find number of quantitity of food greater than 200
                  
