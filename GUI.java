@@ -24,7 +24,7 @@ public class GUI extends JFrame implements ActionListener {
         //send statement to DBMS
         ResultSet result = db.sendCommand("SELECT * FROM item");
         while (result.next()) {
-          name += result.getString("name")+"\n";
+          name += result.getString("name") + " " +  result.getString("quantity") + " " + result.getString("units") + "\n";
         }
       } catch (Exception e){
           e.printStackTrace();
@@ -45,6 +45,9 @@ public class GUI extends JFrame implements ActionListener {
       b.addActionListener(s);
 
       //TODO Step 3
+      JTextArea area = new JTextArea(name);
+      area.setEditable(false);
+      p.add(area);
 
       //TODO Step 4
 
@@ -55,7 +58,7 @@ public class GUI extends JFrame implements ActionListener {
       f.add(p);
 
       // set the size of frame
-      f.setSize(400, 400);
+      f.setSize(768, 1024);
 
       f.show();
 
