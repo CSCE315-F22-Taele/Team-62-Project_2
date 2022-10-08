@@ -16,7 +16,7 @@ public class jdbcpostgreSQL {
 
     //MAKE SURE YOU ARE ON VPN or TAMU WIFI TO ACCESS DATABASE
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         dbConnection db = new dbConnection();
         // List of query commands to be run through the database
         GUI.initialize(db);
