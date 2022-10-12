@@ -18,12 +18,12 @@ public class jdbcpostgreSQL {
 
     public static void main(String[] args) {
         dbConnection db = new dbConnection();
-        // List of query commands to be run through the database
         GUI.initialize(db);
         db.close();
     }
 
     public static void queryTest(dbConnection db){
+        // List of query commands to be run through the database        
         String[] cmds = {
                 "SELECT SUM(total) FROM orders", // total sales
                 "SELECT AVG(total) FROM orders", // average spend per order

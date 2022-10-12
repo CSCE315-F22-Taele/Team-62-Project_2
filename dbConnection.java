@@ -1,16 +1,13 @@
 import java.sql.*;
 import java.util.Arrays;
 
-/*
-CSCE 331
-9-28-2022 Lab
- */
-
-// MAKE SURE YOU ARE ON VPN or TAMU WIFI TO ACCESS DATABASE
-
 public class dbConnection {
     private Connection conn;
-
+    /**
+    * Constructs an SQL connection to the AWS database as a certain user.
+    * Note: the TAMU Wifi or VPN must be used for this connection to work.
+    * @author Team 62
+    */
     public void connect() {
         // Building the connection with your credentials
         String teamNumber = "62"; // Your team number
