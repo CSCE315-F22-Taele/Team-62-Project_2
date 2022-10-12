@@ -12,21 +12,23 @@ import javax.swing.*;
 
 public class GUI extends JFrame {
     JFrame mainFrame;
+    JPanel mainPanel;
     JPanel serverView;
     JPanel managerViewSummary;
     JPanel managerViewInventory;
     JPanel managerViewOrders;
     dbConnection db;
-
     public GUI(dbConnection database)
     {
         db = database;
         // create a new frame
         mainFrame = new JFrame("DB GUI");
+        mainPanel = new JPanel();
+        loadManagerViewOrders();
         loadManagerViewSummary();
         loadManagerViewInventory();
-        loadManagerViewOrders();
         // set the size of frame
+        mainFrame.add(mainPanel);
         mainFrame.setSize(768, 1024);
         mainFrame.show();
         switchToManagerViewInventory();
@@ -52,6 +54,7 @@ public class GUI extends JFrame {
         JTextArea contents = new JTextArea("Contents Go Here");
         contents.setEditable(false);
         managerViewSummary.add(contents);
+        mainPanel.add(managerViewSummary);
     }
 
     public void loadManagerViewInventory(){
@@ -63,6 +66,7 @@ public class GUI extends JFrame {
         JTextArea contents = new JTextArea("Contents Go Here");
         contents.setEditable(false);
         managerViewInventory.add(contents);
+        mainPanel.add(managerViewInventory);
     }
 
     public void loadManagerViewOrders(){
@@ -73,31 +77,39 @@ public class GUI extends JFrame {
         JTextArea contents = new JTextArea("Contents Go Here");
         contents.setEditable(false);
         managerViewOrders.add(contents);
+        mainPanel.add(managerViewOrders);
     }
 
+    public void hideAllPanels(){
+        managerViewSummary.setVisible(false);
+        managerViewInventory.setVisible(false);
+        managerViewOrders.setVisible(false);
+    }
 
     public void switchToManagerViewSummary(){
-        mainFrame.removeAll();
-        mainFrame.add(managerViewSummary);
-
+        System.out.println("Switching to manager summary");
+        hideAllPanels();
+        managerViewSummary.setVisible(true);
     }
 
     public void switchToManagerViewOrders(){
-        mainFrame.removeAll();
-        mainFrame.add(managerViewOrders);
+        System.out.println("Switching to manager orders");
+        hideAllPanels();
+        managerViewOrders.setVisible(true);
     }
 
     public void switchToManagerViewInventory(){
-//        f.removeAll();
-        mainFrame.add(managerViewInventory);
+        System.out.println("Switching to manager inventory");
+        hideAllPanels();
+        managerViewInventory.setVisible(true);
 
 
-        String name = "";
+        String results = "";
         try{
           //send statement to DBMS
           ResultSet result = db.sendCommand("SELECT * FROM item");
           while (result.next()) {
-            name += result.getString("name") + " " +  result.getString("quantity") + " " + result.getString("units") + "\n";
+            results += result.getString("name") + " " +  result.getString("quantity") + " " + result.getString("units") + "\n";
           }
         } catch (Exception e){
             e.printStackTrace();
