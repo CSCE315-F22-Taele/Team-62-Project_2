@@ -10,66 +10,105 @@ import javax.swing.*;
   4) Add the new object to the JPanel p
 */
 
-public class GUI extends JFrame implements ActionListener {
-    static JFrame f;
+public class GUI extends JFrame {
+    JFrame f;
+    JPanel serverView;
+    JPanel managerViewSummary;
+    JPanel managerViewInventory;
+    JPanel managerViewOrders;
+    dbConnection db;
 
-    public static void initialize(dbConnection db)
+    public GUI(dbConnection database)
     {
-      //TODO STEP 1
-      db.connect();
-      JOptionPane.showMessageDialog(null,"Opened database successfully");
+        db = database;
+        // create a new frame
+        f = new JFrame("DB GUI");
+        loadManagerViewSummary();
+        loadManagerViewInventory();
+        loadManagerViewOrders();
+        // set the size of frame
+        f.setSize(768, 1024);
+        f.show();
+        switchToManagerViewInventory();
+    }
 
-      String name = "";
-      try{
-        //send statement to DBMS
-        ResultSet result = db.sendCommand("SELECT * FROM item");
-        while (result.next()) {
-          name += result.getString("name") + " " +  result.getString("quantity") + " " + result.getString("units") + "\n";
-        }
-      } catch (Exception e){
-          e.printStackTrace();
-          JOptionPane.showMessageDialog(null,"Error accessing Database.");
-      }
-      // create a new frame
-      f = new JFrame("DB GUI");
+    public void loadManagerHeader(JPanel p){
+        JButton Summary = new JButton("Summary");
+        Summary.addActionListener(e -> switchToManagerViewSummary());
+        p.add(Summary);
+        JButton Inventory = new JButton("Inventory");
+        Inventory.addActionListener(e -> switchToManagerViewInventory());
+        p.add(Inventory);
+        JButton Orders = new JButton("Orders");
+        Orders.addActionListener(e -> switchToManagerViewOrders());
+        p.add(Orders);
+    }
 
-      // create a object
-      GUI s = new GUI();
+    public void loadManagerViewSummary(){
+        managerViewSummary = new JPanel();
+        loadManagerHeader(managerViewSummary);
+        JLabel title = new JLabel("Summary");
+        managerViewSummary.add(title);
+        JTextArea contents = new JTextArea("Contents Go Here");
+        contents.setEditable(false);
+        managerViewSummary.add(contents);
+    }
 
-      // create a panel
-      JPanel p = new JPanel();
+    public void loadManagerViewInventory(){
+        // create a panel
+        managerViewInventory = new JPanel();
+        loadManagerHeader(managerViewInventory);
+        JLabel title = new JLabel("Inventory");
+        managerViewInventory.add(title);
+        JTextArea contents = new JTextArea("Contents Go Here");
+        contents.setEditable(false);
+        managerViewInventory.add(contents);
+    }
 
-      JButton b = new JButton("Close");
+    public void loadManagerViewOrders(){
+        managerViewOrders = new JPanel();
+        loadManagerHeader(managerViewOrders);
+        JLabel title = new JLabel("Orders");
+        managerViewOrders.add(title);
+        JTextArea contents = new JTextArea("Contents Go Here");
+        contents.setEditable(false);
+        managerViewOrders.add(contents);
+    }
 
-      // add actionlistener to button
-      b.addActionListener(s);
 
-      //TODO Step 3
-      JTextArea area = new JTextArea(name);
-      area.setEditable(false);
-      p.add(area);
-
-      //TODO Step 4
-
-      // add button to panel
-      p.add(b);
-
-      // add panel to frame
-      f.add(p);
-
-      // set the size of frame
-      f.setSize(768, 1024);
-
-      f.show();
+    public void switchToManagerViewSummary(){
+        f.removeAll();
+        f.add(managerViewSummary);
 
     }
 
-    // if button is pressed
-    public void actionPerformed(ActionEvent e)
-    {
-        String s = e.getActionCommand();
-        if (s.equals("Close")) {
-            f.dispose();
+    public void switchToManagerViewOrders(){
+        f.removeAll();
+        f.add(managerViewOrders);
+
+    }
+
+    public void switchToManagerViewInventory(){
+        f.removeAll();
+        f.add(managerViewInventory);
+
+
+        String name = "";
+        try{
+          //send statement to DBMS
+          ResultSet result = db.sendCommand("SELECT * FROM item");
+          while (result.next()) {
+            name += result.getString("name") + " " +  result.getString("quantity") + " " + result.getString("units") + "\n";
+          }
+        } catch (Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,"Error accessing Database.");
         }
+    }
+
+    // if button is pressed
+    public void testEvent(ActionEvent e)
+    {
+        System.out.println("Test");
     }
 }
