@@ -11,7 +11,7 @@ import javax.swing.*;
 */
 
 public class GUI extends JFrame {
-    JFrame f;
+    JFrame mainFrame;
     JPanel serverView;
     JPanel managerViewSummary;
     JPanel managerViewInventory;
@@ -22,13 +22,13 @@ public class GUI extends JFrame {
     {
         db = database;
         // create a new frame
-        f = new JFrame("DB GUI");
+        mainFrame = new JFrame("DB GUI");
         loadManagerViewSummary();
         loadManagerViewInventory();
         loadManagerViewOrders();
         // set the size of frame
-        f.setSize(768, 1024);
-        f.show();
+        mainFrame.setSize(768, 1024);
+        mainFrame.show();
         switchToManagerViewInventory();
     }
 
@@ -77,20 +77,19 @@ public class GUI extends JFrame {
 
 
     public void switchToManagerViewSummary(){
-        f.removeAll();
-        f.add(managerViewSummary);
+        mainFrame.removeAll();
+        mainFrame.add(managerViewSummary);
 
     }
 
     public void switchToManagerViewOrders(){
-        f.removeAll();
-        f.add(managerViewOrders);
-
+        mainFrame.removeAll();
+        mainFrame.add(managerViewOrders);
     }
 
     public void switchToManagerViewInventory(){
-        f.removeAll();
-        f.add(managerViewInventory);
+//        f.removeAll();
+        mainFrame.add(managerViewInventory);
 
 
         String name = "";
