@@ -104,6 +104,21 @@ public class dbConnection {
         return id;
     }
 
+    /**
+     * This method adds the Order to the Database
+     * This method returns immediately or throws an error
+     * sends a query to the database to see orders
+     * calculate the discount
+     * recieve productList and insert order values
+     *
+     * @author JP Pham
+     * @param productList  A list of product as input
+     * @param discount  The discount amount
+     * @param subtotal  The total before taxes and discount
+     * @param date  The date the order was added
+     * @throws  throws error if sendCommand does not work
+     * @return  the total accounting in taxes
+     */
     public double addOrderToDatabase(int[] productList, double discount, double subtotal, String date) {
         // Returns the total price of the new order when done.
         // Note that SQL Date is formatted as "YYYY-MM-DD"
