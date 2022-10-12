@@ -47,6 +47,13 @@ public class dbConnection {
         }
     }
 
+    /**
+     * Returns the result of the command that was sent to the database
+     * @author Ezra Lane
+     * @param cmd  The actual command that is sent to the database
+     * @return the result from the command that was just executed
+     * @throws SQLException if there is any error with the command
+     */
     public ResultSet sendCommand(String cmd) throws SQLException {
         ResultSet result;
         // create a statement object
