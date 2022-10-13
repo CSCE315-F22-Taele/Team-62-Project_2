@@ -9,21 +9,22 @@ import java.lang.Math;
  */
 public class jdbcpostgreSQL {
 
-    //Commands to run this script
-    //This will compile all java files in this directory
-    //javac *.java
-    //This command tells the file where to find the postgres jar which it needs to execute postgres commands, then executes the code
-    //Windows: java -cp ".;postgresql-42.2.8.jar" jdbcpostgreSQL
-    //Mac/Linux: java -cp ".:postgresql-42.2.8.jar" jdbcpostgreSQL
-
-    //MAKE SURE YOU ARE ON VPN or TAMU WIFI TO ACCESS DATABASE
+    /**
+     * Commands to run this script
+     * This will compile all java files in this directory
+     * javac *.java
+     * This command tells the file where to find the postgres jar which it needs to execute postgres commands, then executes the code
+     * Windows: java -cp ".;postgresql-42.2.8.jar" jdbcpostgreSQL
+     * Mac/Linux: java -cp ".:postgresql-42.2.8.jar" jdbcpostgreSQL
+     * MAKE SURE YOU ARE ON VPN or TAMU WIFI TO ACCESS DATABASE
+     */
 
     public static void main(String[] args) {
         dbConnection db = new dbConnection();
         db.connect();
-        GUI g = new GUI(db);
+        GUI g = new GUI(db); 
         
-        /* Inventory I = new Inventory(db); */
+        // Inventory I = new Inventory(db);
     }
 
     public static void queryTest(dbConnection db){
