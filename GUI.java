@@ -31,6 +31,8 @@ public class GUI extends JFrame {
         int mainHeight = 700;
         int mainX = 500;
         int mainY = 0;
+        int frameWidth = 1500;
+        int frameHeight = 1000;
         mainPanel.setBounds(mainX, mainY, mainWidth, mainHeight);
 		
         loadManagerViewOrders();
@@ -43,9 +45,9 @@ public class GUI extends JFrame {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setLayout(null);
 		
-        mainFrame.setSize(1500, 1000);
-        mainFrame.show();
+        mainFrame.setSize(frameWidth, frameHeight);
 		switchToManagerViewInventory();
+        mainFrame.show();
 	}
 
 	/**
@@ -168,7 +170,7 @@ public class GUI extends JFrame {
 		JTextArea contents = new JTextArea(name);
 		contents.setEditable(false);
 		managerViewInventory.add(contents);
-		mainPanel.add(managerViewInventory);
+        mainPanel.add(managerViewInventory);
 	}
 
 	/**
@@ -258,7 +260,7 @@ public class GUI extends JFrame {
 		hideAllPanels();
 		managerViewInventory.setVisible(true);
 
-
+        // retrive items from DB
 		String results = "";
 		try {
 			//send statement to DBMS
