@@ -29,13 +29,38 @@ public class Inventory {
         items();
 
         // reordering the panels
-        int mainWidth = 700;
+        int mainWidth = 1300;
         int mainHeight = 700;
         int mainX = 500;
         int mainY = 0;
         invetoryPanel.setBounds(mainX, mainY, mainWidth, 50);
         contentPanel.setBounds(mainX, 150, mainWidth, mainHeight);
-        
+        JTextField text = new JTextField(10);
+        JButton inventoryUpdate = new JButton("Update");
+      inventoryUpdate.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent e) {     
+            String update = text.getText();
+            String[] input = update.split(" ");
+            try {
+                db.sendUpdate("UPDATE item SET quantity = " + input[1] + " WHERE name = '" + input[0]+"'");
+            } catch (Exception error) {
+                error.printStackTrace();
+                System.err.println(error.getClass().getName() + ": " + error.getMessage());
+                System.exit(0);
+            }
+            contentPanel.removeAll();
+            String itemList = retrivingDBItems();
+            JTextArea content = new JTextArea(itemList);
+		    content.setEditable(false);
+            contentPanel.add(content);
+            //mainPanel.add(contentPanel);
+            
+            
+
+         }
+      }); 
+        mainPanel.add(text);
+        mainPanel.add(inventoryUpdate);
         mainPanel.add(invetoryPanel);
         mainPanel.add(contentPanel);
         
@@ -61,7 +86,7 @@ public class Inventory {
 			//send statement to DBMS
 			ResultSet result = db.sendCommand("SELECT * FROM item");
 			while (result.next()) {
-				name += result.getString("name") + "    " + result.getString("quantity") + " lbs\n";
+				name += result.getString("name") + "    " + result.getString("quantity") + " units\n";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

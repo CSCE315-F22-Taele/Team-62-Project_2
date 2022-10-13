@@ -171,6 +171,7 @@ public class GUI extends JFrame {
 
         // using the inventory class
         Inventory inventory = new Inventory(db);
+        JTextField text = new JTextField(30);
         managerViewInventory.add(inventory.mainInventoryPanel());
 
         mainPanel.add(managerViewInventory);
