@@ -33,4 +33,21 @@ public class Inventory {
         invetoryPanel.add(itemPanel);
 
     }
+
+    public void retrivingDBItems() {
+        String results = "";
+        try {
+          //send statement to DBMS
+          ResultSet result = db.sendCommand("SELECT * FROM item");
+            while (result.next()) {
+                results += result.getString("name") + " " +  result.getString("quantity") + " " + 
+                result.getString("units") + "\n";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,"Error accessing Database.");
+        }
+    }
+
+
 }
