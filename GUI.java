@@ -62,7 +62,70 @@ public class GUI extends JFrame {
         loadManagerHeader(managerViewSummary);
         JLabel title = new JLabel("Summary");
         managerViewSummary.add(title);
-        JTextArea contents = new JTextArea("Contents Go Here");
+      int id = 0;
+      String date = "";
+      int ordersToday = 0;
+      int salesToday = 0;
+      int ordersWeek = 0;
+      int salesWeek = 0;
+      try {
+            ResultSet r = db.sendCommand("SELECT MAX(id) FROM orders");
+            r.next();
+            id = r.getInt("max");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        try {
+            ResultSet r = db.sendCommand("SELECT date FROM orders WHERE id = "+id);
+            r.next();
+            date = r.getString("date");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        try {
+            ResultSet r = db.sendCommand("SELECT total FROM orders WHERE date = '"+date+"'");
+            while (r.next()) {
+              ordersToday++;
+              salesToday += r.getInt("total");
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+
+      // create a new frame
+      //System.out.println(ordersToday + " " + salesToday);
+      String today = "                 TODAY                  \n Revenue: "+ salesToday+"       Orders: "+ordersToday+"\n";
+      for(int i = 0; i<7;i++){
+        try {
+            ResultSet r = db.sendCommand("SELECT total FROM orders WHERE date = '"+date+"'");
+            while (r.next()) {
+              ordersWeek++;
+              salesWeek += r.getInt("total");
+        }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        try {
+            ResultSet r = db.sendCommand("SELECT date FROM orders WHERE date = (date '"+date+"' - integer '1')");
+            r.next();
+              date = r.getString("date");
+        }
+         catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+      }
+      String week = "                 Week                  \n Revenue: "+ salesWeek+"       Orders: "+ordersWeek + "       Avg. Order: "+ (double)salesWeek/ordersWeek;
+        JTextArea contents = new JTextArea(today+week);
         contents.setEditable(false);
         managerViewSummary.add(contents);
         mainPanel.add(managerViewSummary);
@@ -77,7 +140,18 @@ public class GUI extends JFrame {
         loadManagerHeader(managerViewInventory);
         JLabel title = new JLabel("Inventory");
         managerViewInventory.add(title);
-        JTextArea contents = new JTextArea("Contents Go Here");
+        String name = "";
+      try{
+        //send statement to DBMS
+        ResultSet result = db.sendCommand("SELECT * FROM item");
+        while (result.next()) {
+          name += result.getString("name")+ "    " + result.getString("quantity")+" lbs\n";
+        }
+      } catch (Exception e){
+          e.printStackTrace();
+          JOptionPane.showMessageDialog(null,"Error accessing Database.");
+      }
+        JTextArea contents = new JTextArea(name);
         contents.setEditable(false);
         managerViewInventory.add(contents);
         mainPanel.add(managerViewInventory);
@@ -91,7 +165,42 @@ public class GUI extends JFrame {
         loadManagerHeader(managerViewOrders);
         JLabel title = new JLabel("Orders");
         managerViewOrders.add(title);
-        JTextArea contents = new JTextArea("Contents Go Here");
+        int id = 0;
+        double price = 0;
+        String date = "";
+        String prevOrders = "";
+      
+      try {
+            ResultSet r = db.sendCommand("SELECT MAX(id) FROM orders");
+            r.next();
+            id = r.getInt("max");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        try {
+          for(int i = 0; i<20;i++){
+            ResultSet r = db.sendCommand("SELECT * FROM orders WHERE id = "+id);
+            if(r.next() == false){
+              break;
+            }
+            price = r.getDouble("total");
+            date = r.getString("date");
+            prevOrders+=price + "       " + date +"\n";
+            id--;
+            
+          }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+        
+
+      // create a new frame
+      //System.out.println(ordersToday + " " + salesToday);
+        JTextArea contents = new JTextArea(prevOrders);
         contents.setEditable(false);
         managerViewOrders.add(contents);
         mainPanel.add(managerViewOrders);
