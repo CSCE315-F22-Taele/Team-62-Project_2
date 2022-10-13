@@ -26,10 +26,12 @@ public class testGeneration {
      * 
      */
     public static int addRandomProductToDatabase(dbConnection db) {
-        String[] items = {"Rice Pilaf", "White Rice", "Buttered Chicken", "Lemon Chicken", "Gyro Meat", "Falafel", "Onions", "Cauliflower", "Peppers",
-                "Olives", "Couscous", "Slaw", "Tomatoes", "Cucumbers", "Hummus", "Jalepeno Feta Dressing",
-                "Vinagrette Dressing", "Tahini Dressing", "Yogurt Dill Dressing", "Spicy Hummus",
-                "Tzatziki Sauce", "Harissa Yogurt"};
+        String[] items = {"Rice Pilaf", "White Rice", "Buttered Chicken", "Lemon Chicken", "Gyro Meat", 
+        "Falafel", "Onions", "Cauliflower", "Peppers","Olives", "Couscous", "Slaw", "Tomatoes", 
+        "Cucumbers", "Hummus", "Jalepeno Feta Dressing","Vinagrette Dressing", "Tahini Dressing", 
+        "Yogurt Dill Dressing", "Spicy Hummus","Tzatziki Sauce", "Harissa Yogurt", "drink", "2 falafels",
+        "Hummus & Pita", "Vegan Box", "Garlic Fries"};
+        
         String[] names = {"Grain Bowl", "Salad", "Pita", "Greens and Grains"};
 
         int itemsInProduct = (int) (Math.random() * 3) + 4;
