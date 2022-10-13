@@ -18,15 +18,17 @@ public class GUI extends JFrame {
     JPanel managerViewInventory;
     JPanel managerViewOrders;
     dbConnection db;
-    public GUI(dbConnection database)
-    {
+    
+    public GUI(dbConnection database) {
         db = database;
+        
         // create a new frame
         mainFrame = new JFrame("DB GUI");
         mainPanel = new JPanel();
         loadManagerViewOrders();
         loadManagerViewSummary();
         loadManagerViewInventory();
+        
         // set the size of frame
         mainFrame.add(mainPanel);
         mainFrame.setSize(768, 1024);
@@ -34,18 +36,27 @@ public class GUI extends JFrame {
         switchToManagerViewInventory();
     }
 
+    /**
+     * add in the buttons: summary, Inventory, Orders
+     * @param p
+     */
     public void loadManagerHeader(JPanel p){
         JButton Summary = new JButton("Summary");
         Summary.addActionListener(e -> switchToManagerViewSummary());
         p.add(Summary);
+        
         JButton Inventory = new JButton("Inventory");
         Inventory.addActionListener(e -> switchToManagerViewInventory());
         p.add(Inventory);
+        
         JButton Orders = new JButton("Orders");
         Orders.addActionListener(e -> switchToManagerViewOrders());
         p.add(Orders);
     }
 
+    /**
+     * creates the summary panel
+     */
     public void loadManagerViewSummary(){
         managerViewSummary = new JPanel();
         loadManagerHeader(managerViewSummary);
@@ -57,6 +68,9 @@ public class GUI extends JFrame {
         mainPanel.add(managerViewSummary);
     }
 
+    /**
+     * creates the Inventory panel
+     */
     public void loadManagerViewInventory(){
         // create a panel
         managerViewInventory = new JPanel();
@@ -69,6 +83,9 @@ public class GUI extends JFrame {
         mainPanel.add(managerViewInventory);
     }
 
+    /**
+     * creates the Orders panal
+     */
     public void loadManagerViewOrders(){
         managerViewOrders = new JPanel();
         loadManagerHeader(managerViewOrders);
@@ -80,24 +97,39 @@ public class GUI extends JFrame {
         mainPanel.add(managerViewOrders);
     }
 
+    /**
+     * sets all panel to invisible
+     */
     public void hideAllPanels(){
         managerViewSummary.setVisible(false);
         managerViewInventory.setVisible(false);
         managerViewOrders.setVisible(false);
     }
 
+    /**
+     * hides all panel first
+     * switch panel to Summary
+     */
     public void switchToManagerViewSummary(){
         System.out.println("Switching to manager summary");
         hideAllPanels();
         managerViewSummary.setVisible(true);
     }
 
+    /**
+     * hides all panel first
+     * switch panel to Orders
+     */
     public void switchToManagerViewOrders(){
         System.out.println("Switching to manager orders");
         hideAllPanels();
         managerViewOrders.setVisible(true);
     }
 
+    /**
+     * hides all panel first
+     * switch panel to Inventory
+     */
     public void switchToManagerViewInventory(){
         System.out.println("Switching to manager inventory");
         hideAllPanels();
@@ -105,13 +137,14 @@ public class GUI extends JFrame {
 
 
         String results = "";
-        try{
+        try {
           //send statement to DBMS
           ResultSet result = db.sendCommand("SELECT * FROM item");
-          while (result.next()) {
-            results += result.getString("name") + " " +  result.getString("quantity") + " " + result.getString("units") + "\n";
-          }
-        } catch (Exception e){
+            while (result.next()) {
+                results += result.getString("name") + " " +  result.getString("quantity") + " " + 
+                result.getString("units") + "\n";
+            }
+        } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null,"Error accessing Database.");
         }

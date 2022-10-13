@@ -1,9 +1,11 @@
 import java.sql.*;
 import java.lang.Math;
 
-/*
-CSCE 315
-9-27-2021 Lab
+
+
+/**
+ * CSCE 315
+ * 9-27-2021 Lab
  */
 public class jdbcpostgreSQL {
 
@@ -20,6 +22,7 @@ public class jdbcpostgreSQL {
         dbConnection db = new dbConnection();
         db.connect();
         GUI g = new GUI(db);
+        // Inventory I = new Inventory(db);
     }
 
     public static void queryTest(dbConnection db){
