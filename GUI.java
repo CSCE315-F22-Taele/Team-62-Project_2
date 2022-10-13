@@ -267,4 +267,3 @@ public class GUI extends JFrame {
 		System.out.println("Test");
 	}
 }
->>>>>>> e74752f425449610e676d5cf99e7f6d5ac239c89
