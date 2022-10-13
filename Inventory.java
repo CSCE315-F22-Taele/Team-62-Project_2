@@ -53,6 +53,8 @@ public class Inventory {
             JTextArea content = new JTextArea(itemList);
 		    content.setEditable(false);
             contentPanel.add(content);
+            contentPanel.validate();
+            contentPanel.revalidate();
             //mainPanel.add(contentPanel);
             
             
