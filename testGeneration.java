@@ -30,8 +30,8 @@ public class testGeneration {
         "Falafel", "Onions", "Cauliflower", "Peppers","Olives", "Couscous", "Slaw", "Tomatoes", 
         "Cucumbers", "Hummus", "Jalepeno Feta Dressing","Vinagrette Dressing", "Tahini Dressing", 
         "Yogurt Dill Dressing", "Spicy Hummus","Tzatziki Sauce", "Harissa Yogurt", "drink", "2 falafels",
-        "Hummus & Pita", "Vegan Box", "Garlic Fries"};
-        
+        "Hummus & Pita", "Vegan Box", "Garlic Fries", "Pita"};
+
         String[] names = {"Grain Bowl", "Salad", "Pita", "Greens and Grains"};
 
         int itemsInProduct = (int) (Math.random() * 3) + 4;
