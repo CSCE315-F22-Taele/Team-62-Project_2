@@ -25,14 +25,26 @@ public class GUI extends JFrame {
 		// create a new frame
 		mainFrame = new JFrame("DB GUI");
 		mainPanel = new JPanel();
-		loadManagerViewOrders();
+        
+        // reordering the panels
+        int mainWidth = 700;
+        int mainHeight = 700;
+        int mainX = 500;
+        int mainY = 0;
+        mainPanel.setBounds(mainX, mainY, mainWidth, mainHeight);
+		
+        loadManagerViewOrders();
 		loadManagerViewSummary();
 		loadManagerViewInventory();
 
 		// set the size of frame
 		mainFrame.add(mainPanel);
-		mainFrame.setSize(768, 1024);
-		mainFrame.show();
+        
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setLayout(null);
+		
+        mainFrame.setSize(1500, 1000);
+        mainFrame.show();
 		switchToManagerViewInventory();
 	}
 
@@ -140,7 +152,9 @@ public class GUI extends JFrame {
 		loadManagerHeader(managerViewInventory);
 		JLabel title = new JLabel("Inventory");
 		managerViewInventory.add(title);
-		String name = "";
+        
+		
+        String name = "";
 		try {
 			//send statement to DBMS
 			ResultSet result = db.sendCommand("SELECT * FROM item");
