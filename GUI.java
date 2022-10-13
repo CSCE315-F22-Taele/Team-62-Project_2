@@ -63,7 +63,7 @@ public class GUI extends JFrame {
 
      private void loadServerView(){
          JPanel serverPanel = new JPanel(new BorderLayout());
-         serverView = new serverView(serverPanel, this);
+         serverView = new serverView(serverPanel, this, db.getItemHashmap());
          mainPanel.add(serverPanel);
      }
 
