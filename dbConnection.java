@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class dbConnection {
     private Connection conn;
@@ -173,6 +174,19 @@ public class dbConnection {
         return total;
     }
 
+    public HashMap<Integer, Item> getItemHashmap(){
+        HashMap<Integer, Item> resultMap = new HashMap<>();
+        try {
+			ResultSet result = sendCommand("SELECT * FROM item");
+			while (result.next()) {
+                Item newItem = new Item(result.getInt("id"), result.getDouble("quantity"), result.getString("units"), result.getString("name"));
+                resultMap.put(result.getInt("id"), newItem);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        return resultMap;
+    }
 
     public void close() {
         try {

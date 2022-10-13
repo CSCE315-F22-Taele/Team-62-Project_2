@@ -1,6 +1,7 @@
 import java.sql.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.awt.BorderLayout;
 
 /*
   TODO:
@@ -11,13 +12,13 @@ import javax.swing.*;
 */
 
 public class GUI extends JFrame {
-	JFrame mainFrame;
-	JPanel mainPanel;
-	JPanel serverView;
-	JPanel managerViewSummary;
-	JPanel managerViewInventory;
-	JPanel managerViewOrders;
-	dbConnection db;
+    private JFrame mainFrame;
+    private JPanel mainPanel;
+    private JPanel managerViewSummary;
+    private JPanel managerViewInventory;
+    private JPanel managerViewOrders;
+    private serverView serverView;
+    private dbConnection db;
 
 	public GUI(dbConnection database) {
 		db = database;
@@ -25,7 +26,7 @@ public class GUI extends JFrame {
 		// create a new frame
 		mainFrame = new JFrame("DB GUI");
 		mainPanel = new JPanel();
-        
+
         // reordering the panels
         int mainWidth = 700;
         int mainHeight = 700;
@@ -34,17 +35,18 @@ public class GUI extends JFrame {
         int frameWidth = 1500;
         int frameHeight = 1000;
         mainPanel.setBounds(mainX, mainY, mainWidth, mainHeight);
-		
+
         loadManagerViewOrders();
 		loadManagerViewSummary();
 		loadManagerViewInventory();
+        loadServerView();
 
 		// set the size of frame
 		mainFrame.add(mainPanel);
-        
+
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setLayout(null);
-		
+
         mainFrame.setSize(frameWidth, frameHeight);
 		switchToManagerViewInventory();
         mainFrame.show();
@@ -55,7 +57,21 @@ public class GUI extends JFrame {
 	 *
 	 * @param p
 	 */
+     public void switchToManagerView(){
+         switchToManagerViewSummary();
+     }
+
+     private void loadServerView(){
+         JPanel serverPanel = new JPanel(new BorderLayout());
+         serverView = new serverView(serverPanel, this, db.getItemHashmap());
+         mainPanel.add(serverPanel);
+     }
+
 	public void loadManagerHeader(JPanel p) {
+        JButton Server = new JButton("Server View");
+		Server.addActionListener(e -> switchToServerView());
+		p.add(Server);
+
 		JButton Summary = new JButton("Summary");
 		Summary.addActionListener(e -> switchToManagerViewSummary());
 		p.add(Summary);
@@ -152,11 +168,11 @@ public class GUI extends JFrame {
 		// create a panel
 		managerViewInventory = new JPanel();
 		loadManagerHeader(managerViewInventory);
-        
+
         // using the inventory class
         Inventory inventory = new Inventory(db);
         managerViewInventory.add(inventory.mainInventoryPanel());
-		
+
         mainPanel.add(managerViewInventory);
 	}
 
@@ -192,7 +208,6 @@ public class GUI extends JFrame {
 				date = r.getString("date");
 				prevOrders += price + "       " + date + "\n";
 				id--;
-
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -216,7 +231,13 @@ public class GUI extends JFrame {
 		managerViewSummary.setVisible(false);
 		managerViewInventory.setVisible(false);
 		managerViewOrders.setVisible(false);
+        serverView.setVisible(false);
 	}
+
+    public void switchToServerView(){
+        hideAllPanels();
+        serverView.setVisible(true);
+    }
 
 	/**
 	 * hides all panel first
@@ -262,8 +283,4 @@ public class GUI extends JFrame {
 		}
 	}
 
-	// if button is pressed
-	public void testEvent(ActionEvent e) {
-		System.out.println("Test");
-	}
 }
