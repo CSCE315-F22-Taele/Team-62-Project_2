@@ -12,13 +12,15 @@ import java.awt.BorderLayout;
 */
 
 public class GUI extends JFrame {
-    private JFrame mainFrame;
-    private JPanel mainPanel;
-    private JPanel managerViewSummary;
-    private JPanel managerViewInventory;
-    private JPanel managerViewOrders;
-    private serverView serverView;
-    private dbConnection db;
+	private JFrame mainFrame;
+	private JPanel mainPanel;
+	private JPanel managerViewSummary;
+	private JPanel managerViewInventory;
+	private JPanel managerViewOrders;
+	private serverView serverView;
+	private dbConnection db;
+
+	private JPanel verticalInventoryView;
 
 	public GUI(dbConnection database) {
 		db = database;
@@ -27,29 +29,29 @@ public class GUI extends JFrame {
 		mainFrame = new JFrame("DB GUI");
 		mainPanel = new JPanel();
 
-        // reordering the panels
-        int mainWidth = 700;
-        int mainHeight = 700;
-        int mainX = 500;
-        int mainY = 0;
-        int frameWidth = 1500;
-        int frameHeight = 1000;
-        mainPanel.setBounds(mainX, mainY, mainWidth, mainHeight);
+		// reordering the panels
+		int mainWidth = 1000;
+		int mainHeight = 700;
+		int mainX = 500;
+		int mainY = 0;
+		int frameWidth = 1500;
+		int frameHeight = 1000;
+		mainPanel.setBounds(mainX, mainY, mainWidth, mainHeight);
 
-        loadManagerViewOrders();
+		loadManagerViewOrders();
 		loadManagerViewSummary();
 		loadManagerViewInventory();
-        loadServerView();
+		loadServerView();
 
 		// set the size of frame
 		mainFrame.add(mainPanel);
 
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setLayout(null);
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setLayout(null);
 
-        mainFrame.setSize(frameWidth, frameHeight);
+		mainFrame.setSize(frameWidth, frameHeight);
 		switchToManagerViewInventory();
-        mainFrame.show();
+		mainFrame.show();
 	}
 
     public static void deleteComponent(JComponent parent, JComponent child){
@@ -63,18 +65,18 @@ public class GUI extends JFrame {
 	 *
 	 * @param p
 	 */
-     public void switchToManagerView(){
-         switchToManagerViewSummary();
-     }
+	public void switchToManagerView() {
+		switchToManagerViewSummary();
+	}
 
-     private void loadServerView(){
-         JPanel serverPanel = new JPanel(new BorderLayout());
-         serverView = new serverView(serverPanel, this, db.getItemHashmap());
-         mainPanel.add(serverPanel);
-     }
+	private void loadServerView() {
+		JPanel serverPanel = new JPanel(new BorderLayout());
+		serverView = new serverView(serverPanel, this, db.getItemHashmap());
+		mainPanel.add(serverPanel);
+	}
 
 	public void loadManagerHeader(JPanel p) {
-        JButton Server = new JButton("Server View");
+		JButton Server = new JButton("Server View");
 		Server.addActionListener(e -> switchToServerView());
 		p.add(Server);
 
@@ -175,11 +177,16 @@ public class GUI extends JFrame {
 		managerViewInventory = new JPanel();
 		loadManagerHeader(managerViewInventory);
 
-        // using the inventory class
-        Inventory inventory = new Inventory(db);
-        managerViewInventory.add(inventory.mainInventoryPanel());
+		// create a vertical panel
+		JPanel verticalPanel = new JPanel(new BorderLayout());
 
-        mainPanel.add(managerViewInventory);
+		// using the inventory class
+		Inventory inventory = new Inventory(db);
+		JTextField text = new JTextField(30);
+		managerViewInventory.add(inventory.mainInventoryPanel(verticalPanel));
+
+
+		mainPanel.add(managerViewInventory);
 	}
 
 	/**
@@ -237,13 +244,13 @@ public class GUI extends JFrame {
 		managerViewSummary.setVisible(false);
 		managerViewInventory.setVisible(false);
 		managerViewOrders.setVisible(false);
-        serverView.setVisible(false);
+		serverView.setVisible(false);
 	}
 
-    public void switchToServerView(){
-        hideAllPanels();
-        serverView.setVisible(true);
-    }
+	public void switchToServerView() {
+		hideAllPanels();
+		serverView.setVisible(true);
+	}
 
 	/**
 	 * hides all panel first
@@ -274,7 +281,7 @@ public class GUI extends JFrame {
 		hideAllPanels();
 		managerViewInventory.setVisible(true);
 
-        // retrive items from DB
+		// retrive items from DB
 		String results = "";
 		try {
 			//send statement to DBMS
