@@ -1,8 +1,11 @@
 import java.sql.*;
 import java.awt.event.*;
-
+import java.awt.BorderLayout;
 import javax.imageio.plugins.jpeg.JPEGHuffmanTable;
 import javax.swing.*;
+import javax.swing.border.Border;
+
+import java.awt.GridLayout;
 
 public class Inventory {
     
@@ -10,6 +13,7 @@ public class Inventory {
     JPanel invetoryPanel;
     JPanel contentPanel;
     JPanel mainPanel;
+    JPanel verticalView;
     JFrame mainFrame;
     
     dbConnection db;
@@ -21,10 +25,14 @@ public class Inventory {
         contentPanel = new JPanel();
     }
 
-    public JPanel mainInventoryPanel() {
-        mainPanel = new JPanel();
+
+    public JPanel mainInventoryPanel(JPanel verticalPanel) {
+        
+        mainPanel = verticalPanel;
         invetoryPanel = new JPanel();
         contentPanel = new JPanel();
+        verticalView = new JPanel(new GridLayout(0, 1));
+        verticalView.add( new JLabel("Inventory"));
         
         items();
 
@@ -37,8 +45,8 @@ public class Inventory {
         contentPanel.setBounds(mainX, 150, mainWidth, mainHeight);
         JTextField text = new JTextField(10);
         JButton inventoryUpdate = new JButton("Update");
-      inventoryUpdate.addActionListener(new ActionListener() {
-         public void actionPerformed(ActionEvent e) {     
+        inventoryUpdate.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {     
             String update = text.getText();
             String[] input = update.split(" ");
             try {
@@ -56,15 +64,14 @@ public class Inventory {
             contentPanel.validate();
             contentPanel.revalidate();
             //mainPanel.add(contentPanel);
-            
-            
+        }
+        }); 
 
-         }
-      }); 
-        mainPanel.add(text);
-        mainPanel.add(inventoryUpdate);
-        mainPanel.add(invetoryPanel);
-        mainPanel.add(contentPanel);
+        // vertical layout of inventory section
+        mainPanel.add(text, BorderLayout.PAGE_START);
+        mainPanel.add(inventoryUpdate, BorderLayout.LINE_START);
+        mainPanel.add(invetoryPanel, BorderLayout. LINE_END);
+        mainPanel.add(contentPanel, BorderLayout.PAGE_END);
         
         return mainPanel;
     }

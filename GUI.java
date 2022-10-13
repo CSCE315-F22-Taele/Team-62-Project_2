@@ -20,6 +20,8 @@ public class GUI extends JFrame {
     private serverView serverView;
     private dbConnection db;
 
+    private JPanel verticalInventoryView;
+
 	public GUI(dbConnection database) {
 		db = database;
 
@@ -169,10 +171,14 @@ public class GUI extends JFrame {
 		managerViewInventory = new JPanel();
 		loadManagerHeader(managerViewInventory);
 
+		// create a vertical panel
+        JPanel verticalPanel = new JPanel(new BorderLayout());
+
         // using the inventory class
         Inventory inventory = new Inventory(db);
         JTextField text = new JTextField(30);
-        managerViewInventory.add(inventory.mainInventoryPanel());
+        managerViewInventory.add(inventory.mainInventoryPanel(verticalPanel));
+
 
         mainPanel.add(managerViewInventory);
 	}
