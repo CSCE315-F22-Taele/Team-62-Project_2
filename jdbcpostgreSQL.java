@@ -1,9 +1,11 @@
 import java.sql.*;
 import java.lang.Math;
 
-/*
-CSCE 315
-9-27-2021 Lab
+
+
+/**
+ * CSCE 315
+ * 9-27-2021 Lab
  */
 public class jdbcpostgreSQL {
 
@@ -18,12 +20,13 @@ public class jdbcpostgreSQL {
 
     public static void main(String[] args) {
         dbConnection db = new dbConnection();
-        GUI.initialize(db);
-        db.close();
+        db.connect();
+        GUI g = new GUI(db);
+        // Inventory I = new Inventory(db);
     }
 
     public static void queryTest(dbConnection db){
-        // List of query commands to be run through the database        
+        // List of query commands to be run through the database
         String[] cmds = {
                 "SELECT SUM(total) FROM orders", // total sales
                 "SELECT AVG(total) FROM orders", // average spend per order
