@@ -1,6 +1,7 @@
 import java.sql.*;
 import java.awt.event.*;
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import javax.swing.*;
 import java.util.HashMap;
 
@@ -11,7 +12,7 @@ public class serverView {
     private JPanel itemPanel;
     private JPanel receiptPanel;
     private JPanel infoPanel;
-    private HashMap<Integer, JPanel> productPanels = new HashMap<>();
+    private HashMap<JButton, JPanel> productPanels = new HashMap<>(); // Maps instantiated product buttons to their editing panels
 
     private ProductDef[] testProducts = {
         new ProductDef(0, "Gyro", 7.49, new int[]{0,1,2}, new double[]{0.5, 1.0, 1.5}, new int[]{3,4,5}, new double[]{0.3, 0.4, 0.5}),
@@ -23,29 +24,21 @@ public class serverView {
     private void loadProductPanels(){
         for(ProductDef p : testProducts){
             JButton b = new JButton(p.name);
-            b.addActionListener(e -> switchToProductPanel(p.id));
+            b.addActionListener(e -> addNewProduct(p.id));
             productPanel.add(b);
-
-            JPanel productItemPanel = new JPanel();
-            productItemPanel.add(new JLabel("Customize " + p.name));
-            productItemPanel.setVisible(false);
-            // Store the product panel in the hashmap for referencing later.
-            productPanels.put(p.id, productItemPanel);
-            itemPanel.add(productItemPanel);
         }
     }
 
     public serverView(JPanel p, GUI g){
         mainPanel = p;
         gui = g;
-        productPanel = new JPanel();
+        productPanel = new JPanel(new GridLayout(0,1));
         itemPanel = new JPanel();
-        receiptPanel = new JPanel();
+        receiptPanel = new JPanel(new GridLayout(0,1));
         infoPanel = new JPanel();
         infoPanel.add(new JLabel("Server View"));
         productPanel.add(new JLabel("Products"));
         receiptPanel.add(new JLabel("Receipts"));
-        itemPanel.add(new JLabel("Items"));
         JButton switchButton = new JButton("Manager View");
         switchButton.addActionListener(e -> gui.switchToManagerView());
         infoPanel.add(switchButton);
@@ -61,11 +54,30 @@ public class serverView {
     public void setVisible(boolean v){
         mainPanel.setVisible(v);
     }
-    public void switchToProductPanel(int id){
-        System.out.println("I want product panel " + id);
-        // Hide every panel
-        productPanels.forEach((i, p) -> p.setVisible(false));
-        // Show the one we want
-        productPanels.get(id).setVisible(true);
+    public void addNewProduct(int id){
+        // Create and show a new product panel
+        ProductDef p = testProducts[id];
+        JPanel productItemPanel = new JPanel(new GridLayout(5,5));
+        for(int i=0;i<p.optionalItems.length;i++){
+            int itemId = p.optionalItems[i];
+            double portion = p.optionalItemPortions[i];
+            JToggleButton itemButton = new JToggleButton(itemId + " - " + portion);
+            productItemPanel.add(itemButton);
+        }
+        itemPanel.add(productItemPanel);
+
+        // Create a button and add it to the receipt panel.
+        JButton productButton = new JButton(p.name + " - " + p.price);
+        receiptPanel.add(productButton);
+
+        // Map the button to the panel in the hashmap, then add an event listener accordingly
+        productPanels.put(productButton, productItemPanel);
+        productButton.addActionListener(e -> switchToProduct(productPanels.get(productButton)));
+        switchToProduct(productItemPanel);
+    }
+    public void switchToProduct(JPanel p){
+        // Hide every panel and show the one we want
+        productPanels.forEach((i, panel) -> panel.setVisible(false));
+        p.setVisible(true);
     }
 }
