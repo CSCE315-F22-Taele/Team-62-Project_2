@@ -61,6 +61,12 @@ public class dbConnection {
         result = stmt.executeQuery(sqlStatement);
         return result;
     }
+    /**
+     * Function that does not return anything, but string is coonstly being updated
+     * @author Adidev Mohapatra
+     * @param cmd  The actual command that is sent to the database constantly being updated
+     * @throws SQLException if there is any error with the command
+     */
 
     public void sendUpdate(String cmd) throws SQLException {
         ResultSet result;
