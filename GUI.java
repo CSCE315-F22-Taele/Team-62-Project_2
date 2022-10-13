@@ -28,7 +28,7 @@ public class GUI extends JFrame {
 		mainPanel = new JPanel();
 
         // reordering the panels
-        int mainWidth = 700;
+        int mainWidth = 1000;
         int mainHeight = 700;
         int mainX = 500;
         int mainY = 0;
