@@ -9,6 +9,7 @@ public class Inventory {
     JPanel itemPanel;
     JPanel invetoryPanel;
     JPanel contentPanel;
+    JPanel mainPanel;
     JFrame mainFrame;
     
     dbConnection db;
@@ -17,6 +18,31 @@ public class Inventory {
         db = database;
         // create a new frame
         mainFrame = new JFrame("Inventory GUI");
+        invetoryPanel = new JPanel();
+        contentPanel = new JPanel();
+
+        mainInventoryPanel();
+
+        /* items(); */
+        /* int mainWidth = 700; */
+        /* int mainHeight = 700; */
+        /* int mainX = 500; */
+        /* int mainY = 0; */
+        /* invetoryPanel.setBounds(mainX, mainY, mainWidth, 50); */
+        /* contentPanel.setBounds(mainX, 50, mainWidth, mainHeight); */
+        /*  */
+        /* mainFrame.add(invetoryPanel); */
+        /* mainFrame.add(contentPanel); */
+        mainFrame.add(mainPanel);
+        
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setSize(1500, 1000);
+        mainFrame.setLayout(null);
+        /* mainFrame.show(); */
+    }
+
+    public JPanel mainInventoryPanel() {
+        mainPanel = new JPanel();
         invetoryPanel = new JPanel();
         contentPanel = new JPanel();
         
@@ -28,15 +54,12 @@ public class Inventory {
         int mainX = 500;
         int mainY = 0;
         invetoryPanel.setBounds(mainX, mainY, mainWidth, 50);
-        contentPanel.setBounds(mainX, 50, mainWidth, mainHeight);
+        contentPanel.setBounds(mainX, 150, mainWidth, mainHeight);
         
-        mainFrame.add(invetoryPanel);
-        mainFrame.add(contentPanel);
+        mainPanel.add(invetoryPanel);
+        mainPanel.add(contentPanel);
         
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setSize(1500, 1000);
-        mainFrame.setLayout(null);
-        mainFrame.show();
+        return mainPanel;
     }
 
 
@@ -66,6 +89,4 @@ public class Inventory {
 		}
         return name;
     }
-
-
 }

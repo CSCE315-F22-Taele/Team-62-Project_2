@@ -152,24 +152,11 @@ public class GUI extends JFrame {
 		// create a panel
 		managerViewInventory = new JPanel();
 		loadManagerHeader(managerViewInventory);
-		JLabel title = new JLabel("Inventory");
-		managerViewInventory.add(title);
         
+        // using the inventory class
+        Inventory inventory = new Inventory(db);
+        managerViewInventory.add(inventory.mainInventoryPanel());
 		
-        String name = "";
-		try {
-			//send statement to DBMS
-			ResultSet result = db.sendCommand("SELECT * FROM item");
-			while (result.next()) {
-				name += result.getString("name") + "    " + result.getString("quantity") + " lbs\n";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Error accessing Database.");
-		}
-		JTextArea contents = new JTextArea(name);
-		contents.setEditable(false);
-		managerViewInventory.add(contents);
         mainPanel.add(managerViewInventory);
 	}
 
