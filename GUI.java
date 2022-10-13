@@ -52,6 +52,12 @@ public class GUI extends JFrame {
         mainFrame.show();
 	}
 
+    public static void deleteComponent(JComponent parent, JComponent child){
+        parent.remove(child);
+        parent.revalidate();
+        parent.repaint();
+    }
+
 	/**
 	 * add in the buttons: summary, Inventory, Orders
 	 *
