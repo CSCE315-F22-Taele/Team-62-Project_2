@@ -25,13 +25,18 @@ public class GUI extends JFrame {
 		// create a new frame
 		mainFrame = new JFrame("DB GUI");
 		mainPanel = new JPanel();
-		loadManagerViewOrders();
+        
+        // reordering the panels
+        mainPanel.setBounds(0, 0, 200, 200);
+		
+        loadManagerViewOrders();
 		loadManagerViewSummary();
 		loadManagerViewInventory();
 
 		// set the size of frame
 		mainFrame.add(mainPanel);
-		mainFrame.setSize(768, 1024);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setSize(1500, 1000);
 		mainFrame.show();
 		switchToManagerViewInventory();
 	}
