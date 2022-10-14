@@ -37,7 +37,7 @@ public class Inventory {
 
 		// reordering the panels
 		int mainWidth = 2000;
-		int mainHeight = 900;
+		int mainHeight = 1000;
 		int mainX = 450;
 		int mainY = 0;
 		invetoryPanel.setBounds(mainX, mainY, mainWidth, 50);
@@ -48,8 +48,18 @@ public class Inventory {
 			public void actionPerformed(ActionEvent e) {
 				String update = text.getText();
 				String[] input = update.split(" ");
+				String name = "";
+				for(int i = 0; i<input.length-1;i++){
+					if(i == input.length-2){
+						name+=input[i];
+					}
+					else{
+						name+=(input[i]+" ");
+					}
+				}
+				String q = input[input.length-1];
 				try {
-					db.sendUpdate("UPDATE item SET quantity = " + input[1] + " WHERE name = '" + input[0] + "'");
+					db.sendUpdate("UPDATE item SET quantity = " + q + " WHERE name = '" + name + "'");
 				} catch (Exception error) {
 					error.printStackTrace();
 					System.err.println(error.getClass().getName() + ": " + error.getMessage());
@@ -57,7 +67,8 @@ public class Inventory {
 				}
 				contentPanel.removeAll();
 				String itemList = retrivingDBItems();
-				JTextArea content = new JTextArea(itemList);
+				String itemList2 = retrivingDBItems2();
+				JTextArea content = new JTextArea("Item Inventory:\n " + itemList + "\nProduct Prices:\n" +itemList2);
 				content.setEditable(false);
 				contentPanel.add(content);
 				contentPanel.validate();
@@ -70,20 +81,33 @@ public class Inventory {
 			public void actionPerformed(ActionEvent e) {
 				String updatePrice = textPrices.getText();
 				String[] input = updatePrice.split(" ");
+				String Pname = "";
+				String newPrice = "";
+				for(int i = 0; i<input.length-1;i++){
+					if(i == input.length-2){
+						Pname+=input[i];
+					}
+					else{
+						Pname+=(input[i]+" ");
+					}
+				}
+				newPrice = input[input.length-1];
 				try {
-					db.sendUpdate("UPDATE productDef SET price = " + input[1] + " WHERE name = '" + input[0] + "'");
+					db.sendUpdate("UPDATE productDef SET price = " + newPrice + " WHERE name = '" + Pname + "'");
 				} catch (Exception error) {
 					error.printStackTrace();
 					System.err.println(error.getClass().getName() + ": " + error.getMessage());
 					System.exit(0);
 				}
 				//contentPanel.removeAll();
+				contentPanel.removeAll();
 				String itemList = retrivingDBItems();
-				JTextArea content = new JTextArea(itemList);
-				content.setEditable(false);
-				contentPanel.add(content);
-				//contentPanel.validate();
-				//contentPanel.revalidate();
+				String itemList2 = retrivingDBItems2();
+				JTextArea content2 = new JTextArea("Item Inventory:\n " + itemList + "\nProduct Prices:\n" +itemList2);
+				content2.setEditable(false);
+				contentPanel.add(content2);
+				contentPanel.validate();
+				contentPanel.revalidate();
 			}
 		});
 
@@ -101,6 +125,12 @@ public class Inventory {
 		return mainPanel2;
 	}
 
+    /*public JPanel mainpriceupdatepanel(JPanel verticalPanel){
+
+
+
+    }*/
+
 
 	public void items() {
 		itemPanel = new JPanel();
@@ -108,7 +138,8 @@ public class Inventory {
 		itemPanel.add(title);
 
 		String itemList = retrivingDBItems();
-		JTextArea content = new JTextArea(itemList);
+		String itemList2 = retrivingDBItems2();
+		JTextArea content = new JTextArea("Item Inventory:\n " + itemList + "\nProduct Prices:\n" +itemList2);
 		content.setEditable(false);
 		contentPanel.add(content);
 		invetoryPanel.add(itemPanel);
@@ -121,6 +152,20 @@ public class Inventory {
 			ResultSet result = db.sendCommand("SELECT * FROM item");
 			while (result.next()) {
 				name += result.getString("name") + "    " + result.getString("quantity") + " units\n";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Error accessing Database.");
+		}
+		return name;
+	}
+	public String retrivingDBItems2() {
+		String name = "";
+		try {
+			//send statement to DBMS
+			ResultSet result = db.sendCommand("SELECT * FROM productDef");
+			while (result.next()) {
+				name += result.getString("name") + "    " + result.getString("price") + "$\n";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
