@@ -150,16 +150,14 @@ public class GUI extends JFrame {
 					salesWeek += r.getInt("total");
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+				break;
 			}
 			try {
 				ResultSet r = db.sendCommand("SELECT date FROM orders WHERE date = (date '" + date + "' - integer '1')");
 				r.next();
 				date = r.getString("date");
 			} catch (Exception e) {
-				e.printStackTrace();
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+				break;
 			}
 		}
 		String week = "                 Week                  \n Revenue: " + salesWeek + "       Orders: " + ordersWeek + "       Avg. Order: " + (double) salesWeek / ordersWeek;
