@@ -37,14 +37,14 @@ public class Inventory {
 		items();
 
 		// reordering the panels
-		int mainWidth = 1300;
-		int mainHeight = 700;
-		int mainX = 500;
+		int mainWidth = 2000;
+		int mainHeight = 900;
+		int mainX = 450;
 		int mainY = 0;
 		invetoryPanel.setBounds(mainX, mainY, mainWidth, 50);
 		contentPanel.setBounds(mainX, 150, mainWidth, mainHeight);
 		JTextField text = new JTextField(10);
-		JButton inventoryUpdate = new JButton("Update");
+		JButton inventoryUpdate = new JButton("Update Inventory");
 		inventoryUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String update = text.getText();
@@ -65,10 +65,34 @@ public class Inventory {
 				contentPanel.revalidate();
 			}
 		});
+        JTextField textPrices = new JTextField(10);
+		JButton PriceUpdate = new JButton("Update Price");
+		PriceUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String updatePrice = textPrices.getText();
+				String[] input = updatePrice.split(" ");
+				try {
+					db.sendUpdate("UPDATE productDef SET price = " + input[1] + " WHERE name = '" + input[0] + "'");
+				} catch (Exception error) {
+					error.printStackTrace();
+					System.err.println(error.getClass().getName() + ": " + error.getMessage());
+					System.exit(0);
+				}
+				//contentPanel.removeAll();
+				String itemList = retrivingDBItems();
+				JTextArea content = new JTextArea(itemList);
+				content.setEditable(false);
+				contentPanel.add(content);
+				//contentPanel.validate();
+				//contentPanel.revalidate();
+			}
+		});
 
 		// vertical layout of inventory section
 		mainPanel.add(text, BorderLayout.PAGE_START);
-		mainPanel.add(inventoryUpdate, BorderLayout.LINE_START);
+        mainPanel.add(textPrices, BorderLayout.CENTER);
+		mainPanel.add(inventoryUpdate, BorderLayout.PAGE_END);
+        mainPanel.add(PriceUpdate, BorderLayout.LINE_START);
 		mainPanel.add(invetoryPanel, BorderLayout.LINE_END);
 		mainPanel.add(contentPanel, BorderLayout.PAGE_END);
 
