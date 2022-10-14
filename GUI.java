@@ -32,7 +32,7 @@ public class GUI extends JFrame {
 		// reordering the panels
 		int mainWidth = 1000;
 		int mainHeight = 700;
-		int mainX = 500;
+		int mainX = 300;
 		int mainY = 0;
 		int frameWidth = 1500;
 		int frameHeight = 1000;
@@ -71,7 +71,7 @@ public class GUI extends JFrame {
 
 	private void loadServerView() {
 		JPanel serverPanel = new JPanel(new BorderLayout());
-		serverView = new serverView(serverPanel, this, db.getItemHashmap());
+		serverView = new serverView(serverPanel, this, db);
 		mainPanel.add(serverPanel);
 	}
 

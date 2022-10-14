@@ -16,22 +16,26 @@ public class serverView {
     private HashMap<JButton, Product> productDataMap = new HashMap<>(); // Maps instantiated product buttons to their product data
     private HashMap<Integer, Item> itemMap; // Maps item IDs to info
 
-    private ProductDef[] productDefs = testGeneration.productDefs;
+    private dbConnection db;
+    private ProductDef[] productDefs;
 
     private GUI gui;
 
     private void loadProductPanels(){
         for(ProductDef p : productDefs){
+            System.out.println(p.name + ", " + p.id);
             JButton b = new JButton(p.name);
             b.addActionListener(e -> addNewProduct(p.id));
             productPanel.add(b);
         }
     }
 
-    public serverView(JPanel p, GUI g, HashMap<Integer, Item> i){
-        itemMap = i;
+    public serverView(JPanel p, GUI g, dbConnection database){
         mainPanel = p;
         gui = g;
+        db = database;
+        itemMap = db.getItemHashmap();
+        productDefs = db.getProductDefs();
         productPanel = new JPanel(new GridLayout(0,1));
         itemPanel = new JPanel();
         receiptPanel = new JPanel(new GridLayout(0,1));
@@ -55,9 +59,10 @@ public class serverView {
         mainPanel.setVisible(v);
     }
     public void addNewProduct(int id){
+        System.out.println("Adding new product with id " + id);
         // Create and show a new product panel
         ProductDef p = productDefs[id];
-        JPanel productItemPanel = new JPanel(new GridLayout(5,5));
+        JPanel productItemPanel = new JPanel(new GridLayout(0,3));
         Product productData = new Product(p.name, p.price);
         // Create a button and add it to the receipt panel.
         JButton productButton = new JButton(p.name + " - " + p.price);
