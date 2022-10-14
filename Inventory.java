@@ -92,12 +92,18 @@ public class Inventory {
 		mainPanel.add(text, BorderLayout.PAGE_START);
         mainPanel.add(textPrices, BorderLayout.CENTER);
 		mainPanel.add(inventoryUpdate, BorderLayout.PAGE_END);
-        mainPanel.add(PriceUpdate, BorderLayout.LINE_START);
+        mainPanel.add(PriceUpdate, BorderLayout.SOUTH);
 		mainPanel.add(invetoryPanel, BorderLayout.LINE_END);
 		mainPanel.add(contentPanel, BorderLayout.PAGE_END);
 
 		return mainPanel;
 	}
+
+    /*public JPanel mainpriceupdatepanel(JPanel verticalPanel){
+
+
+
+    }*/
 
 
 	public void items() {
