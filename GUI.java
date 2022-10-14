@@ -143,6 +143,7 @@ public class GUI extends JFrame {
 		//System.out.println(ordersToday + " " + salesToday);
 		String today = "                 TODAY                  \n Revenue: " + salesToday + "       Orders: " + ordersToday + "\n";
 		for (int i = 0; i < 7; i++) {
+			if(date!=""){
 			try {
 				ResultSet r = db.sendCommand("SELECT total FROM orders WHERE date = '" + date + "'");
 				while (r.next()) {
@@ -152,12 +153,14 @@ public class GUI extends JFrame {
 			} catch (Exception e) {
 				break;
 			}
+			}
 			try {
 				ResultSet r = db.sendCommand("SELECT date FROM orders WHERE date = (date '" + date + "' - integer '1')");
 				r.next();
 				date = r.getString("date");
 			} catch (Exception e) {
-				break;
+				date = "";
+				continue;
 			}
 		}
 		String week = "                 Week                  \n Revenue: " + salesWeek + "       Orders: " + ordersWeek + "       Avg. Order: " + (double) salesWeek / ordersWeek;
