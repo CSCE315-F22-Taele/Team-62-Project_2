@@ -271,6 +271,7 @@ public class GUI extends JFrame {
 	public void switchToManagerViewOrders() {
 		System.out.println("Switching to manager orders");
 		hideAllPanels();
+		loadManagerViewOrders();
 		managerViewOrders.setVisible(true);
 	}
 
