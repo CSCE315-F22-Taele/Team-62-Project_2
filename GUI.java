@@ -260,6 +260,7 @@ public class GUI extends JFrame {
 	public void switchToManagerViewSummary() {
 		System.out.println("Switching to manager summary");
 		hideAllPanels();
+		loadManagerViewSummary();
 		managerViewSummary.setVisible(true);
 	}
 
