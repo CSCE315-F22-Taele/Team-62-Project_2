@@ -13,18 +13,15 @@ public class serverView {
     private JPanel receiptPanel;
     private JPanel infoPanel;
     private HashMap<JButton, JPanel> productPanels = new HashMap<>(); // Maps instantiated product buttons to their editing panels
+    private HashMap<JButton, Product> productDataMap = new HashMap<>(); // Maps instantiated product buttons to their product data
     private HashMap<Integer, Item> itemMap; // Maps item IDs to info
 
-    private ProductDef[] testProducts = {
-        new ProductDef(0, "Gyro", 7.49, new int[]{0,1,2}, new double[]{0.5, 1.0, 1.5}, new int[]{3,4,5}, new double[]{0.3, 0.4, 0.5}),
-        new ProductDef(1, "Bowl", 7.59, new int[]{0,1,2}, new double[]{0.5, 1.0, 1.5}, new int[]{6,7,8}, new double[]{0.35, 0.45, 0.55}),
-        new ProductDef(2, "Drink", 2.09, new int[]{0,1,2}, new double[]{0.5, 1.0, 1.5}, new int[]{}, new double[]{}),
-    };
+    private ProductDef[] productDefs = testGeneration.productDefs;
 
     private GUI gui;
 
     private void loadProductPanels(){
-        for(ProductDef p : testProducts){
+        for(ProductDef p : productDefs){
             JButton b = new JButton(p.name);
             b.addActionListener(e -> addNewProduct(p.id));
             productPanel.add(b);
@@ -59,29 +56,44 @@ public class serverView {
     }
     public void addNewProduct(int id){
         // Create and show a new product panel
-        ProductDef p = testProducts[id];
+        ProductDef p = productDefs[id];
         JPanel productItemPanel = new JPanel(new GridLayout(5,5));
+        Product productData = new Product(p.name, p.price);
+        // Create a button and add it to the receipt panel.
+        JButton productButton = new JButton(p.name + " - " + p.price);
+        receiptPanel.add(productButton);
+
         for(int i=0;i<p.optionalItems.length;i++){
             int itemId = p.optionalItems[i];
             double portion = p.optionalItemPortions[i];
             Item item = itemMap.get(itemId);
             JToggleButton itemButton = new JToggleButton(item.name + ": " + portion + item.units);
+            itemButton.addActionListener(e -> productData.toggleItem(itemId, portion, itemButton.isSelected()));
             productItemPanel.add(itemButton);
         }
+        JToggleButton deleteButton = new JToggleButton("Remove Product");
+        productItemPanel.add(deleteButton);
         itemPanel.add(productItemPanel);
-
-        // Create a button and add it to the receipt panel.
-        JButton productButton = new JButton(p.name + " - " + p.price);
-        receiptPanel.add(productButton);
 
         // Map the button to the panel in the hashmap, then add an event listener accordingly
         productPanels.put(productButton, productItemPanel);
+        productDataMap.put(productButton, productData);
         productButton.addActionListener(e -> switchToProduct(productPanels.get(productButton)));
         switchToProduct(productItemPanel);
+
+        // Delete product button should remove the product
+        deleteButton.addActionListener(e -> removeProduct(productButton));
     }
     public void switchToProduct(JPanel p){
         // Hide every panel and show the one we want
         productPanels.forEach((i, panel) -> panel.setVisible(false));
         p.setVisible(true);
+    }
+    public void removeProduct(JButton b){
+        JPanel p = productPanels.get(b);
+        productDataMap.remove(b);
+        productPanels.remove(b);
+        GUI.deleteComponent(itemPanel, p);
+        GUI.deleteComponent(receiptPanel, b);
     }
 }

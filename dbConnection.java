@@ -82,15 +82,15 @@ public class dbConnection {
     }
 
     /** *
-* <p>
-* This Method allows a new product built up of items to be created which can then be added to individual orders in the database.
-*
-* @param  name   Name of the product
-* @param  price price of the product
-* @param  itemList   List of items in the product
-* @param  portionList List of the portions of each item in the product
-* @return The id of the newly created product
-*/
+    * <p>
+    * This Method allows a new product built up of items to be created which can then be added to individual orders in the database.
+    *
+    * @param  name   Name of the product
+    * @param  price price of the product
+    * @param  itemList   List of items in the product
+    * @param  portionList List of the portions of each item in the product
+    * @return The id of the newly created product
+    */
     public int addProductToDatabase(String name, double price, int[] itemList, double[] portionList) {
         // Returns the ID of the new product when done.
         int id = 0;
