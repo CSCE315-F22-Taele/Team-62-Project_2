@@ -92,7 +92,7 @@ public class Inventory {
 		mainPanel.add(text, BorderLayout.PAGE_START);
         mainPanel.add(textPrices, BorderLayout.CENTER);
 		mainPanel.add(inventoryUpdate, BorderLayout.PAGE_END);
-        mainPanel.add(PriceUpdate, BorderLayout.SOUTH);
+        mainPanel.add(PriceUpdate, BorderLayout.PAGE_END);
 		mainPanel.add(invetoryPanel, BorderLayout.LINE_END);
 		mainPanel.add(contentPanel, BorderLayout.PAGE_END);
 
