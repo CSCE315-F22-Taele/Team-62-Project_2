@@ -13,6 +13,7 @@ public class Inventory {
 	JPanel invetoryPanel;
 	JPanel contentPanel;
 	JPanel mainPanel;
+	JPanel mainPanel2;
 	JPanel verticalView;
 	JFrame mainFrame;
 
@@ -31,8 +32,6 @@ public class Inventory {
 		mainPanel = verticalPanel;
 		invetoryPanel = new JPanel();
 		contentPanel = new JPanel();
-		verticalView = new JPanel(new GridLayout(0, 1));
-		verticalView.add(new JLabel("Inventory"));
 
 		items();
 
@@ -49,8 +48,18 @@ public class Inventory {
 			public void actionPerformed(ActionEvent e) {
 				String update = text.getText();
 				String[] input = update.split(" ");
+				String name = "";
+				for(int i = 0; i<input.length-1;i++){
+					if(i == input.length-2){
+						name+=input[i];
+					}
+					else{
+						name+=(input[i]+" ");
+					}
+				}
+				String q = input[input.length-1];
 				try {
-					db.sendUpdate("UPDATE item SET quantity = " + input[1] + " WHERE name = '" + input[0] + "'");
+					db.sendUpdate("UPDATE item SET quantity = " + q + " WHERE name = '" + name + "'");
 				} catch (Exception error) {
 					error.printStackTrace();
 					System.err.println(error.getClass().getName() + ": " + error.getMessage());
@@ -90,13 +99,16 @@ public class Inventory {
 
 		// vertical layout of inventory section
 		mainPanel.add(text, BorderLayout.PAGE_START);
-        mainPanel.add(textPrices, BorderLayout.CENTER);
-		mainPanel.add(inventoryUpdate, BorderLayout.PAGE_END);
-        mainPanel.add(PriceUpdate, BorderLayout.PAGE_END);
+		mainPanel.add(inventoryUpdate, BorderLayout.CENTER);
 		mainPanel.add(invetoryPanel, BorderLayout.LINE_END);
 		mainPanel.add(contentPanel, BorderLayout.PAGE_END);
 
-		return mainPanel;
+		mainPanel2 = new JPanel(new BorderLayout());
+		mainPanel2.add(textPrices, BorderLayout.LINE_START);
+		mainPanel2.add(PriceUpdate, BorderLayout.CENTER);
+		mainPanel2.add(mainPanel, BorderLayout.SOUTH);
+
+		return mainPanel2;
 	}
 
     /*public JPanel mainpriceupdatepanel(JPanel verticalPanel){
