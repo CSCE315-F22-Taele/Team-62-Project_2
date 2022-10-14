@@ -282,6 +282,7 @@ public class GUI extends JFrame {
 	public void switchToManagerViewInventory() {
 		System.out.println("Switching to manager inventory");
 		hideAllPanels();
+		loadManagerViewInventory();
 		managerViewInventory.setVisible(true);
 
 		// retrive items from DB
