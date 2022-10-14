@@ -111,7 +111,7 @@ public class dbConnection {
         cmd += (price + ", ");
         cmd += "'" + Arrays.toString(itemList).replace("[", "{").replace("]", "}") + "', ";
         cmd += "'" + Arrays.toString(portionList).replace("[", "{").replace("]", "}") + "'";
-        String full = "INSERT INTO product VALUES (" + cmd + ")";
+        String full = "INSERT INTO products VALUES (" + cmd + ")";
         try {
             sendCommand(full);
         } catch (Exception e) {

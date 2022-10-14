@@ -60,6 +60,11 @@ public class GUI extends JFrame {
         parent.repaint();
     }
 
+    public static void refresh(JComponent c){
+        c.revalidate();
+        c.repaint();
+    }
+
 	/**
 	 * add in the buttons: summary, Inventory, Orders
 	 *
@@ -114,7 +119,6 @@ public class GUI extends JFrame {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
 		}
 		try {
 			ResultSet r = db.sendCommand("SELECT date FROM orders WHERE id = " + id);
@@ -123,7 +127,6 @@ public class GUI extends JFrame {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
 		}
 		try {
 			ResultSet r = db.sendCommand("SELECT total FROM orders WHERE date = '" + date + "'");
@@ -134,7 +137,6 @@ public class GUI extends JFrame {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
 		}
 
 		// create a new frame
@@ -150,7 +152,6 @@ public class GUI extends JFrame {
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-				System.exit(0);
 			}
 			try {
 				ResultSet r = db.sendCommand("SELECT date FROM orders WHERE date = (date '" + date + "' - integer '1')");
@@ -159,7 +160,6 @@ public class GUI extends JFrame {
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-				System.exit(0);
 			}
 		}
 		String week = "                 Week                  \n Revenue: " + salesWeek + "       Orders: " + ordersWeek + "       Avg. Order: " + (double) salesWeek / ordersWeek;

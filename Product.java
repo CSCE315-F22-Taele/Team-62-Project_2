@@ -1,8 +1,8 @@
 import java.util.HashMap;
 
 public class Product {
-    private String name;
-    private double price;
+    public String name;
+    public double price;
     private HashMap<Integer, Double> itemsAndPortions = new HashMap<>(); // Maps items to their respective portions.
     public Product(String name, double price) {
         this.name = name;
