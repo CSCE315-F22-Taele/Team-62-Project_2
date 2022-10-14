@@ -1,6 +1,7 @@
 import java.sql.*;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.math.BigDecimal;
 
 public class dbConnection {
     private Connection conn;
@@ -188,17 +189,24 @@ public class dbConnection {
         return resultMap;
     }
 
-    public ProductDef[] getproductDefs() {
+    public ProductDef[] getProductDefs() {
         try {
             ResultSet count = sendCommand("SELECT COUNT(productDef) FROM productDef");
-            ProductDef[] data = new ProductDef[count.getInt(0)];
+            count.next();
+            ProductDef[] data = new ProductDef[count.getInt("count")];
             try {
                 ResultSet result = sendCommand("SELECT * FROM productDef");
                 int i = 0;
                 while (result.next()) {
-                    data[i] = new ProductDef(result.getInt("id"), result.getString("name"), result.getDouble("price"), (int[]) result.getArray("baseitemlist").getArray(), 
-                    (double[]) result.getArray("baseportionlist").getArray(), (int[]) result.getArray("optionalitemlist").getArray(),
-                    (double[]) result.getArray("optionalportionlist").getArray());
+                    data[i] = new ProductDef(
+                        result.getInt("id"),
+                        result.getString("name"),
+                        result.getDouble("price"),
+                        (Integer[]) result.getArray("baseitemlist").getArray(),
+                        bigDecimalArrayToDoubleArray((BigDecimal[]) result.getArray("baseportionlist").getArray()),
+                        (Integer[]) result.getArray("optionalitemlist").getArray(),
+                        bigDecimalArrayToDoubleArray((BigDecimal[]) result.getArray("optionalportionlist").getArray())
+                    );
                     i += 1;
                 }
                 return data;
@@ -210,6 +218,14 @@ public class dbConnection {
         }
         ProductDef[] bad_data = new ProductDef[0];
         return bad_data;
+    }
+
+    Double[] bigDecimalArrayToDoubleArray(BigDecimal[] in){
+        Double[] out = new Double[in.length];
+        for(int i=0;i<in.length;i++){
+            out[i] = in[i].doubleValue();
+        }
+        return out;
     }
 
     public void close() {

@@ -1,10 +1,4 @@
 public class testGeneration {
-    public static ProductDef[] productDefs = {
-        new ProductDef(0, "Gyro", 7.49, new int[]{0,1,2}, new double[]{0.5, 1.0, 1.5}, new int[]{3,4,5}, new double[]{0.3, 0.4, 0.5}),
-        new ProductDef(1, "Bowl", 7.59, new int[]{0,1,2}, new double[]{0.5, 1.0, 1.5}, new int[]{6,7,8}, new double[]{0.35, 0.45, 0.55}),
-        new ProductDef(2, "Drink", 2.09, new int[]{0,1,2}, new double[]{0.5, 1.0, 1.5}, new int[]{}, new double[]{}),
-    };
-
     /*
      *
      */
