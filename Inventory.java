@@ -13,6 +13,7 @@ public class Inventory {
 	JPanel invetoryPanel;
 	JPanel contentPanel;
 	JPanel mainPanel;
+	JPanel mainPanel2;
 	JPanel verticalView;
 	JFrame mainFrame;
 
@@ -31,8 +32,6 @@ public class Inventory {
 		mainPanel = verticalPanel;
 		invetoryPanel = new JPanel();
 		contentPanel = new JPanel();
-		verticalView = new JPanel(new GridLayout(0, 1));
-		verticalView.add(new JLabel("Inventory"));
 
 		items();
 
@@ -90,13 +89,16 @@ public class Inventory {
 
 		// vertical layout of inventory section
 		mainPanel.add(text, BorderLayout.PAGE_START);
-        mainPanel.add(textPrices, BorderLayout.CENTER);
-		mainPanel.add(inventoryUpdate, BorderLayout.PAGE_END);
-        mainPanel.add(PriceUpdate, BorderLayout.LINE_START);
+		mainPanel.add(inventoryUpdate, BorderLayout.CENTER);
 		mainPanel.add(invetoryPanel, BorderLayout.LINE_END);
 		mainPanel.add(contentPanel, BorderLayout.PAGE_END);
 
-		return mainPanel;
+		mainPanel2 = new JPanel(new BorderLayout());
+		mainPanel2.add(textPrices, BorderLayout.LINE_START);
+		mainPanel2.add(PriceUpdate, BorderLayout.CENTER);
+		mainPanel2.add(mainPanel, BorderLayout.SOUTH);
+
+		return mainPanel2;
 	}
 
 
