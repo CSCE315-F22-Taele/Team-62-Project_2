@@ -82,15 +82,15 @@ public class dbConnection {
     }
 
     /** *
-* <p>
-* This Method allows a new product built up of items to be created which can then be added to individual orders in the database.
-*
-* @param  name   Name of the product
-* @param  price price of the product
-* @param  itemList   List of items in the product
-* @param  portionList List of the portions of each item in the product
-* @return The id of the newly created product
-*/
+    * <p>
+    * This Method allows a new product built up of items to be created which can then be added to individual orders in the database.
+    *
+    * @param  name   Name of the product
+    * @param  price price of the product
+    * @param  itemList   List of items in the product
+    * @param  portionList List of the portions of each item in the product
+    * @return The id of the newly created product
+    */
     public int addProductToDatabase(String name, double price, int[] itemList, double[] portionList) {
         // Returns the ID of the new product when done.
         int id = 0;
@@ -186,6 +186,30 @@ public class dbConnection {
 			e.printStackTrace();
 		}
         return resultMap;
+    }
+
+    public ProductDef[] getproductDefs() {
+        try {
+            ResultSet count = sendCommand("SELECT COUNT(productDef) FROM productDef");
+            ProductDef[] data = new ProductDef[count.getInt(0)];
+            try {
+                ResultSet result = sendCommand("SELECT * FROM productDef");
+                int i = 0;
+                while (result.next()) {
+                    data[i] = new ProductDef(result.getInt("id"), result.getString("name"), result.getDouble("price"), (int[]) result.getArray("baseitemlist").getArray(), 
+                    (double[]) result.getArray("baseportionlist").getArray(), (int[]) result.getArray("optionalitemlist").getArray(),
+                    (double[]) result.getArray("optionalportionlist").getArray());
+                    i += 1;
+                }
+                return data;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        ProductDef[] bad_data = new ProductDef[0];
+        return bad_data;
     }
 
     public void close() {

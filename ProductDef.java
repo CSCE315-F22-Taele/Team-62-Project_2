@@ -1,4 +1,4 @@
-public class ProductDef{
+public class ProductDef {
     public int id;
     public String name;
     public double price;

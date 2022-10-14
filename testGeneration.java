@@ -1,7 +1,12 @@
 public class testGeneration {
-    
+    public static ProductDef[] productDefs = {
+        new ProductDef(0, "Gyro", 7.49, new int[]{0,1,2}, new double[]{0.5, 1.0, 1.5}, new int[]{3,4,5}, new double[]{0.3, 0.4, 0.5}),
+        new ProductDef(1, "Bowl", 7.59, new int[]{0,1,2}, new double[]{0.5, 1.0, 1.5}, new int[]{6,7,8}, new double[]{0.35, 0.45, 0.55}),
+        new ProductDef(2, "Drink", 2.09, new int[]{0,1,2}, new double[]{0.5, 1.0, 1.5}, new int[]{}, new double[]{}),
+    };
+
     /*
-     * 
+     *
      */
     public static int[] randomItemList(int size) {
         int[] result = new int[size];
@@ -11,9 +16,9 @@ public class testGeneration {
         return result;
     }
 
-    /* 
-     * 
-    */
+    /*
+     *
+     */
     public static double[] randomPortionList(int size) {
         double[] result = new double[size];
         for (int i = 0; i < size; i++) {
@@ -23,12 +28,12 @@ public class testGeneration {
     }
 
     /*
-     * 
+     *
      */
     public static int addRandomProductToDatabase(dbConnection db) {
-        String[] items = {"Rice Pilaf", "White Rice", "Buttered Chicken", "Lemon Chicken", "Gyro Meat", 
-        "Falafel", "Onions", "Cauliflower", "Peppers","Olives", "Couscous", "Slaw", "Tomatoes", 
-        "Cucumbers", "Hummus", "Jalepeno Feta Dressing","Vinagrette Dressing", "Tahini Dressing", 
+        String[] items = {"Rice Pilaf", "White Rice", "Buttered Chicken", "Lemon Chicken", "Gyro Meat",
+        "Falafel", "Onions", "Cauliflower", "Peppers","Olives", "Couscous", "Slaw", "Tomatoes",
+        "Cucumbers", "Hummus", "Jalepeno Feta Dressing","Vinagrette Dressing", "Tahini Dressing",
         "Yogurt Dill Dressing", "Spicy Hummus","Tzatziki Sauce", "Harissa Yogurt", "drink", "2 falafels",
         "Hummus & Pita", "Vegan Box", "Garlic Fries", "Pita"};
 
@@ -36,15 +41,15 @@ public class testGeneration {
 
         int itemsInProduct = (int) (Math.random() * 3) + 4;
         return db.addProductToDatabase(
-                names[(int) (Math.random() * (4))],
-                7.69,
-                randomItemList(itemsInProduct),
-                randomPortionList(itemsInProduct)
+            names[(int) (Math.random() * (4))],
+            7.69,
+            randomItemList(itemsInProduct),
+            randomPortionList(itemsInProduct)
         );
     }
 
     /*
-     * 
+     *
      */
     public static double addRandomOrderToDatabase(dbConnection db, String date) {
         // Returns the total price of the order.
@@ -64,7 +69,7 @@ public class testGeneration {
     }
 
     /*
-     * 
+     *
      */
     public static void populateDatabaseWithOrders(dbConnection db) {
         double price = 0;
