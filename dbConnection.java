@@ -188,6 +188,30 @@ public class dbConnection {
         return resultMap;
     }
 
+    public ProductDef[] getproductDefs() {
+        try {
+            ResultSet count = sendCommand("SELECT COUNT(productDef) FROM productDef");
+            ProductDef[] data = new ProductDef[count.getInt(0)];
+            try {
+                ResultSet result = sendCommand("SELECT * FROM productDef");
+                int i = 0;
+                while (result.next()) {
+                    data[i] = new ProductDef(result.getInt("id"), result.getString("name"), result.getDouble("price"), (int[]) result.getArray("baseitemlist").getArray(), 
+                    (double[]) result.getArray("baseportionlist").getArray(), (int[]) result.getArray("optionalitemlist").getArray(),
+                    (double[]) result.getArray("optionalportionlist").getArray());
+                    i += 1;
+                }
+                return data;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        ProductDef[] bad_data = new ProductDef[0];
+        return bad_data;
+    }
+
     public void close() {
         try {
             conn.close();
