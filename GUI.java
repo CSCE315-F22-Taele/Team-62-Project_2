@@ -32,7 +32,7 @@ public class GUI extends JFrame {
 		// reordering the panels
 		int mainWidth = 1000;
 		int mainHeight = 700;
-		int mainX = 500;
+		int mainX = 300;
 		int mainY = 0;
 		int frameWidth = 1500;
 		int frameHeight = 1000;
