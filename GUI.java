@@ -109,9 +109,9 @@ public class GUI extends JFrame {
 		int id = 0;
 		String date = "";
 		int ordersToday = 0;
-		int salesToday = 0;
+		double salesToday = 0;
 		int ordersWeek = 0;
-		int salesWeek = 0;
+		double salesWeek = 0;
 		try {
 			ResultSet r = db.sendCommand("SELECT MAX(id) FROM orders");
 			r.next();
@@ -132,7 +132,7 @@ public class GUI extends JFrame {
 			ResultSet r = db.sendCommand("SELECT total FROM orders WHERE date = '" + date + "'");
 			while (r.next()) {
 				ordersToday++;
-				salesToday += r.getInt("total");
+				salesToday += r.getDouble("total");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -148,7 +148,7 @@ public class GUI extends JFrame {
 				ResultSet r = db.sendCommand("SELECT total FROM orders WHERE date = '" + date + "'");
 				while (r.next()) {
 					ordersWeek++;
-					salesWeek += r.getInt("total");
+					salesWeek += r.getDouble("total");
 				}
 			} catch (Exception e) {
 				break;

@@ -162,7 +162,7 @@ public class serverView {
             productList[i] = p.addToDatabase(db);
             i += 1;
         }
-        db.addOrderToDatabase(productList, (double)((Integer) discount.getValue() / 100.0), price, "2022-10-14");
+        db.addOrderToDatabase(productList, (double)((Integer) discount.getValue() / 100.0), price, "2022-10-15");
         init();
     }
 }
