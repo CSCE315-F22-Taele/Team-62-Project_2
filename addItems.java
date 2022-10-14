@@ -3,6 +3,7 @@ public class addItems {
         dbConnection db = new dbConnection();
         db.connect();
         try {
+            db.sendCommand("INSERT INTO item VALUES (3, 10, 'lbs', 'Buttered Chicken')");
             db.sendCommand("INSERT INTO item VALUES (4, 10, 'lbs', 'Lemon Chicken')");
             db.sendCommand("INSERT INTO item VALUES (5, 32, 'lbs', 'Gyro Meat')");
             db.sendCommand("INSERT INTO item VALUES (6, 14, 'lbs', 'Falafel')");
