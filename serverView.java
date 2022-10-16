@@ -162,7 +162,16 @@ public class serverView {
             productList[i] = p.addToDatabase(db);
             i += 1;
         }
-        db.addOrderToDatabase(productList, (double)((Integer) discount.getValue() / 100.0), price, "2022-10-14");
+        String currentDate = "";
+        try {
+			ResultSet r = db.sendCommand("SELECT CAST( (SELECT CURRENT_TIMESTAMP) AS Date )");
+			r.next();
+			currentDate = r.getString("current_timestamp");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+        db.addOrderToDatabase(productList, (double)((Integer) discount.getValue() / 100.0), price, currentDate);
         init();
     }
 }
