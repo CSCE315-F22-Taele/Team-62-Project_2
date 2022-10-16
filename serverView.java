@@ -100,7 +100,7 @@ public class serverView {
         for(int i=0;i<p.baseItems.length;i++){
             productData.addItem(p.baseItems[i], p.baseItemPortions[i]);
         }
-        
+
         // Create a button and add it to the receipt panel.
         JButton productButton = new JButton(p.name + " - " + p.price);
         receiptPanel.add(productButton);
@@ -163,7 +163,7 @@ public class serverView {
             i += 1;
         }
         String currentDate = "";
-	try {
+        try {
 			ResultSet r = db.sendCommand("SELECT CAST( (SELECT CURRENT_TIMESTAMP) AS Date )");
 			r.next();
 			currentDate = r.getString("current_timestamp");

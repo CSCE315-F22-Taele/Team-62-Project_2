@@ -4,6 +4,7 @@ public class Product {
     public String name;
     public double price;
     private HashMap<Integer, Double> itemsAndPortions = new HashMap<>(); // Maps items to their respective portions.
+    public int id = -1;
     public Product(String name, double price) {
         this.name = name;
         this.price = price;
@@ -35,6 +36,7 @@ public class Product {
             portionList[i] = itemsAndPortions.get(item);
             i += 1;
         }
-        return db.addProductToDatabase(name, price, itemList, portionList);
+        this.id = db.addProductToDatabase(name, price, itemList, portionList);
+        return this.id;
     }
 }
