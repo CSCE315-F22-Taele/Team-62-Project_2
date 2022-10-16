@@ -202,8 +202,12 @@ public class GUI extends JFrame {
 		double price = 0;
 		String date = "";
 		String prevOrders = "";
+		String lowerDate = "2022-10-14";
+		String upperDate = "2022-10-14";
+		int lowID = 0;
+		int highID = 0;
 
-		try {
+		/*try {
 			ResultSet r = db.sendCommand("SELECT MAX(id) FROM orders");
 			r.next();
 			id = r.getInt("max");
@@ -227,8 +231,62 @@ public class GUI extends JFrame {
 			e.printStackTrace();
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
+		}*/
+		//Get the smallest id on the starting date
+		try {
+			ResultSet r = db.sendCommand("SELECT productList[1] FROM orders WHERE id = (SELECT MIN (id) FROM orders WHERE date >='"+lowerDate+"')");
+			r.next();
+			lowID = r.getInt("productList");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
 		}
-
+		//Get the largest id on end date
+		try {
+			ResultSet r = db.sendCommand("SELECT productList[cardinality(productList)] FROM orders WHERE id = (SELECT MAX (id) FROM orders WHERE date <='"+upperDate+"')");
+			r.next();
+			highID = r.getInt("productList");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		//Go to each needed product and output its name, price, and sale date.
+		for(int i = lowID; i <=highID;i++){
+			//Get date
+			String productDate  = "";
+			String name = "";
+			try {
+			ResultSet r = db.sendCommand("select date from orders where " + i + "= ANY(productList)");
+			if(r.next()){
+			productDate = r.getString("date");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		try {
+			ResultSet r = db.sendCommand("select name from products where id = " + i);
+			r.next();
+			name = r.getString("name");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		try {
+			ResultSet r = db.sendCommand("select price from products where id = " + i);
+			r.next();
+			price = r.getDouble("price");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		prevOrders += name + "       " + price + "       " + productDate +"\n";
+		}
 
 		// create a new frame
 		//System.out.println(ordersToday + " " + salesToday);
