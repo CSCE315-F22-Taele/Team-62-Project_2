@@ -22,6 +22,9 @@ public class GUI extends JFrame {
 
 	private JPanel verticalInventoryView;
 
+	String lowerDate = "2022-10-15";
+	String upperDate = "2022-10-15";
+
 	public GUI(dbConnection database) {
 		db = database;
 
@@ -38,7 +41,7 @@ public class GUI extends JFrame {
 		int frameHeight = 1000;
 		mainPanel.setBounds(mainX, mainY, mainWidth, mainHeight);
 
-		loadManagerViewOrders();
+		loadManagerViewOrders(lowerDate,upperDate);
 		loadManagerViewSummary();
 		loadManagerViewInventory();
 		loadServerView();
@@ -190,51 +193,17 @@ public class GUI extends JFrame {
 		mainPanel.add(managerViewInventory);
 	}
 
-	/**
-	 * creates the Orders panal
-	 */
-	public void loadManagerViewOrders() {
-		managerViewOrders = new JPanel();
-		loadManagerHeader(managerViewOrders);
-		JLabel title = new JLabel("Orders");
-		managerViewOrders.add(title);
-		int id = 0;
+
+    //Retrieves sales within date window
+
+	public String retrieveOrders(String lowDate, String highDate){
+		//Get the smallest id on the starting date
 		double price = 0;
-		String date = "";
-		String prevOrders = "";
-		String lowerDate = "2022-10-14";
-		String upperDate = "2022-10-14";
+		String prevOrders = "Sales from "+ lowDate + " to " + highDate + ":\n\n";
 		int lowID = 0;
 		int highID = 0;
-
-		/*try {
-			ResultSet r = db.sendCommand("SELECT MAX(id) FROM orders");
-			r.next();
-			id = r.getInt("max");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
-		}
 		try {
-			for (int i = 0; i < 20; i++) {
-				ResultSet r = db.sendCommand("SELECT * FROM orders WHERE id = " + id);
-				if (r.next() == false) {
-					break;
-				}
-				price = r.getDouble("total");
-				date = r.getString("date");
-				prevOrders += price + "       " + date + "\n";
-				id--;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
-		}*/
-		//Get the smallest id on the starting date
-		try {
-			ResultSet r = db.sendCommand("SELECT productList[1] FROM orders WHERE id = (SELECT MIN (id) FROM orders WHERE date >='"+lowerDate+"')");
+			ResultSet r = db.sendCommand("SELECT productList[1] FROM orders WHERE id = (SELECT MIN (id) FROM orders WHERE date >='"+lowDate+"')");
 			r.next();
 			lowID = r.getInt("productList");
 		} catch (Exception e) {
@@ -242,9 +211,9 @@ public class GUI extends JFrame {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
-		//Get the largest id on end date
+		//Get the largest id on end date 
 		try {
-			ResultSet r = db.sendCommand("SELECT productList[cardinality(productList)] FROM orders WHERE id = (SELECT MAX (id) FROM orders WHERE date <='"+upperDate+"')");
+			ResultSet r = db.sendCommand("SELECT productList[cardinality(productList)] FROM orders WHERE id = (SELECT MAX (id) FROM orders WHERE date <='"+highDate+"')");
 			r.next();
 			highID = r.getInt("productList");
 		} catch (Exception e) {
@@ -287,11 +256,39 @@ public class GUI extends JFrame {
 		}
 		prevOrders += name + "       " + price + "       " + productDate +"\n";
 		}
+		return prevOrders;
+	}
+	/**
+	 * creates the Orders panal
+	 */
+	public void loadManagerViewOrders(String lowDate, String highDate) {
+		managerViewOrders = new JPanel();
+		loadManagerHeader(managerViewOrders);
+		JLabel title = new JLabel("Orders");
+		managerViewOrders.add(title);
+		String prevOrders = retrieveOrders(lowDate,highDate);
 
 		// create a new frame
 		//System.out.println(ordersToday + " " + salesToday);
+		JButton dateUpdate = new JButton("Change dates");
+		JTextField text = new JTextField(10);
 		JTextArea contents = new JTextArea(prevOrders);
+		dateUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String update = text.getText();
+				String[] input = update.split(" ");
+				lowerDate = input[0];
+				upperDate = input[1];
+				managerViewOrders.removeAll();
+				managerViewOrders.validate();
+				managerViewOrders.revalidate();
+				loadManagerViewOrders(lowerDate,upperDate);
+				
+			}
+		});
 		contents.setEditable(false);
+		managerViewOrders.add(dateUpdate);
+		managerViewOrders.add(text);
 		managerViewOrders.add(contents);
 		mainPanel.add(managerViewOrders);
 	}
@@ -329,7 +326,7 @@ public class GUI extends JFrame {
 	public void switchToManagerViewOrders() {
 		System.out.println("Switching to manager orders");
 		hideAllPanels();
-		loadManagerViewOrders();
+		loadManagerViewOrders(lowerDate,upperDate);
 		managerViewOrders.setVisible(true);
 	}
 
