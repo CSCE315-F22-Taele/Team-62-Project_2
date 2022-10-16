@@ -21,13 +21,21 @@ public class GUI extends JFrame {
 	private dbConnection db;
 
 	private JPanel verticalInventoryView;
-
-	String lowerDate = "2022-10-14";
-	String upperDate = "2022-10-15";
+	String lowerDate = "";
+	String upperDate = "";
 
 	public GUI(dbConnection database) {
 		db = database;
-
+		//Get Current date
+		try {
+			ResultSet r = db.sendCommand("SELECT CAST( (SELECT CURRENT_TIMESTAMP) AS Date )");
+			r.next();
+			upperDate = r.getString("current_timestamp");
+			lowerDate = upperDate;
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
 		// create a new frame
 		mainFrame = new JFrame("DB GUI");
 		mainPanel = new JPanel();
@@ -204,8 +212,12 @@ public class GUI extends JFrame {
 		int highID = 0;
 		try {
 			ResultSet r = db.sendCommand("SELECT productList[1] FROM orders WHERE id = (SELECT MIN (id) FROM orders WHERE date >='"+lowDate+"')");
-			r.next();
-			lowID = r.getInt("productList");
+			if(r.next()){
+				lowID = r.getInt("productList");
+			}
+			else{
+				return prevOrders;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -214,8 +226,12 @@ public class GUI extends JFrame {
 		//Get the largest id on end date 
 		try {
 			ResultSet r = db.sendCommand("SELECT productList[cardinality(productList)] FROM orders WHERE id = (SELECT MAX (id) FROM orders WHERE date <='"+highDate+"')");
-			r.next();
+			if(r.next()){
 			highID = r.getInt("productList");
+			}
+			else{
+				return prevOrders;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -290,7 +306,7 @@ public class GUI extends JFrame {
 		});
 		contents.setEditable(false);
 		JScrollPane pane = new JScrollPane(contents);
-		pane.setBounds(10, 11, 455, 249);
+		pane.setBounds(10, 11, getWidth()+5, getHeight());
 		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		managerViewOrders.add(dateUpdate);
 		managerViewOrders.add(text);
