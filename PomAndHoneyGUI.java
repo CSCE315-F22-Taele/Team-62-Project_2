@@ -1,4 +1,4 @@
-import com.intellij.uiDesigner.core.GridConstraints;
+/*import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 
 import java.awt.*;
@@ -28,7 +28,7 @@ public class PomAndHoneyGUI extends JFrame {
 		btnServerView.addActionListener(new ActionListener() {
 			/**
 			 * @param e the event to be processed
-			 */
+			 *//*
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
@@ -37,7 +37,7 @@ public class PomAndHoneyGUI extends JFrame {
 		btnSummary.addActionListener(new ActionListener() {
 			/**
 			 * @param e the event to be processed
-			 */
+			 *//*
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
@@ -46,7 +46,7 @@ public class PomAndHoneyGUI extends JFrame {
 		btnInventory.addActionListener(new ActionListener() {
 			/**
 			 * @param e the event to be processed
-			 */
+			 *//*
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
@@ -55,7 +55,7 @@ public class PomAndHoneyGUI extends JFrame {
 		btnOrders.addActionListener(new ActionListener() {
 			/**
 			 * @param e the event to be processed
-			 */
+			 *//*
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
@@ -88,7 +88,7 @@ public class PomAndHoneyGUI extends JFrame {
 	 * DO NOT edit this method OR call it in your code!
 	 *
 	 * @noinspection ALL
-	 */
+	 *//*
 	private void $$$setupUI$$$() {
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
@@ -123,9 +123,9 @@ public class PomAndHoneyGUI extends JFrame {
 
 	/**
 	 * @noinspection ALL
-	 */
+	 *//*
 	public JComponent $$$getRootComponent$$$() {
 		return mainPanel;
 	}
 
-}
+}*/
