@@ -22,7 +22,7 @@ public class GUI extends JFrame {
 
 	private JPanel verticalInventoryView;
 
-	String lowerDate = "2022-10-15";
+	String lowerDate = "2022-10-14";
 	String upperDate = "2022-10-15";
 
 	public GUI(dbConnection database) {
@@ -50,7 +50,7 @@ public class GUI extends JFrame {
 		mainFrame.add(mainPanel);
 
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainFrame.setLayout(null);
+		//mainFrame.setLayout(null);
 
 		mainFrame.setSize(frameWidth, frameHeight);
 		switchToManagerViewInventory();
@@ -272,7 +272,9 @@ public class GUI extends JFrame {
 		//System.out.println(ordersToday + " " + salesToday);
 		JButton dateUpdate = new JButton("Change dates");
 		JTextField text = new JTextField(10);
-		JTextArea contents = new JTextArea(prevOrders);
+		JTextArea contents = new JTextArea(prevOrders,20,20);
+		contents.setLineWrap(true);
+		contents.setWrapStyleWord(true);
 		dateUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String update = text.getText();
@@ -287,9 +289,12 @@ public class GUI extends JFrame {
 			}
 		});
 		contents.setEditable(false);
+		JScrollPane pane = new JScrollPane(contents);
+		pane.setBounds(10, 11, 455, 249);
+		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		managerViewOrders.add(dateUpdate);
 		managerViewOrders.add(text);
-		managerViewOrders.add(contents);
+		managerViewOrders.add(pane);
 		mainPanel.add(managerViewOrders);
 	}
 
