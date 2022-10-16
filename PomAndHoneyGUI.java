@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.sql.*;
+import java.lang.Math;
 
 public class PomAndHoneyGUI extends JFrame {
 	private JPanel mainPanel;
@@ -18,7 +19,10 @@ public class PomAndHoneyGUI extends JFrame {
 	private JPanel InventoryPanel;
 	private JPanel orderPanel;
 
-	public PomAndHoneyGUI() {
+	private dbConnection db;
+
+	public PomAndHoneyGUI(dbConnection database) {
+		db = database;
 
 		setContentPane(mainPanel);
 		setSize(1500, 1000);
@@ -62,6 +66,10 @@ public class PomAndHoneyGUI extends JFrame {
 			}
 		});
 
+		Inventory inventory = new Inventory(db);
+		JPanel verticalPanel = new JPanel(new BorderLayout());
+		InventoryPanel = new JPanel();
+		InventoryPanel .add( inventory.mainInventoryPanel(verticalPanel) );
 
 	}
 
@@ -69,9 +77,17 @@ public class PomAndHoneyGUI extends JFrame {
 	public static void main(String[] args) {
 		// IMPORTANT NOTES!!!!!!!!
 		// must use to currently run, will prob need to add more stuff later:
-		// javac .\PomAndHoneyGUI.java -cp ";forms_rt.jar"
-		// java -cp ".;forms_rt.jar" .\PomAndHoneyGUI.java
-		PomAndHoneyGUI mainFrame = new PomAndHoneyGUI();
+		// javac .\PomAndHoneyGUI.java .\dbConnection.java .\dbSetup.java .\Inventory.java .\GUI.java .\Product.java .\ProductDef.java .\serverView.java .\testGeneration.java .\Item.java .\addItems.java -cp ";forms_rt.jar"
+
+		// windows
+		// java -cp ".;forms_rt.jar;postgresql-42.2.8.jar" .\PomAndHoneyGUI.java
+
+		// mac/linux
+		// java -cp ".;forms_rt.jar:postgresql-42.2.8.jar" .\PomAndHoneyGUI.java
+
+		dbConnection db = new dbConnection();
+		db.connect();
+		PomAndHoneyGUI mainFrame = new PomAndHoneyGUI(db);
 
 	}
 
