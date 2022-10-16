@@ -100,7 +100,7 @@ public class serverView {
         for(int i=0;i<p.baseItems.length;i++){
             productData.addItem(p.baseItems[i], p.baseItemPortions[i]);
         }
-        
+
         // Create a button and add it to the receipt panel.
         JButton productButton = new JButton(p.name + " - " + p.price);
         receiptPanel.add(productButton);
@@ -162,7 +162,7 @@ public class serverView {
             productList[i] = p.addToDatabase(db);
             i += 1;
         }
-        db.addOrderToDatabase(productList, (double)((Integer) discount.getValue() / 100.0), price, "2022-10-15");
+        db.addOrderToDatabase(productList, (double)((Integer) discount.getValue() / 100.0), price, "2022-10-14");
         init();
     }
 }

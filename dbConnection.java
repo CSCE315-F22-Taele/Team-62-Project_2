@@ -63,6 +63,7 @@ public class dbConnection {
         result = stmt.executeQuery(sqlStatement);
         return result;
     }
+
     /**
      * Function that does not return anything, but string is coonstly being updated
      * @author Adidev Mohapatra
@@ -118,7 +119,7 @@ public class dbConnection {
         }
         for (int i = 0; i < itemList.length; i++) {
             try {
-                sendUpdate("UPDATE item SET quantity = quantity-1 WHERE id = " + itemList[i]);
+                sendUpdate("UPDATE item SET quantity = quantity-" + portionList[i] + " WHERE id = " + itemList[i]);
             } catch (Exception e) {
                 e.printStackTrace();
                 System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -180,7 +181,7 @@ public class dbConnection {
         try {
 			ResultSet result = sendCommand("SELECT * FROM item");
 			while (result.next()) {
-                Item newItem = new Item(result.getInt("id"), result.getDouble("quantity"), result.getString("units"), result.getString("name"));
+                Item newItem = new Item(result.getInt("id"), result.getDouble("quantity"), result.getString("units"), result.getString("name"), result.getDouble("minquantity"));
                 resultMap.put(result.getInt("id"), newItem);
 			}
 		} catch (Exception e) {
