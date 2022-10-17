@@ -237,6 +237,10 @@ public class PomAndHoneyGUI extends JFrame {
 		JPanel server_panel = new JPanel(new BorderLayout());
 		serverView serverView = new serverView(server_panel, db);
 		serverPanel = new JPanel();
+
+		server_panel.setBackground(customWhite);
+		serverPanel.setBackground(customWhite);
+
 		serverPanel.add(server_panel);
 	}
 
