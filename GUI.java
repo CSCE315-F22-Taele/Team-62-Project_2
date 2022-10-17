@@ -2,6 +2,7 @@ import java.sql.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.awt.BorderLayout;
+import java.util.Vector;
 
 /*
   TODO:
@@ -205,6 +206,31 @@ public class GUI extends JFrame {
 		
 		return prevOrders;
 	}
+
+	//Excess sales report
+
+	public String[] excessSales(String date) {
+		//NOTE for when you're coding: current date is stored in currentDate
+		String[] temp = new String[1];
+		try {
+			ResultSet size = db.sendCommand("SELECT COUNT(inventory) FROM inventory WHERE date='" + date + "'");
+			Double[] quantity = new Double[size.getInt("count")];
+			try {
+				ResultSet data = db.sendCommand("SELECT * FROM inventory WHERE date='" + date + "'");
+				int i = 0;
+				while (data.next()) {
+					quantity[i] = (data.getDouble("quantity"));
+					i += 1;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return temp;
+	}
+
 	/**
 	 * creates the Orders panal
 	 */
