@@ -54,6 +54,7 @@ public class serverView {
     public serverView(JPanel p, dbConnection database) {
         mainPanel = p;
         mainPanel.setBackground(customWhite);
+        mainPanel.setSize(1500, 750);
         db = database;
         init2();
     }

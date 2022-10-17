@@ -31,7 +31,7 @@ public class jdbcpostgreSQL {
 
 		dbConnection db = new dbConnection();
 		db.connect();
-        db.close();
+		GUI gui = new GUI(db);
 	}
 
 	public static void queryTest(dbConnection db) {
