@@ -6,9 +6,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
 import java.sql.*;
 import java.lang.Math;
+import java.util.Locale;
 
 public class PomAndHoneyGUI extends JFrame {
 	private JPanel mainPanel;
@@ -23,9 +28,25 @@ public class PomAndHoneyGUI extends JFrame {
 	String lowerDate = "";
 	String upperDate = "";
 	private dbConnection db;
+	Color customPurple = new Color(65, 30, 122);
+	Color customWhite = new Color(255, 255, 255);
 
 	public PomAndHoneyGUI(dbConnection database) {
 		db = database;
+		Border border = new LineBorder(customPurple, 2);
+
+		btnInventory = new JButton();
+		btnInventory.setBorder(border);
+		btnInventory.getInsets();
+
+		btnOrders = new JButton();
+		btnOrders.setBorder(border);
+
+		btnSummary = new JButton();
+		btnSummary.setBorder(border);
+
+		btnServerView = new JButton();
+		btnServerView.setBorder(border);
 
 		$$$setupUI$$$();
 		this.setContentPane(mainPanel);
@@ -39,7 +60,20 @@ public class PomAndHoneyGUI extends JFrame {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				inventoryPanel.setVisible(false);
+				summaryPanel.setVisible(false);
+				serverPanel.setVisible(true);
+				orderPanel.setVisible(false);
 
+				// changed button colors
+				btnInventory.setBackground(customPurple);
+				btnInventory.setForeground(customWhite);
+				btnServerView.setBackground(customWhite);
+				btnServerView.setForeground(customPurple);
+				btnOrders.setBackground(customPurple);
+				btnOrders.setForeground(customWhite);
+				btnSummary.setBackground(customPurple);
+				btnSummary.setForeground(customWhite);
 			}
 		});
 		btnSummary.addActionListener(new ActionListener() {
@@ -50,6 +84,19 @@ public class PomAndHoneyGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				inventoryPanel.setVisible(false);
 				summaryPanel.setVisible(true);
+				serverPanel.setVisible(false);
+				orderPanel.setVisible(false);
+
+
+				// changed button colors
+				btnInventory.setBackground(customPurple);
+				btnInventory.setForeground(customWhite);
+				btnServerView.setBackground(customPurple);
+				btnServerView.setForeground(customWhite);
+				btnOrders.setBackground(customPurple);
+				btnOrders.setForeground(customWhite);
+				btnSummary.setBackground(customWhite);
+				btnSummary.setForeground(customPurple);
 			}
 		});
 		btnInventory.addActionListener(new ActionListener() {
@@ -60,6 +107,18 @@ public class PomAndHoneyGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				inventoryPanel.setVisible(true);
 				summaryPanel.setVisible(false);
+				serverPanel.setVisible(false);
+				orderPanel.setVisible(false);
+
+				// changed button colors
+				btnInventory.setBackground(customWhite);
+				btnInventory.setForeground(customPurple);
+				btnServerView.setBackground(customPurple);
+				btnServerView.setForeground(customWhite);
+				btnOrders.setBackground(customPurple);
+				btnOrders.setForeground(customWhite);
+				btnSummary.setBackground(customPurple);
+				btnSummary.setForeground(customWhite);
 			}
 		});
 		btnOrders.addActionListener(new ActionListener() {
@@ -68,7 +127,20 @@ public class PomAndHoneyGUI extends JFrame {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				inventoryPanel.setVisible(false);
+				summaryPanel.setVisible(false);
+				serverPanel.setVisible(false);
+				orderPanel.setVisible(true);
 
+				// changed button colors
+				btnInventory.setBackground(customPurple);
+				btnInventory.setForeground(customWhite);
+				btnServerView.setBackground(customPurple);
+				btnServerView.setForeground(customWhite);
+				btnOrders.setBackground(customWhite);
+				btnOrders.setForeground(customPurple);
+				btnSummary.setBackground(customPurple);
+				btnSummary.setForeground(customWhite);
 			}
 		});
 
@@ -82,11 +154,12 @@ public class PomAndHoneyGUI extends JFrame {
 	private void createUIComponents() {
 		InventoryComponents();
 		SummaryComponents();
-//		OrderComponents(lowerDate, upperDate);
+		OrderComponents(lowerDate, upperDate);
+		ServerComponents();
 	}
 
 	private void InventoryComponents() {
-		Inventory inventory = new Inventory(db);
+		Inventory inventory = new Inventory(db, customPurple, customWhite);
 		JPanel verticalPanel = new JPanel(new BorderLayout());
 
 		inventoryPanel = new JPanel();
@@ -161,22 +234,23 @@ public class PomAndHoneyGUI extends JFrame {
 	}
 
 	private void ServerComponents() {
-		JPanel serverPanel = new JPanel(new BorderLayout());
-//		serverView = new serverView(serverPanel, this, db);
+		JPanel server_panel = new JPanel(new BorderLayout());
+		serverView serverView = new serverView(server_panel, db);
+		serverPanel = new JPanel();
+		serverPanel.add(server_panel);
 	}
 
-	public String retrieveOrders(String lowDate, String highDate){
+	public String retrieveOrders(String lowDate, String highDate) {
 		//Get the smallest id on the starting date
 		double price = 0;
-		String prevOrders = "Sales from "+ lowDate + " to " + highDate + ":\n\n";
+		String prevOrders = "Sales from " + lowDate + " to " + highDate + ":\n\n";
 		int lowID = 0;
 		int highID = 0;
 		try {
-			ResultSet r = db.sendCommand("SELECT productList[1] FROM orders WHERE id = (SELECT MIN (id) FROM orders WHERE date >='"+lowDate+"')");
-			if(r.next()){
+			ResultSet r = db.sendCommand("SELECT productList[1] FROM orders WHERE id = (SELECT MIN (id) FROM orders WHERE date >='" + lowDate + "')");
+			if (r.next()) {
 				lowID = r.getInt("productList");
-			}
-			else{
+			} else {
 				return prevOrders;
 			}
 		} catch (Exception e) {
@@ -186,11 +260,10 @@ public class PomAndHoneyGUI extends JFrame {
 		}
 		//Get the largest id on end date
 		try {
-			ResultSet r = db.sendCommand("SELECT productList[cardinality(productList)] FROM orders WHERE id = (SELECT MAX (id) FROM orders WHERE date <='"+highDate+"')");
-			if(r.next()){
+			ResultSet r = db.sendCommand("SELECT productList[cardinality(productList)] FROM orders WHERE id = (SELECT MAX (id) FROM orders WHERE date <='" + highDate + "')");
+			if (r.next()) {
 				highID = r.getInt("productList");
-			}
-			else{
+			} else {
 				return prevOrders;
 			}
 		} catch (Exception e) {
@@ -199,13 +272,13 @@ public class PomAndHoneyGUI extends JFrame {
 			System.exit(0);
 		}
 		//Go to each needed product and output its name, price, and sale date.
-		for(int i = lowID; i <=highID;i++){
+		for (int i = lowID; i <= highID; i++) {
 			//Get date
-			String productDate  = "";
+			String productDate = "";
 			String name = "";
 			try {
 				ResultSet r = db.sendCommand("select date from orders where " + i + "= ANY(productList)");
-				if(r.next()){
+				if (r.next()) {
 					productDate = r.getString("date");
 				}
 			} catch (Exception e) {
@@ -231,42 +304,42 @@ public class PomAndHoneyGUI extends JFrame {
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 				System.exit(0);
 			}
-			prevOrders += name + "       " + price + "       " + productDate +"\n";
+			prevOrders += name + "       " + price + "       " + productDate + "\n";
 		}
 		return prevOrders;
 	}
+
 	private void OrderComponents(String lowDate, String highDate) {
 		orderPanel = new JPanel();
-		JLabel title = new JLabel("Orders");
-		orderPanel.add(title);
-		String prevOrders = retrieveOrders(lowDate,highDate);
-
-		// create a new frame
-		//System.out.println(ordersToday + " " + salesToday);
-		JButton dateUpdate = new JButton("Change dates");
-		JTextField text = new JTextField(10);
-		JTextArea contents = new JTextArea(prevOrders,20,20);
-		contents.setLineWrap(true);
-		contents.setWrapStyleWord(true);
-		dateUpdate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String update = text.getText();
-				String[] input = update.split(" ");
-				lowerDate = input[0];
-				upperDate = input[1];
-				orderPanel.removeAll();
-				orderPanel.validate();
-				orderPanel.revalidate();
-			}
-		});
-		contents.setEditable(false);
-		JScrollPane pane = new JScrollPane(contents);
-		pane.setBounds(10, 11, getWidth()+5, getHeight());
-		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		orderPanel.add(dateUpdate);
-		orderPanel.add(text);
-		orderPanel.add(pane);
-		mainPanel.add(orderPanel);
+//		JLabel title = new JLabel("Orders");
+//		orderPanel.add(title);
+//		String prevOrders = retrieveOrders(lowDate, highDate);
+//
+//		// create a new frame
+//		//System.out.println(ordersToday + " " + salesToday);
+//		JButton dateUpdate = new JButton("Change dates");
+//		JTextField text = new JTextField(10);
+//		JTextArea contents = new JTextArea(prevOrders, 20, 20);
+//		contents.setLineWrap(true);
+//		contents.setWrapStyleWord(true);
+//		dateUpdate.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				String update = text.getText();
+//				String[] input = update.split(" ");
+//				lowerDate = input[0];
+//				upperDate = input[1];
+//				orderPanel.removeAll();
+//				orderPanel.validate();
+//				orderPanel.revalidate();
+//			}
+//		});
+//		contents.setEditable(false);
+//		JScrollPane pane = new JScrollPane(contents);
+//		pane.setBounds(10, 11, getWidth() + 5, getHeight());
+//		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+//		orderPanel.add(dateUpdate);
+//		orderPanel.add(text);
+//		orderPanel.add(pane);
 	}
 
 	public static void main(String[] args) {
@@ -301,29 +374,65 @@ public class PomAndHoneyGUI extends JFrame {
 		createUIComponents();
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
+		mainPanel.setBackground(new Color(-1));
+		mainPanel.setForeground(new Color(-1));
 		final JPanel panel1 = new JPanel();
 		panel1.setLayout(new GridLayoutManager(1, 4, new Insets(0, 0, 0, 0), -1, -1));
+		panel1.setBackground(new Color(-1));
+		panel1.setForeground(new Color(-1));
 		mainPanel.add(panel1, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-		btnServerView = new JButton();
+		btnServerView.setBackground(new Color(-12509574));
+		btnServerView.setForeground(new Color(-1));
 		btnServerView.setText("Server View");
-		panel1.add(btnServerView, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, 50), null, 0, false));
-		btnSummary = new JButton();
+		panel1.add(btnServerView, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 50), null, null, 0, false));
+		btnSummary.setBackground(new Color(-12509574));
+		btnSummary.setForeground(new Color(-1));
 		btnSummary.setText("Summary");
-		panel1.add(btnSummary, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, 50), null, 0, false));
-		btnInventory = new JButton();
+		panel1.add(btnSummary, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 50), null, null, 0, false));
+		btnInventory.setBackground(new Color(-12509574));
+		btnInventory.setForeground(new Color(-1));
 		btnInventory.setText("Inventory");
-		panel1.add(btnInventory, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, 50), null, 0, false));
-		btnOrders = new JButton();
+		panel1.add(btnInventory, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 50), null, null, 0, false));
+		btnOrders.setBackground(new Color(-12509574));
+		Font btnOrdersFont = this.$$$getFont$$$("Gill Sans Nova Light", -1, -1, btnOrders.getFont());
+		if (btnOrdersFont != null) btnOrders.setFont(btnOrdersFont);
+		btnOrders.setForeground(new Color(-1));
 		btnOrders.setText("Orders");
-		panel1.add(btnOrders, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, 50), null, 0, false));
-		mainPanel.add(summaryPanel, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-		serverPanel = new JPanel();
-		serverPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-		mainPanel.add(serverPanel, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-		orderPanel = new JPanel();
-		orderPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-		mainPanel.add(orderPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-		mainPanel.add(inventoryPanel, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+		panel1.add(btnOrders, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 50), null, null, 0, false));
+		summaryPanel.setBackground(new Color(-1));
+		summaryPanel.setEnabled(true);
+		summaryPanel.setForeground(new Color(-8113373));
+		mainPanel.add(summaryPanel, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), null, 0, true));
+		summaryPanel.setBorder(BorderFactory.createTitledBorder(null, "", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+		serverPanel.setBackground(new Color(-1));
+		mainPanel.add(serverPanel, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), null, 0, true));
+		orderPanel.setBackground(new Color(-1));
+		mainPanel.add(orderPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, true));
+		inventoryPanel.setBackground(new Color(-1));
+		inventoryPanel.setForeground(new Color(-1));
+		mainPanel.add(inventoryPanel, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), null, 0, true));
+	}
+
+	/**
+	 * @noinspection ALL
+	 */
+	private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+		if (currentFont == null) return null;
+		String resultName;
+		if (fontName == null) {
+			resultName = currentFont.getName();
+		} else {
+			Font testFont = new Font(fontName, Font.PLAIN, 10);
+			if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+				resultName = fontName;
+			} else {
+				resultName = currentFont.getName();
+			}
+		}
+		Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+		boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
+		Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+		return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
 	}
 
 	/**
