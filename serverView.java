@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import javax.swing.*;
 import java.util.HashMap;
+import java.awt.*;
 
 
 public class serverView {
@@ -23,12 +24,20 @@ public class serverView {
     private dbConnection db;
     private ProductDef[] productDefs;
 
+    Color customPurple = new Color(176, 48, 147);
+    Color customWhite = new Color(255, 255, 255);
+
 
     private GUI gui;
 
     private void loadProductPanels(){
         for(ProductDef p : productDefs){
             JButton b = new JButton(p.name);
+
+            b.setBackground(customPurple);
+            b.setForeground(customWhite);
+            b.setMargin(new Insets(10, 10, 10, 10));
+
             b.addActionListener(e -> addNewProduct(p.id));
             productPanel.add(b);
         }
