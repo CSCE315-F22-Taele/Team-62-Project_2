@@ -82,7 +82,6 @@ public class GUI extends JFrame {
 	/**
 	 * add in the buttons: summary, Inventory, Orders
 	 *
-	 * @param p
 	 */
 	public void switchToManagerView() {
 		switchToManagerViewSummary();

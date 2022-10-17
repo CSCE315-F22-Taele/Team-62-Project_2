@@ -54,6 +54,7 @@ public class serverView {
     public serverView(JPanel p, dbConnection database) {
         mainPanel = p;
         mainPanel.setBackground(customWhite);
+        mainPanel.setSize(1500, 750);
         db = database;
         init2();
     }
@@ -219,13 +220,7 @@ public class serverView {
 
     public void finalizeOrder(){
         int price = 0;
-        int[] productList = new int[productDataMap.size()];
         int i = 0;
-        for(Product p : productDataMap.values()){
-            price += p.price;
-            productList[i] = p.addToDatabase(db);
-            i += 1;
-        }
         String currentDate = "";
         try {
 			ResultSet r = db.sendCommand("SELECT CAST( (SELECT CURRENT_TIMESTAMP) AS Date )");
@@ -235,7 +230,12 @@ public class serverView {
 			e.printStackTrace();
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
-        db.addOrderToDatabase(productList, (double)((Integer) discount.getValue() / 100.0), price, currentDate);
+        int orderId = db.addOrderToDatabase((double)((Integer) discount.getValue() / 100.0), price, currentDate);
+        for(Product p : productDataMap.values()){
+            price += p.price;
+            p.addToDatabase(db, currentDate, orderId);
+            i += 1;
+        }
         init();
     }
 }
