@@ -302,6 +302,7 @@ public class PomAndHoneyGUI extends JFrame {
 				orderPanel.removeAll();
 				orderPanel.validate();
 				orderPanel.revalidate();
+				//OrderComponents(lowDate,highDate);
 			}
 		});
 		contents.setEditable(false);
