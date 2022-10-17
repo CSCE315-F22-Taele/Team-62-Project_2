@@ -163,9 +163,9 @@ public class testGeneration {
             db.sendUpdate("INSERT INTO item VALUES (20, 7.5, 'kg', 'Spicy Hummus', 2)");
             db.sendUpdate("INSERT INTO item VALUES (21, 7.5, 'kg', 'Tzatziki Sauce', 2)");
             db.sendUpdate("INSERT INTO item VALUES (22, 7.5, 'kg', 'Harissa Yogurt', 2)");
-            db.sendUpdate("INSERT INTO item VALUES (23, 500, '', 'Paper Cup', 2)");
-            db.sendUpdate("INSERT INTO item VALUES (24, 500, '', 'Plastic Bowl', 2)");
-            db.sendUpdate("INSERT INTO item VALUES (25, 500, '', 'Pita Bread', 2)");
+            db.sendUpdate("INSERT INTO item VALUES (23, 500, '', 'Paper Cup', 100)");
+            db.sendUpdate("INSERT INTO item VALUES (24, 2000, '', 'Plastic Bowl', 400)");
+            db.sendUpdate("INSERT INTO item VALUES (25, 500, '', 'Pita Bread', 100)");
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
