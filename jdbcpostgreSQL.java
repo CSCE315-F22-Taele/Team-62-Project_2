@@ -24,10 +24,10 @@ public class jdbcpostgreSQL {
 		// javac *.java -cp ";forms_rt.jar"
 
 		// windows
-		// java -cp ".;forms_rt.jar;postgresql-42.2.8.jar" .\PomAndHoneyGUI.java
+		// java -cp ".;forms_rt.jar;postgresql-42.2.8.jar" jdbcpostgreSQL
 
 		// mac/linux
-		// java -cp ".;forms_rt.jar:postgresql-42.2.8.jar" .\PomAndHoneyGUI.java
+		// java -cp ".;forms_rt.jar:postgresql-42.2.8.jar" jdbcpostgreSQL
 
 		dbConnection db = new dbConnection();
 		db.connect();
