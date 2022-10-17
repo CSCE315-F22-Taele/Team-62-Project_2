@@ -193,86 +193,15 @@ public class GUI extends JFrame {
 		//Get the smallest id on the starting date
 		double price = 0;
 		String prevOrders = "Sales from "+ lowDate + " to " + highDate + ":\n\n";
-		int lowID = 0;
-		int highID = 0;
 		try {
-			ResultSet r = db.sendCommand("SELECT id FROM item WHERE id = (SELECT MIN (id) FROM item)");
-			if(r.next()){
-				lowID = r.getInt("id");
-			}
-			else{
-				return prevOrders;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
-		}
-		//Get the largest id on end date 
-		try {
-			ResultSet r = db.sendCommand("SELECT id FROM item WHERE id = (SELECT MAX (id) FROM item)");
-			if(r.next()){
-				highID = r.getInt("id");
-			}
-			else{
-				return prevOrders;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
-		}
-		//Go to each needed product and output its name, price, and sale date.
-		for(int i = lowID; i <=highID;i++){
-			//Get date
-			String productDate  = "";
-			String name = "";
-			double firstQuantity = 0;
-			double secondQuantity = 0;
-			double totalQuantity = 0;
-			double minQuantity = 0;
-			try {
-			ResultSet r = db.sendCommand("SELECT * FROM item WHERE id = " + i);
-			if(r.next()){
-				name = r.getString("name");
-				minQuantity = r.getDouble("minquantity");
-			}
-			else{
-				return prevOrders;
-			}
-			}catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
-		}
-			
-			try {
-			ResultSet r = db.sendCommand("SELECT quantity FROM inventory WHERE (itemid = " + i + " AND date >= '" + lowDate+ "' AND date <= '"+highDate+"')");
-			while(r.next()){
-				if(firstQuantity == 0){
-					firstQuantity = r.getDouble("quantity");
+				ResultSet r = db.sendCommand("SELECT name, sum(price) from products where (date => '"+lowDate+"' AND date <= '" + highDate + "' group by name");
+				while (r.next()) {
+					prevOrders += r.getString("name") + ":       " + r.getDouble("price")+"$\n";
 				}
-				else if(secondQuantity == 0){
-					secondQuantity = r.getDouble("quantity");
-					if(secondQuantity > firstQuantity){
-						totalQuantity += ((firstQuantity - minQuantity) + (minQuantity*5 - secondQuantity));
-						firstQuantity = secondQuantity;
-						secondQuantity = 0;
-					}
-					else{
-						totalQuantity += (firstQuantity - secondQuantity);
-						firstQuantity = secondQuantity;
-						secondQuantity = 0;
-					}
-				}
+			} catch (Exception e) {
+				
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
-		}
-			prevOrders += name + ":       " + totalQuantity+" units sold\n";
-		}
+		
 		return prevOrders;
 	}
 	/**

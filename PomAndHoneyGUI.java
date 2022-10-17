@@ -1,4 +1,4 @@
-/*import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 
@@ -70,7 +70,7 @@ public class PomAndHoneyGUI extends JFrame {
 		btnServerView.addActionListener(new ActionListener() {
 			/**
 			 * @param e the event to be processed
-			 *//*
+			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				inventoryPanel.setVisible(false);
@@ -92,7 +92,7 @@ public class PomAndHoneyGUI extends JFrame {
 		btnSummary.addActionListener(new ActionListener() {
 			/**
 			 * @param e the event to be processed
-			 *//*
+			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				inventoryPanel.setVisible(false);
@@ -115,7 +115,7 @@ public class PomAndHoneyGUI extends JFrame {
 		btnInventory.addActionListener(new ActionListener() {
 			/**
 			 * @param e the event to be processed
-			 *//*
+			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				inventoryPanel.setVisible(true);
@@ -137,7 +137,7 @@ public class PomAndHoneyGUI extends JFrame {
 		btnOrders.addActionListener(new ActionListener() {
 			/**
 			 * @param e the event to be processed
-			 *//*
+			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				inventoryPanel.setVisible(false);
@@ -257,72 +257,19 @@ public class PomAndHoneyGUI extends JFrame {
 		serverPanel.add(server_panel);
 	}
 
-	public String retrieveOrders(String lowDate, String highDate) {
+	public String retrieveOrders(String lowDate, String highDate){
 		//Get the smallest id on the starting date
 		double price = 0;
-		String prevOrders = "Sales from " + lowDate + " to " + highDate + ":\n\n";
-		int lowID = 0;
-		int highID = 0;
+		String prevOrders = "Sales from "+ lowDate + " to " + highDate + ":\n\n";
 		try {
-			ResultSet r = db.sendCommand("SELECT productList[1] FROM orders WHERE id = (SELECT MIN (id) FROM orders WHERE date >='" + lowDate + "')");
-			if (r.next()) {
-				lowID = r.getInt("productList");
-			} else {
-				return prevOrders;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
-		}
-		//Get the largest id on end date
-		try {
-			ResultSet r = db.sendCommand("SELECT productList[cardinality(productList)] FROM orders WHERE id = (SELECT MAX (id) FROM orders WHERE date <='" + highDate + "')");
-			if (r.next()) {
-				highID = r.getInt("productList");
-			} else {
-				return prevOrders;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
-		}
-		//Go to each needed product and output its name, price, and sale date.
-		for (int i = lowID; i <= highID; i++) {
-			//Get date
-			String productDate = "";
-			String name = "";
-			try {
-				ResultSet r = db.sendCommand("select date from orders where " + i + "= ANY(productList)");
-				if (r.next()) {
-					productDate = r.getString("date");
+				ResultSet r = db.sendCommand("SELECT name, sum(price) from products where (date >= '"+lowDate+"' AND date <= '" + highDate + "') group by name");
+				while (r.next()) {
+					prevOrders += r.getString("name") + ":       " + r.getDouble("price")+"$\n";
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-				System.exit(0);
+				
 			}
-			try {
-				ResultSet r = db.sendCommand("select name from products where id = " + i);
-				r.next();
-				name = r.getString("name");
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-				System.exit(0);
-			}
-			try {
-				ResultSet r = db.sendCommand("select price from products where id = " + i);
-				r.next();
-				price = r.getDouble("price");
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.err.println(e.getClass().getName() + ": " + e.getMessage());
-				System.exit(0);
-			}
-			prevOrders += name + "       " + price + "       " + productDate + "\n";
-		}
+		
 		return prevOrders;
 	}
 
@@ -332,7 +279,7 @@ public class PomAndHoneyGUI extends JFrame {
 		JLabel title = new JLabel("Orders");
 		orderPanel.add(title);
 //		String prevOrders = retrieveOrders(lowDate, highDate);
-		String prevOrders = "kal;sdjf";
+		String prevOrders = retrieveOrders(lowDate,highDate);
 
 		// create a new frame
 		//System.out.println(ordersToday + " " + salesToday);
@@ -388,7 +335,7 @@ public class PomAndHoneyGUI extends JFrame {
 	 * DO NOT edit this method OR call it in your code!
 	 *
 	 * @noinspection ALL
-	 *//*
+	 */
 	private void $$$setupUI$$$() {
 		createUIComponents();
 		mainPanel = new JPanel();
@@ -456,14 +403,10 @@ public class PomAndHoneyGUI extends JFrame {
 
 	/**
 	 * @noinspection ALL
-	 *//*
+	 */
 	public JComponent $$$getRootComponent$$$() {
 		return mainPanel;
 	}
 
-<<<<<<< HEAD
-}*/
-=======
 
 }
->>>>>>> 279d586d6bc6329245f8dc9b51c01014549e84d4
