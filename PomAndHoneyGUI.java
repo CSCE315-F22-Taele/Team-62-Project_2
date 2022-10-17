@@ -20,7 +20,8 @@ public class PomAndHoneyGUI extends JFrame {
 	private JPanel summaryPanel;
 	private JPanel orderPanel;
 	private JPanel inventoryPanel;
-
+	String lowerDate = "";
+	String upperDate = "";
 	private dbConnection db;
 
 	public PomAndHoneyGUI(dbConnection database) {
@@ -47,7 +48,8 @@ public class PomAndHoneyGUI extends JFrame {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				inventoryPanel.setVisible(false);
+				summaryPanel.setVisible(true);
 			}
 		});
 		btnInventory.addActionListener(new ActionListener() {
@@ -56,7 +58,8 @@ public class PomAndHoneyGUI extends JFrame {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				inventoryPanel.setVisible(true);
+				summaryPanel.setVisible(false);
 			}
 		});
 		btnOrders.addActionListener(new ActionListener() {
@@ -79,6 +82,7 @@ public class PomAndHoneyGUI extends JFrame {
 	private void createUIComponents() {
 		InventoryComponents();
 		SummaryComponents();
+//		OrderComponents(lowerDate, upperDate);
 	}
 
 	private void InventoryComponents() {
@@ -154,6 +158,115 @@ public class PomAndHoneyGUI extends JFrame {
 		JTextArea contents = new JTextArea(today + week);
 		contents.setEditable(false);
 		summaryPanel.add(contents);
+	}
+
+	private void ServerComponents() {
+		JPanel serverPanel = new JPanel(new BorderLayout());
+//		serverView = new serverView(serverPanel, this, db);
+	}
+
+	public String retrieveOrders(String lowDate, String highDate){
+		//Get the smallest id on the starting date
+		double price = 0;
+		String prevOrders = "Sales from "+ lowDate + " to " + highDate + ":\n\n";
+		int lowID = 0;
+		int highID = 0;
+		try {
+			ResultSet r = db.sendCommand("SELECT productList[1] FROM orders WHERE id = (SELECT MIN (id) FROM orders WHERE date >='"+lowDate+"')");
+			if(r.next()){
+				lowID = r.getInt("productList");
+			}
+			else{
+				return prevOrders;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		//Get the largest id on end date
+		try {
+			ResultSet r = db.sendCommand("SELECT productList[cardinality(productList)] FROM orders WHERE id = (SELECT MAX (id) FROM orders WHERE date <='"+highDate+"')");
+			if(r.next()){
+				highID = r.getInt("productList");
+			}
+			else{
+				return prevOrders;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+		//Go to each needed product and output its name, price, and sale date.
+		for(int i = lowID; i <=highID;i++){
+			//Get date
+			String productDate  = "";
+			String name = "";
+			try {
+				ResultSet r = db.sendCommand("select date from orders where " + i + "= ANY(productList)");
+				if(r.next()){
+					productDate = r.getString("date");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+				System.exit(0);
+			}
+			try {
+				ResultSet r = db.sendCommand("select name from products where id = " + i);
+				r.next();
+				name = r.getString("name");
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+				System.exit(0);
+			}
+			try {
+				ResultSet r = db.sendCommand("select price from products where id = " + i);
+				r.next();
+				price = r.getDouble("price");
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.err.println(e.getClass().getName() + ": " + e.getMessage());
+				System.exit(0);
+			}
+			prevOrders += name + "       " + price + "       " + productDate +"\n";
+		}
+		return prevOrders;
+	}
+	private void OrderComponents(String lowDate, String highDate) {
+		orderPanel = new JPanel();
+		JLabel title = new JLabel("Orders");
+		orderPanel.add(title);
+		String prevOrders = retrieveOrders(lowDate,highDate);
+
+		// create a new frame
+		//System.out.println(ordersToday + " " + salesToday);
+		JButton dateUpdate = new JButton("Change dates");
+		JTextField text = new JTextField(10);
+		JTextArea contents = new JTextArea(prevOrders,20,20);
+		contents.setLineWrap(true);
+		contents.setWrapStyleWord(true);
+		dateUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String update = text.getText();
+				String[] input = update.split(" ");
+				lowerDate = input[0];
+				upperDate = input[1];
+				orderPanel.removeAll();
+				orderPanel.validate();
+				orderPanel.revalidate();
+			}
+		});
+		contents.setEditable(false);
+		JScrollPane pane = new JScrollPane(contents);
+		pane.setBounds(10, 11, getWidth()+5, getHeight());
+		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		orderPanel.add(dateUpdate);
+		orderPanel.add(text);
+		orderPanel.add(pane);
+		mainPanel.add(orderPanel);
 	}
 
 	public static void main(String[] args) {
