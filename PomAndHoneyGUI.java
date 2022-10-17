@@ -27,6 +27,13 @@ public class PomAndHoneyGUI extends JFrame {
 	public PomAndHoneyGUI(dbConnection database) {
 		db = database;
 
+		btnInventory = new JButton();
+		btnOrders = new JButton();
+		btnSummary = new JButton();
+		btnServerView = new JButton();
+		Color customPurple = new Color(65, 30, 122);
+		Color customWhite = new Color(255, 255, 255);
+
 		$$$setupUI$$$();
 		this.setContentPane(mainPanel);
 		this.setSize(1500, 1000);
@@ -42,6 +49,17 @@ public class PomAndHoneyGUI extends JFrame {
 				inventoryPanel.setVisible(false);
 				summaryPanel.setVisible(false);
 				serverPanel.setVisible(true);
+				orderPanel.setVisible(false);
+
+				// changed button colors
+				btnInventory.setBackground(customPurple);
+				btnInventory.setForeground(customWhite);
+				btnServerView.setBackground(customWhite);
+				btnServerView.setForeground(customPurple);
+				btnOrders.setBackground(customPurple);
+				btnOrders.setForeground(customWhite);
+				btnSummary.setBackground(customPurple);
+				btnSummary.setForeground(customWhite);
 			}
 		});
 		btnSummary.addActionListener(new ActionListener() {
@@ -53,6 +71,18 @@ public class PomAndHoneyGUI extends JFrame {
 				inventoryPanel.setVisible(false);
 				summaryPanel.setVisible(true);
 				serverPanel.setVisible(false);
+				orderPanel.setVisible(false);
+
+
+				// changed button colors
+				btnInventory.setBackground(customPurple);
+				btnInventory.setForeground(customWhite);
+				btnServerView.setBackground(customPurple);
+				btnServerView.setForeground(customWhite);
+				btnOrders.setBackground(customPurple);
+				btnOrders.setForeground(customWhite);
+				btnSummary.setBackground(customWhite);
+				btnSummary.setForeground(customPurple);
 			}
 		});
 		btnInventory.addActionListener(new ActionListener() {
@@ -64,6 +94,17 @@ public class PomAndHoneyGUI extends JFrame {
 				inventoryPanel.setVisible(true);
 				summaryPanel.setVisible(false);
 				serverPanel.setVisible(false);
+				orderPanel.setVisible(false);
+
+				// changed button colors
+				btnInventory.setBackground(customWhite);
+				btnInventory.setForeground(customPurple);
+				btnServerView.setBackground(customPurple);
+				btnServerView.setForeground(customWhite);
+				btnOrders.setBackground(customPurple);
+				btnOrders.setForeground(customWhite);
+				btnSummary.setBackground(customPurple);
+				btnSummary.setForeground(customWhite);
 			}
 		});
 		btnOrders.addActionListener(new ActionListener() {
@@ -72,7 +113,20 @@ public class PomAndHoneyGUI extends JFrame {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				inventoryPanel.setVisible(false);
+				summaryPanel.setVisible(false);
+				serverPanel.setVisible(false);
+				orderPanel.setVisible(true);
 
+				// changed button colors
+				btnInventory.setBackground(customPurple);
+				btnInventory.setForeground(customWhite);
+				btnServerView.setBackground(customPurple);
+				btnServerView.setForeground(customWhite);
+				btnOrders.setBackground(customWhite);
+				btnOrders.setForeground(customPurple);
+				btnSummary.setBackground(customPurple);
+				btnSummary.setForeground(customWhite);
 			}
 		});
 
@@ -86,7 +140,7 @@ public class PomAndHoneyGUI extends JFrame {
 	private void createUIComponents() {
 		InventoryComponents();
 		SummaryComponents();
-//		OrderComponents(lowerDate, upperDate);
+		OrderComponents(lowerDate, upperDate);
 		ServerComponents();
 	}
 
@@ -243,36 +297,35 @@ public class PomAndHoneyGUI extends JFrame {
 
 	private void OrderComponents(String lowDate, String highDate) {
 		orderPanel = new JPanel();
-		JLabel title = new JLabel("Orders");
-		orderPanel.add(title);
-		String prevOrders = retrieveOrders(lowDate, highDate);
-
-		// create a new frame
-		//System.out.println(ordersToday + " " + salesToday);
-		JButton dateUpdate = new JButton("Change dates");
-		JTextField text = new JTextField(10);
-		JTextArea contents = new JTextArea(prevOrders, 20, 20);
-		contents.setLineWrap(true);
-		contents.setWrapStyleWord(true);
-		dateUpdate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String update = text.getText();
-				String[] input = update.split(" ");
-				lowerDate = input[0];
-				upperDate = input[1];
-				orderPanel.removeAll();
-				orderPanel.validate();
-				orderPanel.revalidate();
-			}
-		});
-		contents.setEditable(false);
-		JScrollPane pane = new JScrollPane(contents);
-		pane.setBounds(10, 11, getWidth() + 5, getHeight());
-		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		orderPanel.add(dateUpdate);
-		orderPanel.add(text);
-		orderPanel.add(pane);
-		mainPanel.add(orderPanel);
+//		JLabel title = new JLabel("Orders");
+//		orderPanel.add(title);
+//		String prevOrders = retrieveOrders(lowDate, highDate);
+//
+//		// create a new frame
+//		//System.out.println(ordersToday + " " + salesToday);
+//		JButton dateUpdate = new JButton("Change dates");
+//		JTextField text = new JTextField(10);
+//		JTextArea contents = new JTextArea(prevOrders, 20, 20);
+//		contents.setLineWrap(true);
+//		contents.setWrapStyleWord(true);
+//		dateUpdate.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				String update = text.getText();
+//				String[] input = update.split(" ");
+//				lowerDate = input[0];
+//				upperDate = input[1];
+//				orderPanel.removeAll();
+//				orderPanel.validate();
+//				orderPanel.revalidate();
+//			}
+//		});
+//		contents.setEditable(false);
+//		JScrollPane pane = new JScrollPane(contents);
+//		pane.setBounds(10, 11, getWidth() + 5, getHeight());
+//		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+//		orderPanel.add(dateUpdate);
+//		orderPanel.add(text);
+//		orderPanel.add(pane);
 	}
 
 	public static void main(String[] args) {
@@ -324,11 +377,10 @@ public class PomAndHoneyGUI extends JFrame {
 		btnSummary.setForeground(new Color(-1));
 		btnSummary.setText("Summary");
 		panel1.add(btnSummary, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, 50), null, 0, false));
-		btnInventory = new JButton();
 		btnInventory.setBackground(new Color(-12509574));
 		btnInventory.setForeground(new Color(-1));
 		btnInventory.setText("Inventory");
-		panel1.add(btnInventory, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, 50), null, 0, false));
+		panel1.add(btnInventory, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, 50), null, 1, false));
 		btnOrders = new JButton();
 		btnOrders.setBackground(new Color(-12509574));
 		btnOrders.setForeground(new Color(-1));
@@ -341,8 +393,6 @@ public class PomAndHoneyGUI extends JFrame {
 		summaryPanel.setBorder(BorderFactory.createTitledBorder(null, "", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 		serverPanel.setBackground(new Color(-1));
 		mainPanel.add(serverPanel, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), null, 0, true));
-		orderPanel = new JPanel();
-		orderPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
 		orderPanel.setBackground(new Color(-1));
 		mainPanel.add(orderPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, true));
 		inventoryPanel.setBackground(new Color(-1));
