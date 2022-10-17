@@ -75,23 +75,24 @@ public class testGeneration {
     /*
      *
      */
-    public static void populateDatabaseWithOrders(dbConnection db) {
+    public static void populateDatabaseWithOrders(dbConnection db, int startDay) {
         testGeneration.addItems(db);
         testGeneration.addProductDefs(db);
-        System.out.println("Removing orders and products...");
-        try {
-            db.sendUpdate("DELETE FROM orders;");
-            db.sendUpdate("DELETE FROM products;");
+        if(startDay == 1){
+            System.out.println("Removing orders and products...");
+            try {
+                db.sendUpdate("DELETE FROM orders;");
+                db.sendUpdate("DELETE FROM products;");
+            }
+            catch (Exception error) {
+                error.printStackTrace();
+                System.exit(0);
+            }
+            System.out.println("Successfully deleted.");
         }
-        catch (Exception error) {
-            error.printStackTrace();
-            System.exit(0);
-        }
-        System.out.println("Successfully deleted.");
-
         double price = 0;
         int num = 0;
-        for (int day = 1; day <= 30; day++) {
+        for (int day = startDay; day <= 30; day++) {
             int orderCount;
             if (day == 17 || day == 10) {
                 orderCount = 800;
@@ -114,6 +115,12 @@ public class testGeneration {
         for(int i : items.keySet()){
             Item item = items.get(i);
             double quantity = item.quantity;
+            try {
+                db.sendUpdate("INSERT INTO inventory VALUES (" + i + ", " + quantity + ", '" + date + "')");
+            } catch (Exception error) {
+                error.printStackTrace();
+                System.exit(0);
+            }
             if(quantity < item.minquantity){
                 System.out.println("Restocking " + item.name);
                 System.out.println(" - Current Inventory: " + quantity);
