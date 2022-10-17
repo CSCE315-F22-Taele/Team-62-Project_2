@@ -27,7 +27,6 @@ public class PomAndHoneyGUI extends JFrame {
 	private JPanel inventoryPanel;
 	String lowerDate = "";
 	String upperDate = "";
-	String currentDate = "";
 	private dbConnection db;
 	Color customPurple = new Color(65, 30, 122);
 	Color customWhite = new Color(255, 255, 255);
@@ -49,6 +48,7 @@ public class PomAndHoneyGUI extends JFrame {
 		btnServerView = new JButton();
 		btnServerView.setBorder(border);
 
+		String currentDate = "";
 		try {
 			ResultSet r = db.sendCommand("SELECT CAST( (SELECT CURRENT_TIMESTAMP) AS Date )");
 			r.next();
@@ -331,7 +331,8 @@ public class PomAndHoneyGUI extends JFrame {
 		orderPanel = new JPanel();
 		JLabel title = new JLabel("Orders");
 		orderPanel.add(title);
-		String prevOrders = retrieveOrders(lowDate, highDate);
+//		String prevOrders = retrieveOrders(lowDate, highDate);
+		String prevOrders = "kal;sdjf";
 
 		// create a new frame
 		//System.out.println(ordersToday + " " + salesToday);
