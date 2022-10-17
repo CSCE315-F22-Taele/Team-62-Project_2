@@ -19,6 +19,16 @@ public class jdbcpostgreSQL {
 	 */
 
 	public static void main(String[] args) {
+        // IMPORTANT NOTES!!!!!!!!
+		// must use to currently run, will prob need to add more stuff later:
+		// javac *.java -cp ";forms_rt.jar"
+
+		// windows
+		// java -cp ".;forms_rt.jar;postgresql-42.2.8.jar" jdbcpostgreSQL
+
+		// mac/linux
+		// java -cp ".;forms_rt.jar:postgresql-42.2.8.jar" jdbcpostgreSQL
+
 		dbConnection db = new dbConnection();
 		db.connect();
         GUI g = new GUI(db);

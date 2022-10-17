@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import javax.imageio.plugins.jpeg.JPEGHuffmanTable;
 import javax.swing.*;
 import javax.swing.border.Border;
-
+import java.awt.*;
 import java.awt.GridLayout;
 
 public class Inventory {
@@ -16,6 +16,8 @@ public class Inventory {
 	JPanel mainPanel2;
 	JPanel verticalView;
 	JFrame mainFrame;
+	JButton inventoryUpdate = new JButton("Update Inventory");
+	JButton PriceUpdate = new JButton("Update Price");
 
 	dbConnection db;
 
@@ -26,12 +28,26 @@ public class Inventory {
 		contentPanel = new JPanel();
 	}
 
+	public Inventory(dbConnection database, Color btnBackgroundColor, Color btnForeColor) {
+		db = database;
+		mainFrame = new JFrame("Inventory GUI");
+		invetoryPanel = new JPanel();
+		contentPanel = new JPanel();
+
+		invetoryPanel.setBackground(Color.white);
+		contentPanel.setBackground(Color.white);
+
+		// setting button colors
+		inventoryUpdate.setBackground(btnBackgroundColor);
+		inventoryUpdate.setForeground(btnForeColor);
+		PriceUpdate.setBackground(btnBackgroundColor);
+		PriceUpdate.setForeground(btnForeColor);
+	}
+
 
 	public JPanel mainInventoryPanel(JPanel verticalPanel) {
 
 		mainPanel = verticalPanel;
-		invetoryPanel = new JPanel();
-		contentPanel = new JPanel();
 
 		items();
 
@@ -43,7 +59,6 @@ public class Inventory {
 		invetoryPanel.setBounds(mainX, mainY, mainWidth, 50);
 		contentPanel.setBounds(mainX, 150, mainWidth, mainHeight);
 		JTextField text = new JTextField(10);
-		JButton inventoryUpdate = new JButton("Update Inventory");
 		inventoryUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String update = text.getText();
@@ -76,7 +91,6 @@ public class Inventory {
 			}
 		});
         JTextField textPrices = new JTextField(10);
-		JButton PriceUpdate = new JButton("Update Price");
 		PriceUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String updatePrice = textPrices.getText();
