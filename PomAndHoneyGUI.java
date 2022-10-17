@@ -48,6 +48,7 @@ public class PomAndHoneyGUI extends JFrame {
 		btnServerView = new JButton();
 		btnServerView.setBorder(border);
 
+
 		String currentDate = "";
 		try {
 			ResultSet r = db.sendCommand("SELECT CAST( (SELECT CURRENT_TIMESTAMP) AS Date )");
@@ -65,6 +66,10 @@ public class PomAndHoneyGUI extends JFrame {
 		this.setSize(1500, 1000);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		inventoryPanel.setVisible(false);
+		summaryPanel.setVisible(false);
+		serverPanel.setVisible(false);
+		orderPanel.setVisible(false);
 
 		btnServerView.addActionListener(new ActionListener() {
 			/**
@@ -330,8 +335,8 @@ public class PomAndHoneyGUI extends JFrame {
 		orderPanel = new JPanel();
 		JLabel title = new JLabel("Orders");
 		orderPanel.add(title);
-//		String prevOrders = retrieveOrders(lowDate, highDate);
-		String prevOrders = "kal;sdjf";
+		String prevOrders = retrieveOrders(lowDate, highDate);
+//		String prevOrders = "kal;sdjf";
 
 		// create a new frame
 		//System.out.println(ordersToday + " " + salesToday);
