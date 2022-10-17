@@ -1,3 +1,5 @@
 *.class
 dbSetup.java
 *.iml
+out/
+.idea
