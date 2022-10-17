@@ -9,8 +9,11 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
 import java.sql.*;
 import java.lang.Math;
+import java.util.Locale;
 
 public class PomAndHoneyGUI extends JFrame {
 	private JPanel mainPanel;
@@ -25,11 +28,11 @@ public class PomAndHoneyGUI extends JFrame {
 	String lowerDate = "";
 	String upperDate = "";
 	private dbConnection db;
+	Color customPurple = new Color(65, 30, 122);
+	Color customWhite = new Color(255, 255, 255);
 
 	public PomAndHoneyGUI(dbConnection database) {
 		db = database;
-		Color customPurple = new Color(65, 30, 122);
-		Color customWhite = new Color(255, 255, 255);
 		Border border = new LineBorder(customPurple, 2);
 
 		btnInventory = new JButton();
@@ -156,7 +159,7 @@ public class PomAndHoneyGUI extends JFrame {
 	}
 
 	private void InventoryComponents() {
-		Inventory inventory = new Inventory(db);
+		Inventory inventory = new Inventory(db, customPurple, customWhite);
 		JPanel verticalPanel = new JPanel(new BorderLayout());
 
 		inventoryPanel = new JPanel();
@@ -381,19 +384,21 @@ public class PomAndHoneyGUI extends JFrame {
 		btnServerView.setBackground(new Color(-12509574));
 		btnServerView.setForeground(new Color(-1));
 		btnServerView.setText("Server View");
-		panel1.add(btnServerView, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 75), null, null, 0, false));
+		panel1.add(btnServerView, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 50), null, null, 0, false));
 		btnSummary.setBackground(new Color(-12509574));
 		btnSummary.setForeground(new Color(-1));
 		btnSummary.setText("Summary");
-		panel1.add(btnSummary, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 75), null, null, 0, false));
+		panel1.add(btnSummary, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 50), null, null, 0, false));
 		btnInventory.setBackground(new Color(-12509574));
 		btnInventory.setForeground(new Color(-1));
 		btnInventory.setText("Inventory");
-		panel1.add(btnInventory, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 75), null, null, 0, false));
+		panel1.add(btnInventory, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 50), null, null, 0, false));
 		btnOrders.setBackground(new Color(-12509574));
+		Font btnOrdersFont = this.$$$getFont$$$("Gill Sans Nova Light", -1, -1, btnOrders.getFont());
+		if (btnOrdersFont != null) btnOrders.setFont(btnOrdersFont);
 		btnOrders.setForeground(new Color(-1));
 		btnOrders.setText("Orders");
-		panel1.add(btnOrders, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 75), null, null, 0, false));
+		panel1.add(btnOrders, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 50), null, null, 0, false));
 		summaryPanel.setBackground(new Color(-1));
 		summaryPanel.setEnabled(true);
 		summaryPanel.setForeground(new Color(-8113373));
@@ -406,6 +411,28 @@ public class PomAndHoneyGUI extends JFrame {
 		inventoryPanel.setBackground(new Color(-1));
 		inventoryPanel.setForeground(new Color(-1));
 		mainPanel.add(inventoryPanel, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), null, 0, true));
+	}
+
+	/**
+	 * @noinspection ALL
+	 */
+	private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+		if (currentFont == null) return null;
+		String resultName;
+		if (fontName == null) {
+			resultName = currentFont.getName();
+		} else {
+			Font testFont = new Font(fontName, Font.PLAIN, 10);
+			if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+				resultName = fontName;
+			} else {
+				resultName = currentFont.getName();
+			}
+		}
+		Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+		boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
+		Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+		return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
 	}
 
 	/**
