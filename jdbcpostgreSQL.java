@@ -21,8 +21,7 @@ public class jdbcpostgreSQL {
 	public static void main(String[] args) {
 		dbConnection db = new dbConnection();
 		db.connect();
-        testGeneration.populateDatabaseWithOrders(db);
-        db.close();
+        GUI g = new GUI(db);
 	}
 
 	public static void queryTest(dbConnection db) {

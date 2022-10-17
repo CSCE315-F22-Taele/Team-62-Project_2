@@ -21,6 +21,7 @@ public class GUI extends JFrame {
 	private dbConnection db;
 
 	private JPanel verticalInventoryView;
+	String currentDate = "";
 	String lowerDate = "";
 	String upperDate = "";
 
@@ -30,7 +31,8 @@ public class GUI extends JFrame {
 		try {
 			ResultSet r = db.sendCommand("SELECT CAST( (SELECT CURRENT_TIMESTAMP) AS Date )");
 			r.next();
-			upperDate = r.getString("current_timestamp");
+			currentDate = r.getString("current_timestamp");
+			upperDate = currentDate;
 			lowerDate = upperDate;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -118,27 +120,11 @@ public class GUI extends JFrame {
 		JLabel title = new JLabel("Summary");
 		managerViewSummary.add(title);
 		int id = 0;
-		String date = "";
+		String date = currentDate;
 		int ordersToday = 0;
 		double salesToday = 0;
 		int ordersWeek = 0;
 		double salesWeek = 0;
-		try {
-			ResultSet r = db.sendCommand("SELECT MAX(id) FROM orders");
-			r.next();
-			id = r.getInt("max");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		try {
-			ResultSet r = db.sendCommand("SELECT date FROM orders WHERE id = " + id);
-			r.next();
-			date = r.getString("date");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
 		try {
 			ResultSet r = db.sendCommand("SELECT total FROM orders WHERE date = '" + date + "'");
 			while (r.next()) {
@@ -211,9 +197,9 @@ public class GUI extends JFrame {
 		int lowID = 0;
 		int highID = 0;
 		try {
-			ResultSet r = db.sendCommand("SELECT productList[1] FROM orders WHERE id = (SELECT MIN (id) FROM orders WHERE date >='"+lowDate+"')");
+			ResultSet r = db.sendCommand("SELECT id FROM item WHERE id = (SELECT MIN (id) FROM item)");
 			if(r.next()){
-				lowID = r.getInt("productList");
+				lowID = r.getInt("id");
 			}
 			else{
 				return prevOrders;
@@ -225,9 +211,9 @@ public class GUI extends JFrame {
 		}
 		//Get the largest id on end date 
 		try {
-			ResultSet r = db.sendCommand("SELECT productList[cardinality(productList)] FROM orders WHERE id = (SELECT MAX (id) FROM orders WHERE date <='"+highDate+"')");
+			ResultSet r = db.sendCommand("SELECT id FROM item WHERE id = (SELECT MAX (id) FROM item)");
 			if(r.next()){
-			highID = r.getInt("productList");
+				highID = r.getInt("id");
 			}
 			else{
 				return prevOrders;
@@ -242,35 +228,51 @@ public class GUI extends JFrame {
 			//Get date
 			String productDate  = "";
 			String name = "";
+			double firstQuantity = 0;
+			double secondQuantity = 0;
+			double totalQuantity = 0;
+			double minQuantity = 0;
 			try {
-			ResultSet r = db.sendCommand("select date from orders where " + i + "= ANY(productList)");
+			ResultSet r = db.sendCommand("SELECT * FROM item WHERE id = " + i);
 			if(r.next()){
-			productDate = r.getString("date");
+				name = r.getString("name");
+				minQuantity = r.getDouble("minquantity");
+			}
+			else{
+				return prevOrders;
+			}
+			}catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			System.exit(0);
+		}
+			
+			try {
+			ResultSet r = db.sendCommand("SELECT quantity FROM inventory WHERE (itemid = " + i + " AND date >= '" + lowDate+ "' AND date <= '"+highDate+"')");
+			while(r.next()){
+				if(firstQuantity == 0){
+					firstQuantity = r.getDouble("quantity");
+				}
+				else if(secondQuantity == 0){
+					secondQuantity = r.getDouble("quantity");
+					if(secondQuantity > firstQuantity){
+						totalQuantity += ((firstQuantity - minQuantity) + (minQuantity*5 - secondQuantity));
+						firstQuantity = secondQuantity;
+						secondQuantity = 0;
+					}
+					else{
+						totalQuantity += (firstQuantity - secondQuantity);
+						firstQuantity = secondQuantity;
+						secondQuantity = 0;
+					}
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			System.exit(0);
 		}
-		try {
-			ResultSet r = db.sendCommand("select name from products where id = " + i);
-			r.next();
-			name = r.getString("name");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
-		}
-		try {
-			ResultSet r = db.sendCommand("select price from products where id = " + i);
-			r.next();
-			price = r.getDouble("price");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			System.exit(0);
-		}
-		prevOrders += name + "       " + price + "       " + productDate +"\n";
+			prevOrders += name + ":       " + totalQuantity+" units sold\n";
 		}
 		return prevOrders;
 	}
