@@ -26,7 +26,7 @@ public class testGeneration {
     /*
      *
      */
-    public static Product addRandomProductToDatabase(dbConnection db) {
+    public static Product addRandomProductToDatabase(dbConnection db, String date, int orderId) {
         ProductDef[] productDefs = db.getProductDefs();
         ProductDef productToUse = productDefs[(int) (Math.random() *  productDefs.length)];
 
@@ -43,7 +43,7 @@ public class testGeneration {
         }
 
         // Add the product to the database.
-        p.addToDatabase(db);
+        p.addToDatabase(db, date, orderId);
         // Return the product, which will now contain its ID in the database
         return p;
     }
@@ -51,25 +51,24 @@ public class testGeneration {
     /*
      *
      */
-    public static double addRandomOrderToDatabase(dbConnection db, String date){
+    public static void addRandomOrderToDatabase(dbConnection db, String date){
         // Returns the total price of the order.
         double discount = Math.random() < 0.1 ? Math.random() * 0.3 : 0.0;
         int numProducts = (int) (Math.random() * 4) + 1;
-        int[] productList = new int[numProducts];
         double subtotal = 0;
+
+        int orderId = db.addOrderToDatabase(discount, subtotal, date);
 
         // Add random products to the database, then add to order
         for (int i = 0; i < numProducts; i++) {
-            Product p = addRandomProductToDatabase(db);
+            Product p = addRandomProductToDatabase(db, date, orderId);
             if(p.id == -1){
                 System.out.println("Error adding order to database (product ID not assigned).");
                 System.exit(0);
             }
-            productList[i] = p.id;
             subtotal += p.price;
         }
 
-        return db.addOrderToDatabase(productList, discount, subtotal, date);
     }
 
     /*
@@ -95,15 +94,15 @@ public class testGeneration {
         for (int day = startDay; day <= 30; day++) {
             int orderCount;
             if (day == 17 || day == 10) {
-                orderCount = 800;
+                orderCount = 30;
             } else {
-                orderCount = 200;
+                orderCount = 10;
             }
             String date = "2022-09-" + String.format("%2d", day).replace(" ", "0");
             System.out.println("Adding orders for " + date);
             for (int i = 0; i < orderCount; i++) {
                 num += 1;
-                price += addRandomOrderToDatabase(db, date);
+                addRandomOrderToDatabase(db, date);
             }
             takeInventory(db, date);
 
@@ -116,7 +115,7 @@ public class testGeneration {
             Item item = items.get(i);
             double quantity = item.quantity;
             try {
-                db.sendUpdate("INSERT INTO inventory VALUES (" + i + ", " + quantity + ", '" + date + "')");
+                db.sendUpdate("INSERT INTO inventory VALUES (" + i + ", " + quantity + ", '" + date + "', false)");
             } catch (Exception error) {
                 error.printStackTrace();
                 System.exit(0);
@@ -133,12 +132,12 @@ public class testGeneration {
                     System.exit(0);
                 }
                 System.out.println(" - New Inventory: " + quantity);
-            }
-            try {
-                db.sendUpdate("INSERT INTO inventory VALUES (" + i + ", " + quantity + ", '" + date + "')");
-            } catch (Exception error) {
-                error.printStackTrace();
-                System.exit(0);
+                try {
+                    db.sendUpdate("INSERT INTO inventory VALUES (" + i + ", " + quantity + ", '" + date + "', true)");
+                } catch (Exception error) {
+                    error.printStackTrace();
+                    System.exit(0);
+                }
             }
         }
         System.out.println("Inventory taken for " + date + ", day ended.");
@@ -147,6 +146,7 @@ public class testGeneration {
     public static void addItems(dbConnection db) {
         System.out.println("Resetting Items...");
         try {
+            db.sendUpdate("DELETE FROM inventory;");
             db.sendUpdate("DELETE FROM item;");
             db.sendUpdate("INSERT INTO item VALUES (1, 40, 'kg', 'Rice Pilaf', 8)");
             db.sendUpdate("INSERT INTO item VALUES (2, 40, 'kg', 'White Rice', 8)");

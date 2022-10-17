@@ -48,6 +48,7 @@ public class PomAndHoneyGUI extends JFrame {
 		btnServerView = new JButton();
 		btnServerView.setBorder(border);
 
+
 		String currentDate = "";
 		try {
 			ResultSet r = db.sendCommand("SELECT CAST( (SELECT CURRENT_TIMESTAMP) AS Date )");
@@ -65,7 +66,10 @@ public class PomAndHoneyGUI extends JFrame {
 		this.setSize(1500, 1000);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-
+		inventoryPanel.setVisible(false);
+		summaryPanel.setVisible(false);
+		serverPanel.setVisible(false);
+		orderPanel.setVisible(false);
 
 		btnServerView.addActionListener(new ActionListener() {
 			/**
@@ -264,10 +268,11 @@ public class PomAndHoneyGUI extends JFrame {
 		try {
 				ResultSet r = db.sendCommand("SELECT name, sum(price) from products where (date >= '"+lowDate+"' AND date <= '" + highDate + "') group by name");
 				while (r.next()) {
-					prevOrders += r.getString("name") + ":       " + r.getDouble("price")+"$\n";
+					prevOrders += r.getString("name") + ":       " + r.getDouble("sum")+"$\n";
 				}
 			} catch (Exception e) {
-				
+				e.printStackTrace();
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			}
 		
 		return prevOrders;
@@ -278,8 +283,8 @@ public class PomAndHoneyGUI extends JFrame {
 		orderPanel = new JPanel();
 		JLabel title = new JLabel("Orders");
 		orderPanel.add(title);
-//		String prevOrders = retrieveOrders(lowDate, highDate);
-		String prevOrders = retrieveOrders(lowDate,highDate);
+		String prevOrders = retrieveOrders(lowDate, highDate);
+//		String prevOrders = "kal;sdjf";
 
 		// create a new frame
 		//System.out.println(ordersToday + " " + salesToday);
@@ -313,13 +318,17 @@ public class PomAndHoneyGUI extends JFrame {
 		/*
 		 IMPORTANT NOTES!!!!!!!!
 		 must use to currently run, will prob need to add more stuff later:
+		 window:
 		 javac .\PomAndHoneyGUI.java .\dbConnection.java .\dbSetup.java .\Inventory.java .\GUI.java .\Product.java .\ProductDef.java .\serverView.java .\testGeneration.java .\Item.java .\addItems.java -cp ";forms_rt.jar"
+
+		 Mac
+		 javac ./PomAndHoneyGUI.java ./dbConnection.java ./dbSetup.java ./Inventory.java ./GUI.java ./Product.java ./ProductDef.java ./serverView.java ./testGeneration.java ./Item.java ./addItems.java -cp ":forms_rt.jar"
 
 		 windows
 		 java -cp ".;forms_rt.jar;postgresql-42.2.8.jar" .\PomAndHoneyGUI.java
 
 		 mac/linux
-		 java -cp ".;forms_rt.jar:postgresql-42.2.8.jar" .\PomAndHoneyGUI.java
+		 java -cp ".:forms_rt.jar:postgresql-42.2.8.jar" ./PomAndHoneyGUI.java
 		 */
 
 		dbConnection db = new dbConnection();
@@ -373,7 +382,7 @@ public class PomAndHoneyGUI extends JFrame {
 		serverPanel.setBackground(new Color(-1));
 		mainPanel.add(serverPanel, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), new Dimension(1500, 750), 0, true));
 		orderPanel.setBackground(new Color(-1));
-		mainPanel.add(orderPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, true));
+		mainPanel.add(orderPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), null, 0, true));
 		inventoryPanel.setBackground(new Color(-1));
 		inventoryPanel.setForeground(new Color(-1));
 		mainPanel.add(inventoryPanel, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), null, 0, true));

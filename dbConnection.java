@@ -93,7 +93,7 @@ public class dbConnection {
     * @param  portionList List of the portions of each item in the product
     * @return The id of the newly created product
     */
-    public int addProductToDatabase(String name, double price, int[] itemList, double[] portionList) {
+    public int addProductToDatabase(String name, double price, int[] itemList, double[] portionList, String date, int orderId) {
         // Returns the ID of the new product when done.
         int id = 0;
         try {
@@ -111,7 +111,9 @@ public class dbConnection {
         cmd += "'" + name + "', ";
         cmd += (price + ", ");
         cmd += "'" + Arrays.toString(itemList).replace("[", "{").replace("]", "}") + "', ";
-        cmd += "'" + Arrays.toString(portionList).replace("[", "{").replace("]", "}") + "'";
+        cmd += "'" + Arrays.toString(portionList).replace("[", "{").replace("]", "}") + "', ";
+        cmd += "'" + date + "',";
+        cmd += orderId;
         String full = "INSERT INTO products VALUES (" + cmd + ")";
         try {
             sendCommand(full);
@@ -144,7 +146,7 @@ public class dbConnection {
      * @throws  throws error if sendCommand does not work
      * @return  the total accounting in taxes
      */
-    public double addOrderToDatabase(int[] productList, double discount, double subtotal, String date) {
+    public int addOrderToDatabase(double discount, double subtotal, String date) {
         // Returns the total price of the new order when done.
         // Note that SQL Date is formatted as "YYYY-MM-DD"
         int id = 0;
@@ -162,7 +164,7 @@ public class dbConnection {
 
         String cmd = "";
         cmd += id + ", ";
-        cmd += "'" + Arrays.toString(productList).replace("[", "{").replace("]", "}") + "', ";
+        cmd += "'{}',";
         cmd += discount + ", ";
         cmd += subtotal + ", ";
         cmd += total + ", ";
@@ -173,7 +175,7 @@ public class dbConnection {
             sendCommand(full);
         } catch (Exception e) {
         }
-        return total;
+        return id;
     }
 
     public HashMap<Integer, Item> getItemHashmap(){

@@ -194,12 +194,13 @@ public class GUI extends JFrame {
 		double price = 0;
 		String prevOrders = "Sales from "+ lowDate + " to " + highDate + ":\n\n";
 		try {
-				ResultSet r = db.sendCommand("SELECT name, sum(price) from products where (date => '"+lowDate+"' AND date <= '" + highDate + "' group by name");
+				ResultSet r = db.sendCommand("SELECT name, sum(price) from products where (date >= '"+lowDate+"' AND date <= '" + highDate + "') group by name");
 				while (r.next()) {
-					prevOrders += r.getString("name") + ":       " + r.getDouble("price")+"$\n";
+					prevOrders += r.getString("name") + ":       " + r.getDouble("sum")+"$\n";
 				}
 			} catch (Exception e) {
-				
+				e.printStackTrace();
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			}
 		
 		return prevOrders;
