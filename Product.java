@@ -27,7 +27,7 @@ public class Product {
         }
     }
 
-    public int addToDatabase(dbConnection db){
+    public int addToDatabase(dbConnection db, String date, int orderId){
         int[] itemList = new int[itemsAndPortions.size()];
         double[] portionList = new double[itemsAndPortions.size()];
         int i=0;
@@ -36,7 +36,7 @@ public class Product {
             portionList[i] = itemsAndPortions.get(item);
             i += 1;
         }
-        this.id = db.addProductToDatabase(name, price, itemList, portionList);
+        this.id = db.addProductToDatabase(name, price, itemList, portionList, date, orderId);
         return this.id;
     }
 }
