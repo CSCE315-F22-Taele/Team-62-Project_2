@@ -22,10 +22,10 @@
         </properties>
         <border type="none"/>
         <children>
-          <component id="aaabf" class="javax.swing.JButton" binding="btnServerView">
+          <component id="aaabf" class="javax.swing.JButton" binding="btnServerView" custom-create="true">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="50" height="50"/>
+                <minimum-size width="100" height="75"/>
               </grid>
             </constraints>
             <properties>
@@ -34,10 +34,10 @@
               <text value="Server View"/>
             </properties>
           </component>
-          <component id="ecbe4" class="javax.swing.JButton" binding="btnSummary">
+          <component id="ecbe4" class="javax.swing.JButton" binding="btnSummary" custom-create="true">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="50" height="50"/>
+                <minimum-size width="100" height="75"/>
               </grid>
             </constraints>
             <properties>
@@ -48,8 +48,8 @@
           </component>
           <component id="f9dde" class="javax.swing.JButton" binding="btnInventory" custom-create="true">
             <constraints>
-              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="1" use-parent-layout="false">
-                <preferred-size width="50" height="50"/>
+              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                <minimum-size width="100" height="75"/>
               </grid>
             </constraints>
             <properties>
@@ -58,10 +58,10 @@
               <text value="Inventory"/>
             </properties>
           </component>
-          <component id="b623" class="javax.swing.JButton" binding="btnOrders">
+          <component id="b623" class="javax.swing.JButton" binding="btnOrders" custom-create="true">
             <constraints>
               <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                <preferred-size width="50" height="50"/>
+                <minimum-size width="100" height="75"/>
               </grid>
             </constraints>
             <properties>

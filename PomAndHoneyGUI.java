@@ -6,6 +6,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.sql.*;
 import java.lang.Math;
@@ -26,13 +28,22 @@ public class PomAndHoneyGUI extends JFrame {
 
 	public PomAndHoneyGUI(dbConnection database) {
 		db = database;
-
-		btnInventory = new JButton();
-		btnOrders = new JButton();
-		btnSummary = new JButton();
-		btnServerView = new JButton();
 		Color customPurple = new Color(65, 30, 122);
 		Color customWhite = new Color(255, 255, 255);
+		Border border = new LineBorder(customPurple, 2);
+
+		btnInventory = new JButton();
+		btnInventory.setBorder(border);
+		btnInventory.getInsets();
+
+		btnOrders = new JButton();
+		btnOrders.setBorder(border);
+
+		btnSummary = new JButton();
+		btnSummary.setBorder(border);
+
+		btnServerView = new JButton();
+		btnServerView.setBorder(border);
 
 		$$$setupUI$$$();
 		this.setContentPane(mainPanel);
@@ -367,25 +378,22 @@ public class PomAndHoneyGUI extends JFrame {
 		panel1.setBackground(new Color(-1));
 		panel1.setForeground(new Color(-1));
 		mainPanel.add(panel1, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-		btnServerView = new JButton();
 		btnServerView.setBackground(new Color(-12509574));
 		btnServerView.setForeground(new Color(-1));
 		btnServerView.setText("Server View");
-		panel1.add(btnServerView, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, 50), null, 0, false));
-		btnSummary = new JButton();
+		panel1.add(btnServerView, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 75), null, null, 0, false));
 		btnSummary.setBackground(new Color(-12509574));
 		btnSummary.setForeground(new Color(-1));
 		btnSummary.setText("Summary");
-		panel1.add(btnSummary, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, 50), null, 0, false));
+		panel1.add(btnSummary, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 75), null, null, 0, false));
 		btnInventory.setBackground(new Color(-12509574));
 		btnInventory.setForeground(new Color(-1));
 		btnInventory.setText("Inventory");
-		panel1.add(btnInventory, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, 50), null, 1, false));
-		btnOrders = new JButton();
+		panel1.add(btnInventory, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 75), null, null, 0, false));
 		btnOrders.setBackground(new Color(-12509574));
 		btnOrders.setForeground(new Color(-1));
 		btnOrders.setText("Orders");
-		panel1.add(btnOrders, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, 50), null, 0, false));
+		panel1.add(btnOrders, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 75), null, null, 0, false));
 		summaryPanel.setBackground(new Color(-1));
 		summaryPanel.setEnabled(true);
 		summaryPanel.setForeground(new Color(-8113373));
