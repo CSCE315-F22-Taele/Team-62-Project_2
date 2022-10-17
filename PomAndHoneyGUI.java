@@ -48,11 +48,28 @@ public class PomAndHoneyGUI extends JFrame {
 		btnServerView = new JButton();
 		btnServerView.setBorder(border);
 
+
+		String currentDate = "";
+		try {
+			ResultSet r = db.sendCommand("SELECT CAST( (SELECT CURRENT_TIMESTAMP) AS Date )");
+			r.next();
+			currentDate = r.getString("current_timestamp");
+			upperDate = currentDate;
+			lowerDate = upperDate;
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+
 		$$$setupUI$$$();
 		this.setContentPane(mainPanel);
 		this.setSize(1500, 1000);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		inventoryPanel.setVisible(false);
+		summaryPanel.setVisible(false);
+		serverPanel.setVisible(false);
+		orderPanel.setVisible(false);
 
 		btnServerView.addActionListener(new ActionListener() {
 			/**
@@ -237,6 +254,10 @@ public class PomAndHoneyGUI extends JFrame {
 		JPanel server_panel = new JPanel(new BorderLayout());
 		serverView serverView = new serverView(server_panel, db);
 		serverPanel = new JPanel();
+
+		server_panel.setBackground(customWhite);
+		serverPanel.setBackground(customWhite);
+
 		serverPanel.add(server_panel);
 	}
 
@@ -309,37 +330,39 @@ public class PomAndHoneyGUI extends JFrame {
 		return prevOrders;
 	}
 
+
 	private void OrderComponents(String lowDate, String highDate) {
 		orderPanel = new JPanel();
-//		JLabel title = new JLabel("Orders");
-//		orderPanel.add(title);
-//		String prevOrders = retrieveOrders(lowDate, highDate);
-//
-//		// create a new frame
-//		//System.out.println(ordersToday + " " + salesToday);
-//		JButton dateUpdate = new JButton("Change dates");
-//		JTextField text = new JTextField(10);
-//		JTextArea contents = new JTextArea(prevOrders, 20, 20);
-//		contents.setLineWrap(true);
-//		contents.setWrapStyleWord(true);
-//		dateUpdate.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				String update = text.getText();
-//				String[] input = update.split(" ");
-//				lowerDate = input[0];
-//				upperDate = input[1];
-//				orderPanel.removeAll();
-//				orderPanel.validate();
-//				orderPanel.revalidate();
-//			}
-//		});
-//		contents.setEditable(false);
-//		JScrollPane pane = new JScrollPane(contents);
-//		pane.setBounds(10, 11, getWidth() + 5, getHeight());
-//		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-//		orderPanel.add(dateUpdate);
-//		orderPanel.add(text);
-//		orderPanel.add(pane);
+		JLabel title = new JLabel("Orders");
+		orderPanel.add(title);
+		String prevOrders = retrieveOrders(lowDate, highDate);
+//		String prevOrders = "kal;sdjf";
+
+		// create a new frame
+		//System.out.println(ordersToday + " " + salesToday);
+		JButton dateUpdate = new JButton("Change dates");
+		JTextField text = new JTextField(10);
+		JTextArea contents = new JTextArea(prevOrders, 20, 20);
+		contents.setLineWrap(true);
+		contents.setWrapStyleWord(true);
+		dateUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String update = text.getText();
+				String[] input = update.split(" ");
+				lowerDate = input[0];
+				upperDate = input[1];
+				orderPanel.removeAll();
+				orderPanel.validate();
+				orderPanel.revalidate();
+			}
+		});
+		contents.setEditable(false);
+		JScrollPane pane = new JScrollPane(contents);
+		pane.setBounds(10, 11, getWidth() + 5, getHeight());
+		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		orderPanel.add(dateUpdate);
+		orderPanel.add(text);
+		orderPanel.add(pane);
 	}
 
 	public static void main(String[] args) {
@@ -347,13 +370,17 @@ public class PomAndHoneyGUI extends JFrame {
 		/*
 		 IMPORTANT NOTES!!!!!!!!
 		 must use to currently run, will prob need to add more stuff later:
+		 window:
 		 javac .\PomAndHoneyGUI.java .\dbConnection.java .\dbSetup.java .\Inventory.java .\GUI.java .\Product.java .\ProductDef.java .\serverView.java .\testGeneration.java .\Item.java .\addItems.java -cp ";forms_rt.jar"
+
+		 Mac
+		 javac ./PomAndHoneyGUI.java ./dbConnection.java ./dbSetup.java ./Inventory.java ./GUI.java ./Product.java ./ProductDef.java ./serverView.java ./testGeneration.java ./Item.java ./addItems.java -cp ":forms_rt.jar"
 
 		 windows
 		 java -cp ".;forms_rt.jar;postgresql-42.2.8.jar" .\PomAndHoneyGUI.java
 
 		 mac/linux
-		 java -cp ".;forms_rt.jar:postgresql-42.2.8.jar" .\PomAndHoneyGUI.java
+		 java -cp ".:forms_rt.jar:postgresql-42.2.8.jar" ./PomAndHoneyGUI.java
 		 */
 
 		dbConnection db = new dbConnection();
@@ -405,9 +432,9 @@ public class PomAndHoneyGUI extends JFrame {
 		mainPanel.add(summaryPanel, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), null, 0, true));
 		summaryPanel.setBorder(BorderFactory.createTitledBorder(null, "", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 		serverPanel.setBackground(new Color(-1));
-		mainPanel.add(serverPanel, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), null, 0, true));
+		mainPanel.add(serverPanel, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), new Dimension(1500, 750), 0, true));
 		orderPanel.setBackground(new Color(-1));
-		mainPanel.add(orderPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, true));
+		mainPanel.add(orderPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), null, 0, true));
 		inventoryPanel.setBackground(new Color(-1));
 		inventoryPanel.setForeground(new Color(-1));
 		mainPanel.add(inventoryPanel, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), null, 0, true));

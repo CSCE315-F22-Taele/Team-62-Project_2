@@ -1,5 +1,4 @@
 import java.sql.*;
-import java.awt.event.*;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import javax.swing.*;
@@ -24,7 +23,9 @@ public class serverView {
     private dbConnection db;
     private ProductDef[] productDefs;
 
-    Color customPurple = new Color(176, 48, 147);
+    Color customPink = new Color(176, 48, 147);
+    Color customGrey = new Color(104, 119, 108);
+    Color customPurple = new Color(65, 30, 122);
     Color customWhite = new Color(255, 255, 255);
 
 
@@ -34,7 +35,7 @@ public class serverView {
         for(ProductDef p : productDefs){
             JButton b = new JButton(p.name);
 
-            b.setBackground(customPurple);
+            b.setBackground(customPink);
             b.setForeground(customWhite);
             b.setMargin(new Insets(10, 10, 10, 10));
 
@@ -52,6 +53,8 @@ public class serverView {
 
     public serverView(JPanel p, dbConnection database) {
         mainPanel = p;
+        mainPanel.setBackground(customWhite);
+        mainPanel.setSize(1500, 750);
         db = database;
         init2();
     }
@@ -155,6 +158,10 @@ public class serverView {
 
         // Create a button and add it to the receipt panel.
         JButton productButton = new JButton(p.name + " - " + p.price);
+
+        productButton.setBackground(customPurple);
+        productButton.setForeground(customWhite);
+
         receiptPanel.add(productButton);
 
         for(int i=0;i<p.optionalItems.length;i++){
@@ -162,7 +169,13 @@ public class serverView {
             double portion = p.optionalItemPortions[i];
             Item item = itemMap.get(itemId);
             JToggleButton itemButton = new JToggleButton(item.name + ": " + portion + item.units);
-            itemButton.addActionListener(e -> productData.toggleItem(itemId, portion, itemButton.isSelected()));
+
+            // setting the item button color and margin
+            itemButton.setBackground(customGrey);
+            itemButton.setForeground(customWhite);
+            itemButton.setMargin(new Insets(20, 20, 20, 20));
+
+        itemButton.addActionListener(e -> productData.toggleItem(itemId, portion, itemButton.isSelected()));
             productItemPanel.add(itemButton);
         }
         JToggleButton deleteButton = new JToggleButton("Remove Product");
