@@ -39,7 +39,9 @@ public class PomAndHoneyGUI extends JFrame {
 			 */
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				inventoryPanel.setVisible(false);
+				summaryPanel.setVisible(false);
+				serverPanel.setVisible(true);
 			}
 		});
 		btnSummary.addActionListener(new ActionListener() {
@@ -50,6 +52,7 @@ public class PomAndHoneyGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				inventoryPanel.setVisible(false);
 				summaryPanel.setVisible(true);
+				serverPanel.setVisible(false);
 			}
 		});
 		btnInventory.addActionListener(new ActionListener() {
@@ -60,6 +63,7 @@ public class PomAndHoneyGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				inventoryPanel.setVisible(true);
 				summaryPanel.setVisible(false);
+				serverPanel.setVisible(false);
 			}
 		});
 		btnOrders.addActionListener(new ActionListener() {
@@ -83,6 +87,7 @@ public class PomAndHoneyGUI extends JFrame {
 		InventoryComponents();
 		SummaryComponents();
 //		OrderComponents(lowerDate, upperDate);
+		ServerComponents();
 	}
 
 	private void InventoryComponents() {
@@ -161,22 +166,23 @@ public class PomAndHoneyGUI extends JFrame {
 	}
 
 	private void ServerComponents() {
-		JPanel serverPanel = new JPanel(new BorderLayout());
-//		serverView = new serverView(serverPanel, this, db);
+		JPanel server_panel = new JPanel(new BorderLayout());
+		serverView serverView = new serverView(server_panel, db);
+		serverPanel = new JPanel();
+		serverPanel.add(server_panel);
 	}
 
-	public String retrieveOrders(String lowDate, String highDate){
+	public String retrieveOrders(String lowDate, String highDate) {
 		//Get the smallest id on the starting date
 		double price = 0;
-		String prevOrders = "Sales from "+ lowDate + " to " + highDate + ":\n\n";
+		String prevOrders = "Sales from " + lowDate + " to " + highDate + ":\n\n";
 		int lowID = 0;
 		int highID = 0;
 		try {
-			ResultSet r = db.sendCommand("SELECT productList[1] FROM orders WHERE id = (SELECT MIN (id) FROM orders WHERE date >='"+lowDate+"')");
-			if(r.next()){
+			ResultSet r = db.sendCommand("SELECT productList[1] FROM orders WHERE id = (SELECT MIN (id) FROM orders WHERE date >='" + lowDate + "')");
+			if (r.next()) {
 				lowID = r.getInt("productList");
-			}
-			else{
+			} else {
 				return prevOrders;
 			}
 		} catch (Exception e) {
@@ -186,11 +192,10 @@ public class PomAndHoneyGUI extends JFrame {
 		}
 		//Get the largest id on end date
 		try {
-			ResultSet r = db.sendCommand("SELECT productList[cardinality(productList)] FROM orders WHERE id = (SELECT MAX (id) FROM orders WHERE date <='"+highDate+"')");
-			if(r.next()){
+			ResultSet r = db.sendCommand("SELECT productList[cardinality(productList)] FROM orders WHERE id = (SELECT MAX (id) FROM orders WHERE date <='" + highDate + "')");
+			if (r.next()) {
 				highID = r.getInt("productList");
-			}
-			else{
+			} else {
 				return prevOrders;
 			}
 		} catch (Exception e) {
@@ -199,13 +204,13 @@ public class PomAndHoneyGUI extends JFrame {
 			System.exit(0);
 		}
 		//Go to each needed product and output its name, price, and sale date.
-		for(int i = lowID; i <=highID;i++){
+		for (int i = lowID; i <= highID; i++) {
 			//Get date
-			String productDate  = "";
+			String productDate = "";
 			String name = "";
 			try {
 				ResultSet r = db.sendCommand("select date from orders where " + i + "= ANY(productList)");
-				if(r.next()){
+				if (r.next()) {
 					productDate = r.getString("date");
 				}
 			} catch (Exception e) {
@@ -231,21 +236,22 @@ public class PomAndHoneyGUI extends JFrame {
 				System.err.println(e.getClass().getName() + ": " + e.getMessage());
 				System.exit(0);
 			}
-			prevOrders += name + "       " + price + "       " + productDate +"\n";
+			prevOrders += name + "       " + price + "       " + productDate + "\n";
 		}
 		return prevOrders;
 	}
+
 	private void OrderComponents(String lowDate, String highDate) {
 		orderPanel = new JPanel();
 		JLabel title = new JLabel("Orders");
 		orderPanel.add(title);
-		String prevOrders = retrieveOrders(lowDate,highDate);
+		String prevOrders = retrieveOrders(lowDate, highDate);
 
 		// create a new frame
 		//System.out.println(ordersToday + " " + salesToday);
 		JButton dateUpdate = new JButton("Change dates");
 		JTextField text = new JTextField(10);
-		JTextArea contents = new JTextArea(prevOrders,20,20);
+		JTextArea contents = new JTextArea(prevOrders, 20, 20);
 		contents.setLineWrap(true);
 		contents.setWrapStyleWord(true);
 		dateUpdate.addActionListener(new ActionListener() {
@@ -261,7 +267,7 @@ public class PomAndHoneyGUI extends JFrame {
 		});
 		contents.setEditable(false);
 		JScrollPane pane = new JScrollPane(contents);
-		pane.setBounds(10, 11, getWidth()+5, getHeight());
+		pane.setBounds(10, 11, getWidth() + 5, getHeight());
 		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		orderPanel.add(dateUpdate);
 		orderPanel.add(text);
@@ -316,14 +322,15 @@ public class PomAndHoneyGUI extends JFrame {
 		btnOrders = new JButton();
 		btnOrders.setText("Orders");
 		panel1.add(btnOrders, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(50, 50), null, 0, false));
-		mainPanel.add(summaryPanel, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-		serverPanel = new JPanel();
-		serverPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-		mainPanel.add(serverPanel, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+		summaryPanel.setEnabled(true);
+		summaryPanel.setForeground(new Color(-8113373));
+		mainPanel.add(summaryPanel, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), null, 0, true));
+		summaryPanel.setBorder(BorderFactory.createTitledBorder(null, "", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
+		mainPanel.add(serverPanel, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), null, 0, false));
 		orderPanel = new JPanel();
 		orderPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
 		mainPanel.add(orderPanel, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-		mainPanel.add(inventoryPanel, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+		mainPanel.add(inventoryPanel, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), null, 0, true));
 	}
 
 	/**

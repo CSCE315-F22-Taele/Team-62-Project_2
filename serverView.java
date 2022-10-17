@@ -41,6 +41,50 @@ public class serverView {
         init();
     }
 
+    public serverView(JPanel p, dbConnection database) {
+        mainPanel = p;
+        db = database;
+        init2();
+    }
+
+    private void init2(){
+        productPanels = new HashMap<>();
+        productDataMap = new HashMap<>();
+        mainPanel.removeAll();
+        GUI.refresh(mainPanel);
+        itemMap = db.getItemHashmap();
+        productDefs = db.getProductDefs();
+        productPanel = new JPanel(new GridLayout(0,1));
+        itemPanel = new JPanel();
+        receiptPanel = new JPanel(new GridLayout(0,1));
+        infoPanel = new JPanel();
+        infoPanel.add(new JLabel("Server View"));
+        productPanel.add(new JLabel("Products"));
+        receiptPanel.add(new JLabel("Receipts"));
+        subtotal = new JLabel("Subtotal: $0.00");
+        total = new JLabel("Total: $0.00");
+        receiptPanel.add(subtotal);
+        receiptPanel.add(total);
+        SpinnerModel model = new SpinnerNumberModel(0, 0, 100, 5);
+        discount = new JSpinner(model);
+        receiptPanel.add(new JLabel("Discount %:"));
+        receiptPanel.add(discount);
+        JButton switchButton = new JButton("Manager View");
+//        switchButton.addActionListener(e -> gui.switchToManagerView());
+        JButton finalizeButton = new JButton("Finalize Order");
+        finalizeButton.addActionListener(e -> finalizeOrder());
+
+        infoPanel.add(switchButton);
+
+        mainPanel.add(infoPanel, BorderLayout.PAGE_START);
+        mainPanel.add(productPanel, BorderLayout.LINE_START);
+        mainPanel.add(receiptPanel, BorderLayout.LINE_END);
+        mainPanel.add(itemPanel, BorderLayout.CENTER);
+        itemPanel.setSize(800,800);
+        mainPanel.add(finalizeButton, BorderLayout.PAGE_END);
+
+        loadProductPanels();
+    }
     private void init(){
         productPanels = new HashMap<>();
         productDataMap = new HashMap<>();
@@ -79,7 +123,6 @@ public class serverView {
 
         loadProductPanels();
     }
-
     public void setVisible(boolean v){
         mainPanel.setVisible(v);
     }
