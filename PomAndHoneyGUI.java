@@ -25,8 +25,6 @@ public class PomAndHoneyGUI extends JFrame {
 	private JPanel summaryPanel;
 	private JPanel orderPanel;
 	private JPanel inventoryPanel;
-	String lowerDate = "";
-	String upperDate = "";
 	private dbConnection db;
 	Color customPurple = new Color(65, 30, 122);
 	Color customWhite = new Color(255, 255, 255);
@@ -48,18 +46,6 @@ public class PomAndHoneyGUI extends JFrame {
 		btnServerView = new JButton();
 		btnServerView.setBorder(border);
 
-
-		String currentDate = "";
-		try {
-			ResultSet r = db.sendCommand("SELECT CAST( (SELECT CURRENT_TIMESTAMP) AS Date )");
-			r.next();
-			currentDate = r.getString("current_timestamp");
-			upperDate = currentDate;
-			lowerDate = upperDate;
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
 
 		$$$setupUI$$$();
 		this.setContentPane(mainPanel);
@@ -171,7 +157,7 @@ public class PomAndHoneyGUI extends JFrame {
 	private void createUIComponents() {
 		InventoryComponents();
 		SummaryComponents();
-		OrderComponents(lowerDate, upperDate);
+		OrderComponents();
 		ServerComponents();
 	}
 
@@ -261,57 +247,14 @@ public class PomAndHoneyGUI extends JFrame {
 		serverPanel.add(server_panel);
 	}
 
-	public String retrieveOrders(String lowDate, String highDate){
-		//Get the smallest id on the starting date
-		double price = 0;
-		String prevOrders = "Sales from "+ lowDate + " to " + highDate + ":\n\n";
-		try {
-				ResultSet r = db.sendCommand("SELECT name, sum(price) from products where (date >= '"+lowDate+"' AND date <= '" + highDate + "') group by name");
-				while (r.next()) {
-					prevOrders += r.getString("name") + ":       " + r.getDouble("sum")+"$\n";
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			}
-		
-		return prevOrders;
-	}
 
 
-	private void OrderComponents(String lowDate, String highDate) {
+	private void OrderComponents() {
+		Order order = new Order(db, customPurple, customWhite);
+		JPanel verticalPanel = new JPanel(new BorderLayout());
+
 		orderPanel = new JPanel();
-		JLabel title = new JLabel("Orders");
-		orderPanel.add(title);
-		String prevOrders = retrieveOrders(lowDate, highDate);
-//		String prevOrders = "kal;sdjf";
-
-		// create a new frame
-		//System.out.println(ordersToday + " " + salesToday);
-		JButton dateUpdate = new JButton("Change dates");
-		JTextField text = new JTextField(10);
-		JTextArea contents = new JTextArea(prevOrders, 20, 20);
-		contents.setLineWrap(true);
-		contents.setWrapStyleWord(true);
-		dateUpdate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String update = text.getText();
-				String[] input = update.split(" ");
-				lowerDate = input[0];
-				upperDate = input[1];
-				orderPanel.removeAll();
-				orderPanel.validate();
-				orderPanel.revalidate();
-				//OrderComponents(lowDate,highDate);
-			}
-		});
-		contents.setEditable(false);
-		JScrollPane pane = new JScrollPane(contents);
-		pane.setBounds(10, 11, getWidth() + 5, getHeight());
-		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		orderPanel.add(dateUpdate);
-		orderPanel.add(text);
-		orderPanel.add(pane);
+		orderPanel.add(order.mainOrderPanel(verticalPanel));
 	}
 
 	public static void main(String[] args) {
@@ -320,7 +263,7 @@ public class PomAndHoneyGUI extends JFrame {
 		 IMPORTANT NOTES!!!!!!!!
 		 must use to currently run, will prob need to add more stuff later:
 		 window:
-		 javac .\PomAndHoneyGUI.java .\dbConnection.java .\dbSetup.java .\Inventory.java .\GUI.java .\Product.java .\ProductDef.java .\serverView.java .\testGeneration.java .\Item.java .\addItems.java -cp ";forms_rt.jar"
+		 javac .\PomAndHoneyGUI.java .\dbConnection.java .\dbSetup.java .\Inventory.java .\GUI.java .\Product.java .\ProductDef.java .\serverView.java .\testGeneration.java .\Item.java .\addItems.java .\Order.java -cp ";forms_rt.jar"
 
 		 Mac
 		 javac ./PomAndHoneyGUI.java ./dbConnection.java ./dbSetup.java ./Inventory.java ./GUI.java ./Product.java ./ProductDef.java ./serverView.java ./testGeneration.java ./Item.java ./addItems.java -cp ":forms_rt.jar"
