@@ -52,10 +52,30 @@ public class PomAndHoneyGUI extends JFrame {
 		this.setSize(1500, 1000);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		// only show buttons when initially launch
 		inventoryPanel.setVisible(false);
 		summaryPanel.setVisible(false);
-		serverPanel.setVisible(false);
+		serverPanel.setVisible(true);
 		orderPanel.setVisible(false);
+
+		// changed button colors
+		int fontSize = 17;
+		String customFont = "Gill Sans Nova Light";
+		btnInventory.setBackground(customPurple);
+		btnInventory.setForeground(customWhite);
+		btnInventory.setFont(new Font(customFont, Font.BOLD, fontSize));
+
+		btnServerView.setBackground(customWhite);
+		btnServerView.setForeground(customPurple);
+		btnServerView.setFont(new Font(customFont, Font.BOLD, fontSize));
+
+		btnOrders.setBackground(customPurple);
+		btnOrders.setForeground(customWhite);
+		btnOrders.setFont(new Font(customFont, Font.BOLD, fontSize));
+
+		btnSummary.setBackground(customPurple);
+		btnSummary.setForeground(customWhite);
+		btnSummary.setFont(new Font(customFont, Font.BOLD, fontSize));
 
 		btnServerView.addActionListener(new ActionListener() {
 			/**
@@ -68,15 +88,7 @@ public class PomAndHoneyGUI extends JFrame {
 				serverPanel.setVisible(true);
 				orderPanel.setVisible(false);
 
-				// changed button colors
-				btnInventory.setBackground(customPurple);
-				btnInventory.setForeground(customWhite);
-				btnServerView.setBackground(customWhite);
-				btnServerView.setForeground(customPurple);
-				btnOrders.setBackground(customPurple);
-				btnOrders.setForeground(customWhite);
-				btnSummary.setBackground(customPurple);
-				btnSummary.setForeground(customWhite);
+
 			}
 		});
 		btnSummary.addActionListener(new ActionListener() {
@@ -149,7 +161,7 @@ public class PomAndHoneyGUI extends JFrame {
 				orderPanel.add(order.mainOrderPanel(verticalPanel));
 				orderPanel.validate();
 				orderPanel.revalidate();
-				
+
 				btnInventory.setBackground(customPurple);
 				btnInventory.setForeground(customWhite);
 				btnServerView.setBackground(customPurple);
@@ -247,6 +259,10 @@ public class PomAndHoneyGUI extends JFrame {
 		String week = "                 Week                  \n Revenue: " + salesWeek + "       Orders: " + ordersWeek + "       Avg. Order: " + (double) salesWeek / ordersWeek;
 		JTextArea contents = new JTextArea(today + week);
 		contents.setEditable(false);
+
+		Border border = new LineBorder(customPurple, 2);
+		contents.setBorder(border);
+
 		summaryPanel.add(contents);
 	}
 
@@ -262,13 +278,12 @@ public class PomAndHoneyGUI extends JFrame {
 	}
 
 
-
 	private void OrderComponents() {
 		Order order = new Order(db, customPurple, customWhite);
 		JPanel verticalPanel = new JPanel(new BorderLayout());
 		orderPanel = new JPanel();
 		orderPanel.add(order.mainOrderPanel(verticalPanel));
-		
+
 	}
 
 	public static void main(String[] args) {
@@ -332,11 +347,6 @@ public class PomAndHoneyGUI extends JFrame {
 		btnOrders.setForeground(new Color(-1));
 		btnOrders.setText("Orders");
 		panel1.add(btnOrders, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 50), null, null, 0, false));
-		summaryPanel.setBackground(new Color(-1));
-		summaryPanel.setEnabled(true);
-		summaryPanel.setForeground(new Color(-8113373));
-		mainPanel.add(summaryPanel, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), null, 0, true));
-		summaryPanel.setBorder(BorderFactory.createTitledBorder(null, "", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 		serverPanel.setBackground(new Color(-1));
 		mainPanel.add(serverPanel, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), new Dimension(1500, 750), 0, true));
 		orderPanel.setBackground(new Color(-1));
@@ -344,6 +354,8 @@ public class PomAndHoneyGUI extends JFrame {
 		inventoryPanel.setBackground(new Color(-1));
 		inventoryPanel.setForeground(new Color(-1));
 		mainPanel.add(inventoryPanel, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), null, 0, true));
+		summaryPanel.setBackground(new Color(-1));
+		mainPanel.add(summaryPanel, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(1500, 750), null, 0, true));
 	}
 
 	/**

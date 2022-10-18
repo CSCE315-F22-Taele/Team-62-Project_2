@@ -6,6 +6,8 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.GridLayout;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 public class Inventory {
 
@@ -34,8 +36,11 @@ public class Inventory {
 		invetoryPanel = new JPanel();
 		contentPanel = new JPanel();
 
+		Color customPurple = new Color(65, 30, 122);
+		Border border = new LineBorder(customPurple, 2);
 		invetoryPanel.setBackground(Color.white);
 		contentPanel.setBackground(Color.white);
+		contentPanel.setBorder(border);
 
 		// setting button colors
 		inventoryUpdate.setBackground(btnBackgroundColor);

@@ -27,6 +27,7 @@ public class serverView {
     Color customGrey = new Color(104, 119, 108);
     Color customPurple = new Color(65, 30, 122);
     Color customWhite = new Color(255, 255, 255);
+    Color maroon = new Color(141, 6, 6);
 
 
     private GUI gui;
@@ -81,12 +82,12 @@ public class serverView {
         discount = new JSpinner(model);
         receiptPanel.add(new JLabel("Discount %:"));
         receiptPanel.add(discount);
-        JButton switchButton = new JButton("Manager View");
-//        switchButton.addActionListener(e -> gui.switchToManagerView());
+
         JButton finalizeButton = new JButton("Finalize Order");
         finalizeButton.addActionListener(e -> finalizeOrder());
-
-        infoPanel.add(switchButton);
+        finalizeButton.setBackground(customPurple);
+        finalizeButton.setForeground(customWhite);
+        finalizeButton.setMargin(new Insets(20, 20, 20, 20));
 
         mainPanel.add(infoPanel, BorderLayout.PAGE_START);
         mainPanel.add(productPanel, BorderLayout.LINE_START);
@@ -180,6 +181,11 @@ public class serverView {
         }
         JToggleButton deleteButton = new JToggleButton("Remove Product");
         productItemPanel.add(deleteButton);
+
+        deleteButton.setBackground(maroon);
+        deleteButton.setForeground(customWhite);
+        deleteButton.setMargin(new Insets(20, 20, 20, 20));
+
         itemPanel.add(productItemPanel);
 
         // Map the button to the panel in the hashmap, then add an event listener accordingly
