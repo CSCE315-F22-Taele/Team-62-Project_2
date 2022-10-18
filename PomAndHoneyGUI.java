@@ -87,8 +87,6 @@ public class PomAndHoneyGUI extends JFrame {
 				summaryPanel.setVisible(false);
 				serverPanel.setVisible(true);
 				orderPanel.setVisible(false);
-
-
 			}
 		});
 		btnSummary.addActionListener(new ActionListener() {
@@ -259,6 +257,7 @@ public class PomAndHoneyGUI extends JFrame {
 		String week = "                 Week                  \n Revenue: " + salesWeek + "       Orders: " + ordersWeek + "       Avg. Order: " + (double) salesWeek / ordersWeek;
 		JTextArea contents = new JTextArea(today + week);
 		contents.setEditable(false);
+		contents.setFont(new Font("Gill Sans Nova Light", Font.PLAIN, 20));
 
 		Border border = new LineBorder(customPurple, 2);
 		contents.setBorder(border);
@@ -283,7 +282,6 @@ public class PomAndHoneyGUI extends JFrame {
 		JPanel verticalPanel = new JPanel(new BorderLayout());
 		orderPanel = new JPanel();
 		orderPanel.add(order.mainOrderPanel(verticalPanel));
-
 	}
 
 	public static void main(String[] args) {
@@ -295,7 +293,7 @@ public class PomAndHoneyGUI extends JFrame {
 		 javac .\PomAndHoneyGUI.java .\dbConnection.java .\dbSetup.java .\Inventory.java .\GUI.java .\Product.java .\ProductDef.java .\serverView.java .\testGeneration.java .\Item.java .\addItems.java .\Order.java -cp ";forms_rt.jar"
 
 		 Mac
-		 javac ./PomAndHoneyGUI.java ./dbConnection.java ./dbSetup.java ./Inventory.java ./GUI.java ./Product.java ./ProductDef.java ./serverView.java ./testGeneration.java ./Item.java ./addItems.java -cp ":forms_rt.jar"
+		 javac ./PomAndHoneyGUI.java ./dbConnection.java ./dbSetup.java ./Inventory.java ./GUI.java ./Product.java ./ProductDef.java ./serverView.java ./testGeneration.java ./Item.java ./addItems.java -cp ./Order.java ":forms_rt.jar"
 
 		 windows
 		 java -cp ".;forms_rt.jar;postgresql-42.2.8.jar" .\PomAndHoneyGUI.java

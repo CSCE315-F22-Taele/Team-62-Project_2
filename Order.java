@@ -6,6 +6,8 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.GridLayout;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 public class Order {
 
@@ -33,8 +35,13 @@ public class Order {
 		db = database;
 		mainFrame = new JFrame("order GUI");
 		BigOrderPanel = new JPanel();
+
 		contentPanel = new JPanel();
-        String currentDate = "";
+		Color customPurple = new Color(65, 30, 122);
+		Border border = new LineBorder(customPurple, 2);
+		contentPanel.setBorder(border);
+
+		String currentDate = "";
 		try {
 			ResultSet r = db.sendCommand("SELECT CAST( (SELECT CURRENT_TIMESTAMP) AS Date )");
 			r.next();
@@ -79,6 +86,8 @@ public class Order {
                 String prevOrders = retrieveOrders(lowerDate,upperDate);
 				contentPanel.removeAll();
 				JTextArea content = new JTextArea(prevOrders);
+
+
 				content.setEditable(false);
 				contentPanel.add(content);
 				contentPanel.validate();
