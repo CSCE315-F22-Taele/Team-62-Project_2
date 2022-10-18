@@ -39,6 +39,8 @@ public class serverView {
             b.setBackground(customPink);
             b.setForeground(customWhite);
             b.setMargin(new Insets(10, 10, 10, 10));
+            b.setOpaque(true);
+            b.setBorderPainted(false);
 
             b.addActionListener(e -> addNewProduct(p.id));
             productPanel.add(b);
