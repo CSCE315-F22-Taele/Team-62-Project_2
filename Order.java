@@ -112,7 +112,7 @@ public class Order {
 
 
     }*/
-public String retrieveOrders(String lowDate, String highDate){
+    public String retrieveOrders(String lowDate, String highDate){
 		//Get the smallest id on the starting date
 		double price = 0;
 		String prevOrders = "Sales from "+ lowDate + " to " + highDate + ":\n\n";
@@ -125,7 +125,7 @@ public String retrieveOrders(String lowDate, String highDate){
 				e.printStackTrace();
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			}
-		
+
 		return prevOrders;
 	}
 
