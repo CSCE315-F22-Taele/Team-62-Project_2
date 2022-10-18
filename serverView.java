@@ -226,9 +226,11 @@ public class serverView {
 
     public void finalizeOrder(){
         int price = 0;
+        int[] productList = new int[productDataMap.size()];
         int i = 0;
-        String currentDate = "";
-        try {
+         int orderid = 0;
+         String currentDate = "";
+	    try {
 			ResultSet r = db.sendCommand("SELECT CAST( (SELECT CURRENT_TIMESTAMP) AS Date )");
 			r.next();
 			currentDate = r.getString("current_timestamp");
@@ -236,12 +238,20 @@ public class serverView {
 			e.printStackTrace();
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
-        int orderId = db.addOrderToDatabase((double)((Integer) discount.getValue() / 100.0), price, currentDate);
+        try {
+            ResultSet r = db.sendCommand("SELECT MAX(id) FROM orders");
+            r.next();
+            orderid = r.getInt("max") + 1;
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
         for(Product p : productDataMap.values()){
             price += p.price;
-            p.addToDatabase(db, currentDate, orderId);
+            productList[i] = p.addToDatabase(db,currentDate,orderid);
             i += 1;
         }
+        db.addOrderToDatabase(productList, (double)((Integer) discount.getValue() / 100.0), price, currentDate);
         init();
     }
 }
