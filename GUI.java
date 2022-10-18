@@ -211,15 +211,19 @@ public class GUI extends JFrame {
 
 	public String[] excessSales(String date) {
 		//NOTE for when you're coding: current date is stored in currentDate
-		String[] temp = new String[1];
+		String[] temp = new String[100];
+		Double[] quantity_holder = new Double[100];
+		int j = 0; //used for iterating through temp array
+		int i = 0; //used for iterating through the quantity array
+		// Get the stock at the given date
 		try {
 			ResultSet size = db.sendCommand("SELECT COUNT(inventory) FROM inventory WHERE date='" + date + "'");
-			Double[] quantity = new Double[size.getInt("count")];
+			Double[] temp_quantity = new Double[size.getInt("count")];
 			try {
 				ResultSet data = db.sendCommand("SELECT * FROM inventory WHERE date='" + date + "'");
-				int i = 0;
 				while (data.next()) {
-					quantity[i] = (data.getDouble("quantity"));
+					temp_quantity[i] = (data.getDouble("quantity"));
+					quantity_holder[i] = temp_quantity[i];
 					i += 1;
 				}
 			} catch (Exception e) {
@@ -228,7 +232,37 @@ public class GUI extends JFrame {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return temp;
+		Double[] quantity = new Double[i];
+		for (int k = 0; k < i; k += 1) {
+			quantity[k] = quantity_holder[k];
+		}
+		//get the current stock
+		try {
+			ResultSet size2 = db.sendCommand("SELECT COUNT(item) FROM item");
+			Double[] curr_quantity = new Double[size2.getInt("count")];
+			try {
+				ResultSet data2 = db.sendCommand("SELECT * FROM item ORDER BY id ASC");
+				int l = 0;
+				while (data2.next()) {
+					curr_quantity[l] = (data2.getDouble("quantity"));
+					l += 1;
+					// This is where the less than 10% check happens
+					if (curr_quantity[l] > (quantity[l] * 0.9)) {
+						temp[j] = data2.getString("name");
+						j += 1;
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		String[] final_result = new String[j];
+		for (int k = 0; k < j; k += 1) {
+			final_result[k] = temp[k];
+		}
+		return final_result;
 	}
 
 	/**
