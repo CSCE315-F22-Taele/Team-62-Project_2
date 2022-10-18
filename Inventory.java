@@ -76,6 +76,7 @@ public class Inventory {
 				String update = text.getText();
 				String[] input = update.split(" ");
 				String name = "";
+				//Retrieve item name and new quantity
 				for(int i = 0; i<input.length-1;i++){
 					if(i == input.length-2){
 						name+=input[i];
@@ -85,6 +86,7 @@ public class Inventory {
 					}
 				}
 				String q = input[input.length-1];
+				//Update the item with it's new quantity
 				try {
 					db.sendUpdate("UPDATE item SET quantity = " + q + " WHERE name = '" + name + "'");
 				} catch (Exception error) {
@@ -109,6 +111,7 @@ public class Inventory {
 				String[] input = updatePrice.split(" ");
 				String Pname = "";
 				String newPrice = "";
+				//Retrieve item name and new price
 				for(int i = 0; i<input.length-1;i++){
 					if(i == input.length-2){
 						Pname+=input[i];
@@ -118,6 +121,7 @@ public class Inventory {
 					}
 				}
 				newPrice = input[input.length-1];
+				//Update the item's price
 				try {
 					db.sendUpdate("UPDATE productDef SET price = " + newPrice + " WHERE name = '" + Pname + "'");
 				} catch (Exception error) {
@@ -161,7 +165,7 @@ public class Inventory {
 
     }*/
 
-
+	//Creates the item panel and generates the content needed
 	public void items() {
 		itemPanel = new JPanel();
 		JLabel title = new JLabel("Inventory");
@@ -175,6 +179,9 @@ public class Inventory {
 		invetoryPanel.add(itemPanel);
 	}
 
+<<<<<<< HEAD
+	//Retrieves every item from the database
+=======
 	private void seasonalMenuItems() {
 
 		JButton seasonItemBtn = new JButton("Seasonal Menu Items");
@@ -192,6 +199,7 @@ public class Inventory {
 		seasonalItemPanel.add(textSeasonItem);
 	}
 
+>>>>>>> 3a208f49590ff49713a1f97a07f93a91bfd2ffa0
 	public String retrivingDBItems() {
 		String name = "";
 		try {
@@ -206,6 +214,7 @@ public class Inventory {
 		}
 		return name;
 	}
+	//Retrieves every product definition from the database
 	public String retrivingDBItems2() {
 		String name = "";
 		try {

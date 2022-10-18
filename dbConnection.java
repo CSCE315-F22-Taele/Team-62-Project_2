@@ -171,12 +171,58 @@ public class dbConnection {
         cmd += "'" + date + "'";
         String full = "INSERT INTO orders VALUES (" + cmd + ")";
         //System.out.println(full);
+        String prevDate = "";
         try {
             sendCommand(full);
         } catch (Exception e) {
         }
+        try {
+			ResultSet r = sendCommand("SELECT date from orders where date = (date "+ date + "- integer '1'");
+			r.next();
+			prevDate = r.getString("date");
+		} catch (Exception e) {
+			prevDate = "";
+		}
+        if(prevDate != date){
+            takeInventory(this,date);
+        }
         return total;
     }
+
+    public static void takeInventory(dbConnection db, String date){
+        HashMap<Integer, Item> items = db.getItemHashmap();
+        for(int i : items.keySet()){
+            Item item = items.get(i);
+            double quantity = item.quantity;
+            try {
+                db.sendUpdate("INSERT INTO inventory VALUES (" + i + ", " + quantity + ", '" + date + "', false)");
+            } catch (Exception error) {
+                error.printStackTrace();
+                System.exit(0);
+            }
+            if(quantity < item.minquantity){
+               // System.out.println("Restocking " + item.name);
+               // System.out.println(" - Current Inventory: " + quantity);
+                quantity += item.minquantity * 5;
+                try {
+                    db.sendUpdate("UPDATE item SET quantity = " + quantity + " WHERE id = " + i + "");
+                    db.sendUpdate("UPDATE item SET lastrestock = '" + date + "' WHERE id = " + i + "");
+                } catch (Exception error) {
+                    error.printStackTrace();
+                    System.exit(0);
+                }
+               // System.out.println(" - New Inventory: " + quantity);
+                try {
+                    db.sendUpdate("INSERT INTO inventory VALUES (" + i + ", " + quantity + ", '" + date + "', true)");
+                } catch (Exception error) {
+                    error.printStackTrace();
+                    System.exit(0);
+                }
+            }
+        }
+       // System.out.println("Inventory taken for " + date + ", day ended.");
+    }
+    
 
     public HashMap<Integer, Item> getItemHashmap(){
         HashMap<Integer, Item> resultMap = new HashMap<>();

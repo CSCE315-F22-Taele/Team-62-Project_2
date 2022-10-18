@@ -79,10 +79,12 @@ public class Order {
 		JTextField text = new JTextField(10);
 		orderUpdate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+                //Stores input as the lower bound date and the higher date
 				String update = text.getText();
 				String[] input = update.split(" ");
 				lowerDate = input[0];
 				upperDate = input[1];
+                //Call retrieveOrder function to get orders sales within the two dates
                 String prevOrders = retrieveOrders(lowerDate,upperDate);
 				contentPanel.removeAll();
 				JTextArea content = new JTextArea(prevOrders);
@@ -112,6 +114,8 @@ public class Order {
 
 
     }*/
+
+    //Retrieves the sales for all orders placed between the two dates by the products sold.
     public String retrieveOrders(String lowDate, String highDate){
 		//Get the smallest id on the starting date
 		double price = 0;
@@ -129,6 +133,7 @@ public class Order {
 		return prevOrders;
 	}
 
+    //Generates the contents of the order panel
 	public void orders(String lowDate, String highDate) {
 		orderPanel = new JPanel();
 		JLabel title = new JLabel("Orders");
