@@ -61,7 +61,7 @@ public class summaryView{
 		contents.setBorder(border);
 
         pairPanel.add(contents);
-        mainPanel.add(pairPanel);
+        mainPanel.add(pairPanel, BorderLayout.CENTER);
     }
 
 	//Excess sales report
@@ -221,6 +221,6 @@ public class summaryView{
         summaryPanel = new JPanel();
         summaryPanel.add(new JLabel("Summary"));
 		summaryPanel.add(contents);
-        mainPanel.add(summaryPanel);
+        mainPanel.add(summaryPanel, BorderLayout.NORTH);
     }
 }

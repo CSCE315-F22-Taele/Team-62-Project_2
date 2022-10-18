@@ -37,15 +37,19 @@ public class PomAndHoneyGUI extends JFrame {
 		btnInventory = new JButton();
 		btnInventory.setBorder(border);
 		btnInventory.getInsets();
+		btnInventory.setOpaque(true);
 
 		btnOrders = new JButton();
 		btnOrders.setBorder(border);
+		btnOrders.setOpaque(true);
 
 		btnSummary = new JButton();
 		btnSummary.setBorder(border);
+		btnSummary.setOpaque(true);
 
 		btnServerView = new JButton();
 		btnServerView.setBorder(border);
+		btnServerView.setOpaque(true);
 
 
 		$$$setupUI$$$();
