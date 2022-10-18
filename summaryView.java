@@ -14,8 +14,8 @@ public class summaryView{
 
     public summaryView(dbConnection db){
         this.db = db;
-        mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel = new JPanel(new BorderLayout());
+//        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
     }
 
     public void update(){
@@ -47,8 +47,25 @@ public class summaryView{
 		contents.setBorder(border);
 
         pairPanel.add(contents);
-        mainPanel.add(pairPanel);
+        mainPanel.add(pairPanel, BorderLayout.CENTER);
     }
+
+	private void seasonalMenuItems() {
+		JPanel seasonalItemPanel = new JPanel();
+
+		seasonalItemPanel.add(new JLabel("Seasonal Menu Items"));
+
+		try {
+//			ResultSet r = db.sendCommand("");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+		}
+		JTextArea contents = new JTextArea("asd;lkfjad");
+		contents.setEditable(false);
+		seasonalItemPanel.add(contents);
+		mainPanel.add(seasonalItemPanel, BorderLayout.EAST);
+	}
 
     private void loadSummaryPanel(){
         int id = 0;
@@ -117,6 +134,6 @@ public class summaryView{
         summaryPanel = new JPanel();
         summaryPanel.add(new JLabel("Summary"));
 		summaryPanel.add(contents);
-        mainPanel.add(summaryPanel);
+        mainPanel.add(summaryPanel, BorderLayout.NORTH);
     }
 }
