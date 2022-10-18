@@ -16,11 +16,14 @@ public class Inventory {
 	JPanel contentPanel;
 	JPanel mainPanel;
 	JPanel mainPanel2;
+	JPanel mainPanel3;
 	JPanel verticalView;
 	JFrame mainFrame;
 	JButton inventoryUpdate = new JButton("Update Inventory");
 	JButton PriceUpdate = new JButton("Update Price");
-
+	JPanel seasonalItemPanel;
+	Color customPurple = new Color(65, 30, 122);
+	Border border = new LineBorder(customPurple, 2);
 	dbConnection db;
 
 	public Inventory(dbConnection database) {
@@ -28,6 +31,9 @@ public class Inventory {
 		mainFrame = new JFrame("Inventory GUI");
 		invetoryPanel = new JPanel();
 		contentPanel = new JPanel();
+		seasonalItemPanel = new JPanel();
+
+		seasonalMenuItems();
 	}
 
 	public Inventory(dbConnection database, Color btnBackgroundColor, Color btnForeColor) {
@@ -36,8 +42,9 @@ public class Inventory {
 		invetoryPanel = new JPanel();
 		contentPanel = new JPanel();
 
-		Color customPurple = new Color(65, 30, 122);
-		Border border = new LineBorder(customPurple, 2);
+		seasonalItemPanel = new JPanel();
+		seasonalMenuItems();
+
 		invetoryPanel.setBackground(Color.white);
 		contentPanel.setBackground(Color.white);
 		contentPanel.setBorder(border);
@@ -141,7 +148,11 @@ public class Inventory {
 		mainPanel2.add(PriceUpdate, BorderLayout.CENTER);
 		mainPanel2.add(mainPanel, BorderLayout.SOUTH);
 
-		return mainPanel2;
+		mainPanel3 = new JPanel(new BorderLayout());
+		mainPanel3.add(mainPanel2, BorderLayout.EAST);
+		mainPanel3.add(seasonalItemPanel, BorderLayout.NORTH);
+
+		return mainPanel3;
 	}
 
     /*public JPanel mainpriceupdatepanel(JPanel verticalPanel){
@@ -162,6 +173,23 @@ public class Inventory {
 		content.setEditable(false);
 		contentPanel.add(content);
 		invetoryPanel.add(itemPanel);
+	}
+
+	private void seasonalMenuItems() {
+
+		JButton seasonItemBtn = new JButton("Seasonal Menu Items");
+		seasonItemBtn.setBackground(customPurple);
+		seasonItemBtn.setForeground(Color.white);
+		seasonItemBtn.setOpaque(true);
+		JTextField textSeasonItem = new JTextField(10);
+		seasonItemBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+
+		seasonalItemPanel.add(seasonItemBtn);
+		seasonalItemPanel.add(textSeasonItem);
 	}
 
 	public String retrivingDBItems() {

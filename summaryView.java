@@ -50,22 +50,6 @@ public class summaryView{
         mainPanel.add(pairPanel, BorderLayout.CENTER);
     }
 
-	private void seasonalMenuItems() {
-		JPanel seasonalItemPanel = new JPanel();
-
-		seasonalItemPanel.add(new JLabel("Seasonal Menu Items"));
-
-		try {
-//			ResultSet r = db.sendCommand("");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		JTextArea contents = new JTextArea("asd;lkfjad");
-		contents.setEditable(false);
-		seasonalItemPanel.add(contents);
-		mainPanel.add(seasonalItemPanel, BorderLayout.EAST);
-	}
 
     private void loadSummaryPanel(){
         int id = 0;
