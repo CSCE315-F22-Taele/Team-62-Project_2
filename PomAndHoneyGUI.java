@@ -114,6 +114,13 @@ public class PomAndHoneyGUI extends JFrame {
 				orderPanel.setVisible(false);
 
 				// changed button colors
+				//InventoryComponents();
+				Inventory inventory = new Inventory(db, customPurple, customWhite);
+				JPanel verticalPanel = new JPanel(new BorderLayout());
+				inventoryPanel.removeAll();
+				inventoryPanel.add(inventory.mainInventoryPanel(verticalPanel));
+				inventoryPanel.validate();
+				inventoryPanel.revalidate();
 				btnInventory.setBackground(customWhite);
 				btnInventory.setForeground(customPurple);
 				btnServerView.setBackground(customPurple);
@@ -136,6 +143,13 @@ public class PomAndHoneyGUI extends JFrame {
 				orderPanel.setVisible(true);
 
 				// changed button colors
+				Order order = new Order(db, customPurple, customWhite);
+				JPanel verticalPanel = new JPanel(new BorderLayout());
+				orderPanel.removeAll();
+				orderPanel.add(order.mainOrderPanel(verticalPanel));
+				orderPanel.validate();
+				orderPanel.revalidate();
+				
 				btnInventory.setBackground(customPurple);
 				btnInventory.setForeground(customWhite);
 				btnServerView.setBackground(customPurple);
@@ -252,9 +266,9 @@ public class PomAndHoneyGUI extends JFrame {
 	private void OrderComponents() {
 		Order order = new Order(db, customPurple, customWhite);
 		JPanel verticalPanel = new JPanel(new BorderLayout());
-
 		orderPanel = new JPanel();
 		orderPanel.add(order.mainOrderPanel(verticalPanel));
+		
 	}
 
 	public static void main(String[] args) {
