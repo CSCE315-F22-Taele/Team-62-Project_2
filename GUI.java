@@ -264,6 +264,41 @@ public class GUI extends JFrame {
 		}
 		return final_result;
 	}
+	//Restock Report 
+	///////////////////////////////////////
+	public String[] restockitems(String restock){
+
+		int min_restock=2;
+		try {
+			ResultSet size = db.sendCommand("SELECT COUNT(item) FROM item");
+			Double[] curr_quantity = new Double[size.getInt("count")];
+			try {
+				ResultSet order_data = db.sendCommand("SELECT * FROM item ORDER BY id ASC");
+				int l = 0;
+				while (order_data.next()) {
+					curr_quantity[l] = (order_data.getDouble("minquantity"));
+					l += 1;
+					if (curr_quantity[l] > min_restock) {
+						temp[j] = order_data.getString("name");
+						j += 1;
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		String[] final_result = new String[j];
+		for (int k = 0; k < j; k += 1) {
+			final_result[k] = temp[k];
+		}
+		return final_result;
+
+	}
+
+	////////////////////////////////////////
 
 	/**
 	 * creates the Orders panal
