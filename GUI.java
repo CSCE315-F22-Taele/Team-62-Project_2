@@ -164,6 +164,18 @@ public class GUI extends JFrame {
 		JTextArea contents = new JTextArea(today + week);
 		contents.setEditable(false);
 		managerViewSummary.add(contents);
+		String pairs = "";
+        try {
+            ResultSet r = db.sendCommand("SELECT t1.name as i1, t2.name as i2, count(*) from products t1 join products t2 on t1.orderId = t2.orderId and t1.name < t2.name group by t1.name, t2.name order by count(*) desc limit 10;");
+            while (r.next()) {
+                pairs += r.getString("i1") + " & " + r.getString("i2") + ": " + r.getInt("count") + " occurrences\n";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		JTextArea contents2 = new JTextArea(pairs);
+		contents2.setEditable(false);
+		managerViewSummary.add(contents2);
 		mainPanel.add(managerViewSummary);
 	}
 
