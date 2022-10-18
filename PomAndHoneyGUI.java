@@ -22,6 +22,7 @@ public class PomAndHoneyGUI extends JFrame {
 	private JButton btnInventory;
 	private JButton btnOrders;
 	private JPanel serverPanel;
+    private summaryView sumView;
 	private JPanel summaryPanel;
 	private JPanel orderPanel;
 	private JPanel inventoryPanel;
@@ -87,6 +88,17 @@ public class PomAndHoneyGUI extends JFrame {
 				summaryPanel.setVisible(false);
 				serverPanel.setVisible(true);
 				orderPanel.setVisible(false);
+
+                // changed button colors
+				btnInventory.setBackground(customPurple);
+				btnInventory.setForeground(customWhite);
+				btnServerView.setBackground(customWhite);
+				btnServerView.setForeground(customPurple);
+				btnOrders.setBackground(customPurple);
+				btnOrders.setForeground(customWhite);
+				btnSummary.setBackground(customPurple);
+				btnSummary.setForeground(customWhite);
+
 			}
 		});
 		btnSummary.addActionListener(new ActionListener() {
@@ -100,6 +112,7 @@ public class PomAndHoneyGUI extends JFrame {
 				serverPanel.setVisible(false);
 				orderPanel.setVisible(false);
 
+                sumView.update();
 
 				// changed button colors
 				btnInventory.setBackground(customPurple);
@@ -194,75 +207,8 @@ public class PomAndHoneyGUI extends JFrame {
 	}
 
 	private void SummaryComponents() {
-		summaryPanel = new JPanel();
-		JLabel title = new JLabel("Summary");
-		summaryPanel.add(title);
-		int id = 0;
-		String date = "";
-		int ordersToday = 0;
-		double salesToday = 0;
-		int ordersWeek = 0;
-		double salesWeek = 0;
-		try {
-			ResultSet r = db.sendCommand("SELECT MAX(id) FROM orders");
-			r.next();
-			id = r.getInt("max");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		try {
-			ResultSet r = db.sendCommand("SELECT date FROM orders WHERE id = " + id);
-			r.next();
-			date = r.getString("date");
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		try {
-			ResultSet r = db.sendCommand("SELECT total FROM orders WHERE date = '" + date + "'");
-			while (r.next()) {
-				ordersToday++;
-				salesToday += r.getDouble("total");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-
-		// create a new frame
-		//System.out.println(ordersToday + " " + salesToday);
-		String today = "                 TODAY                  \n Revenue: " + salesToday + "       Orders: " + ordersToday + "\n";
-		for (int i = 0; i < 7; i++) {
-			if (date != "") {
-				try {
-					ResultSet r = db.sendCommand("SELECT total FROM orders WHERE date = '" + date + "'");
-					while (r.next()) {
-						ordersWeek++;
-						salesWeek += r.getDouble("total");
-					}
-				} catch (Exception e) {
-					break;
-				}
-			}
-			try {
-				ResultSet r = db.sendCommand("SELECT date FROM orders WHERE date = (date '" + date + "' - integer '1')");
-				r.next();
-				date = r.getString("date");
-			} catch (Exception e) {
-				date = "";
-				continue;
-			}
-		}
-		String week = "                 Week                  \n Revenue: " + salesWeek + "       Orders: " + ordersWeek + "       Avg. Order: " + (double) salesWeek / ordersWeek;
-		JTextArea contents = new JTextArea(today + week);
-		contents.setEditable(false);
-		contents.setFont(new Font("Gill Sans Nova Light", Font.PLAIN, 20));
-
-		Border border = new LineBorder(customPurple, 2);
-		contents.setBorder(border);
-
-		summaryPanel.add(contents);
+		sumView = new summaryView(db);
+        summaryPanel = sumView.mainPanel;
 	}
 
 	private void ServerComponents() {
