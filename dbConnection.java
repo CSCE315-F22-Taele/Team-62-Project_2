@@ -146,7 +146,7 @@ public class dbConnection {
      * @throws  throws error if sendCommand does not work
      * @return  the total accounting in taxes
      */
-    public int addOrderToDatabase(double discount, double subtotal, String date) {
+    public double addOrderToDatabase(int[] productList, double discount, double subtotal, String date) {
         // Returns the total price of the new order when done.
         // Note that SQL Date is formatted as "YYYY-MM-DD"
         int id = 0;
@@ -164,7 +164,7 @@ public class dbConnection {
 
         String cmd = "";
         cmd += id + ", ";
-        cmd += "'{}',";
+        cmd += "'" + Arrays.toString(productList).replace("[", "{").replace("]", "}") + "', ";
         cmd += discount + ", ";
         cmd += subtotal + ", ";
         cmd += total + ", ";
@@ -175,7 +175,7 @@ public class dbConnection {
             sendCommand(full);
         } catch (Exception e) {
         }
-        return id;
+        return total;
     }
 
     public HashMap<Integer, Item> getItemHashmap(){
