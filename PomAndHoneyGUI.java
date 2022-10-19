@@ -21,6 +21,7 @@ public class PomAndHoneyGUI extends JFrame {
 	private JButton btnInventory;
 	private JButton btnOrders;
 	private JPanel serverPanel;
+	private serverView serverViewInstance;
     private summaryView sumView;
 	private JPanel summaryPanel;
 	private JPanel orderPanel;
@@ -96,10 +97,7 @@ public class PomAndHoneyGUI extends JFrame {
 				orderPanel.setVisible(false);
 
                 // changed button colors
-				serverPanel.removeAll();
-				ServerComponents();
-				server.validate();
-				serverPanel.revalidate();
+				serverViewInstance.init();
 				btnInventory.setBackground(customPurple);
 				btnInventory.setForeground(customWhite);
 				btnServerView.setBackground(customWhite);
@@ -239,7 +237,7 @@ public class PomAndHoneyGUI extends JFrame {
 	 */
 	private void ServerComponents() {
 		JPanel server_panel = new JPanel(new BorderLayout());
-		serverView serverView = new serverView(server_panel, db);
+		serverViewInstance = new serverView(server_panel, db);
 		serverPanel = new JPanel();
 
 		server_panel.setBackground(customWhite);
