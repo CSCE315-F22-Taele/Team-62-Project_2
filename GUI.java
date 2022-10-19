@@ -278,9 +278,11 @@ public class GUI extends JFrame {
 	}
 	//Restock Report 
 	///////////////////////////////////////
-	public String[] restockitems(String restock){
+	public String[] restockitems(){
 
 		int min_restock=2;
+		int j = 0;
+		String[] temp = new String[1000];
 		try {
 			ResultSet size = db.sendCommand("SELECT COUNT(item) FROM item");
 			Double[] curr_quantity = new Double[size.getInt("count")];
@@ -288,9 +290,9 @@ public class GUI extends JFrame {
 				ResultSet order_data = db.sendCommand("SELECT * FROM item ORDER BY id ASC");
 				int l = 0;
 				while (order_data.next()) {
-					curr_quantity[l] = (order_data.getDouble("minquantity"));
+					curr_quantity[l] = (order_data.getDouble("quantity"));
 					l += 1;
-					if (curr_quantity[l] > min_restock) {
+					if (curr_quantity[l] < min_restock) {
 						temp[j] = order_data.getString("name");
 						j += 1;
 					}

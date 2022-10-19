@@ -179,9 +179,6 @@ public class Inventory {
 		invetoryPanel.add(itemPanel);
 	}
 
-<<<<<<< HEAD
-	//Retrieves every item from the database
-=======
 	private void seasonalMenuItems() {
 
 		JButton seasonItemBtn = new JButton("Seasonal Menu Items");
@@ -199,7 +196,6 @@ public class Inventory {
 		seasonalItemPanel.add(textSeasonItem);
 	}
 
->>>>>>> 3a208f49590ff49713a1f97a07f93a91bfd2ffa0
 	public String retrivingDBItems() {
 		String name = "";
 		try {
