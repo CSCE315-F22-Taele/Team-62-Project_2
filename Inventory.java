@@ -166,11 +166,6 @@ public class Inventory {
 		return mainPanel3;
 	}
 
-    /*public JPanel mainpriceupdatepanel(JPanel verticalPanel){
-
-
-
-    }*/
 
 	//Creates the item panel and generates the content needed
 	/**
