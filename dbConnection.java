@@ -200,25 +200,25 @@ public class dbConnection {
                 error.printStackTrace();
                 System.exit(0);
             }
-            if(quantity < item.minquantity){
-               // System.out.println("Restocking " + item.name);
-               // System.out.println(" - Current Inventory: " + quantity);
-                quantity += item.minquantity * 5;
-                try {
-                    db.sendUpdate("UPDATE item SET quantity = " + quantity + " WHERE id = " + i + "");
-                    db.sendUpdate("UPDATE item SET lastrestock = '" + date + "' WHERE id = " + i + "");
-                } catch (Exception error) {
-                    error.printStackTrace();
-                    System.exit(0);
-                }
-               // System.out.println(" - New Inventory: " + quantity);
-                try {
-                    db.sendUpdate("INSERT INTO inventory VALUES (" + i + ", " + quantity + ", '" + date + "', true)");
-                } catch (Exception error) {
-                    error.printStackTrace();
-                    System.exit(0);
-                }
-            }
+            // // /*if(quantity < item.minquantity){
+            // //    // System.out.println("Restocking " + item.name);
+            // //    // System.out.println(" - Current Inventory: " + quantity);
+            // //     quantity += item.minquantity * 5;
+            // //     try {
+            // //         db.sendUpdate("UPDATE item SET quantity = " + quantity + " WHERE id = " + i + "");
+            // //         db.sendUpdate("UPDATE item SET lastrestock = '" + date + "' WHERE id = " + i + "");
+            // //     } catch (Exception error) {
+            // //         error.printStackTrace();
+            // //         System.exit(0);
+            // //     }*/
+            // //    // System.out.println(" - New Inventory: " + quantity);
+            //     try {
+            //         db.sendUpdate("INSERT INTO inventory VALUES (" + i + ", " + quantity + ", '" + date + "', true)");
+            //     } catch (Exception error) {
+            //         error.printStackTrace();
+            //         System.exit(0);
+            //     }
+            // }
         }
        // System.out.println("Inventory taken for " + date + ", day ended.");
     }
