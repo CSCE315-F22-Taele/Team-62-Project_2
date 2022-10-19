@@ -83,10 +83,13 @@ public class dbConnection {
 
     }
 
+    public void addItemToDatabase(int id, double quantity, String units, String newItem, int minQuantity) {
+        String sqlStatement = "INSERT INTO item VALUES ('Bo', 905, 'bob', '2000-01-01', '');";
+        System.out.println(sqlStatement);
+    }
+
     /** *
     * <p>
-    * This Method allows a new product built up of items to be created which can then be added to individual orders in the database.
-    *
     * @param  name   Name of the product
     * @param  price price of the product
     * @param  itemList   List of items in the product

@@ -35,6 +35,7 @@ public class summaryView{
         mainPanel.removeAll();
         loadSummaryPanel();
         loadPairPanel();
+		loadRestockPanel();
 		loadExcessPanel(todayDate);
         mainPanel.validate();
         mainPanel.revalidate();
@@ -63,6 +64,51 @@ public class summaryView{
         pairPanel.add(contents);
         mainPanel.add(pairPanel, BorderLayout.CENTER);
     }
+
+	private void loadRestockPanel(){
+        JPanel restockPanel = new JPanel();
+        restockPanel.add(new JLabel("Restock Items"));
+
+        String result = restockitems();
+
+        JTextArea contents = new JTextArea(result);
+		contents.setEditable(false);
+		contents.setFont(new Font("Gill Sans Nova Light", Font.PLAIN, 20));
+        Border border = new LineBorder(customPurple, 2);
+		contents.setBorder(border);
+
+        restockPanel.add(contents);
+        mainPanel.add(restockPanel, BorderLayout.CENTER);
+    }
+
+	//Restock Report 
+	///////////////////////////////////////
+	public String restockitems(){
+
+		int min_restock=2;
+		String result = "";
+		try {
+			//ResultSet size = db.sendCommand("SELECT COUNT(item) FROM item");
+			//Double[] curr_quantity = new Double[size.getInt("count")];
+			try {
+				ResultSet order_data = db.sendCommand("SELECT * FROM item where quantity < minquantity");
+				while (order_data.next()) {
+					result+=(order_data.getString("name")+"\n");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// String[] final_result = new String[j];
+		// for (int k = 0; k < j; k += 1) {
+		// 	final_result[k] = temp[k];
+		// }
+		return result;
+
+	}
 
 	//Excess sales report
 
