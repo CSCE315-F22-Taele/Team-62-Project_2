@@ -47,7 +47,7 @@ public class summaryView{
 
         String result = "";
         try {
-            ResultSet r = db.sendCommand("SELECT t1.name as i1, t2.name as i2, count(*) from products t1 join products t2 on t1.orderId = t2.orderId and t1.name < t2.name group by t1.name, t2.name order by count(*) desc limit 10;");
+            ResultSet r = db.sendCommand("SELECT t1.name as i1, t2.name as i2, count(*) from products t1 join products t2 on t1.orderId = t2.orderId and t1.name < t2.name group by t1.name, t2.name order by count(*) desc limit 6;");
             while (r.next()) {
                 result += r.getString("i1") + " & " + r.getString("i2") + ": " + r.getInt("count") + " occurrences\n";
             }
@@ -71,13 +71,18 @@ public class summaryView{
 
         String result = restockitems();
 
-        JTextArea contents = new JTextArea(result);
+        JTextArea contents = new JTextArea(result, 5, 10);
 		contents.setEditable(false);
+		contents.setLineWrap(true);
+		contents.setWrapStyleWord(true);
 		contents.setFont(new Font("Gill Sans Nova Light", Font.PLAIN, 20));
         Border border = new LineBorder(customPurple, 2);
 		contents.setBorder(border);
+		JScrollPane pane = new JScrollPane(contents);
+		pane.setBounds(10, 11, 455, 249);
+		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        restockPanel.add(contents);
+        restockPanel.add(pane);
         mainPanel.add(restockPanel, BorderLayout.CENTER);
     }
 
@@ -189,7 +194,7 @@ public class summaryView{
 			result +=(item+"\n");
 		}
 		System.out.println("Here: " +date + result);
-        JTextArea contents = new JTextArea(result, 10, 10);
+        JTextArea contents = new JTextArea(result, 5, 10);
 		contents.setEditable(false);
 		contents.setLineWrap(true);
 		contents.setWrapStyleWord(true);
