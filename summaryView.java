@@ -83,7 +83,7 @@ public class summaryView{
 		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         restockPanel.add(pane);
-        mainPanel.add(restockPanel, BorderLayout.CENTER);
+        mainPanel.add(restockPanel, BorderLayout.EAST);
     }
 
 	//Restock Report

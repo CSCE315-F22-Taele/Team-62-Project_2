@@ -1,6 +1,5 @@
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.uiDesigner.core.Spacer;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,11 +7,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
-import java.sql.*;
-import java.lang.Math;
 import java.util.Locale;
 
 /**
@@ -249,6 +245,9 @@ public class PomAndHoneyGUI extends JFrame {
 	}
 
 
+	/**
+	 * displays
+	 */
 	private void OrderComponents() {
 		Order order = new Order(db, customPurple, customWhite);
 		JPanel verticalPanel = new JPanel(new BorderLayout());
