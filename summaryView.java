@@ -189,14 +189,19 @@ public class summaryView{
 			result +=(item+"\n");
 		}
 		System.out.println("Here: " +date + result);
-        JTextArea contents = new JTextArea(result);
+        JTextArea contents = new JTextArea(result, 10, 10);
 		contents.setEditable(false);
+		contents.setLineWrap(true);
+		contents.setWrapStyleWord(true);
 		contents.setFont(new Font("Gill Sans Nova Light", Font.PLAIN, 20));
         Border border = new LineBorder(customPurple, 2);
 		contents.setBorder(border);
+		JScrollPane pane = new JScrollPane(contents);
+		pane.setBounds(10, 10, 10, 10);
+		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		excessPanel.add(excessButton);
 		excessPanel.add(text);
-        excessPanel.add(contents);
+        excessPanel.add(pane);
         mainPanel.add(excessPanel);
     }
 

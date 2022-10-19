@@ -190,6 +190,8 @@ public class Inventory {
 		seasonItemBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				String newItem = textSeasonItem.getText();
+				db.addItemToDatabase(30, 34.34, "Kg", newItem, 2);
 			}
 		});
 
