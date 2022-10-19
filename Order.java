@@ -9,6 +9,9 @@ import java.awt.GridLayout;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
+/**
+* Initializes, maintains, and updates all UI for the orders tab.
+*/
 public class Order {
 
 	JPanel orderPanel;
@@ -23,7 +26,7 @@ public class Order {
     String upperDate = "";
 
 	dbConnection db;
-	
+
 	/**
      * This is the constructor for the Order class
      *

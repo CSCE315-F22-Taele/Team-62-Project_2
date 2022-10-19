@@ -1,3 +1,6 @@
+/**
+* Unified logging system that allows all logs to be easily turned off or on.
+*/
 public class Logger{
     private static boolean DEBUG = false; // Set this to false when submitting the release!
     /**

@@ -9,6 +9,9 @@ import java.awt.GridLayout;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
+/**
+Initializes, maintains, and updates the view for the inventory tab. 
+*/
 public class Inventory {
 
 	JPanel itemPanel;
