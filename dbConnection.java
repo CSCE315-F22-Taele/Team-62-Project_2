@@ -87,7 +87,8 @@ public class dbConnection {
         try{
             Statement stmt = conn.createStatement();
             String sqlStatement = "INSERT INTO item VALUES (" + String.valueOf(id) +"," + String.valueOf(quantity) + "," + "'" + units + "'" + "," + "'" + newItem + "'" + "," + String.valueOf(minQuantity) + "," + "'2022-10-18'" + ")";
-            ResultSet result = stmt.executeQuery(sqlStatement);
+            int result = stmt.executeUpdate(sqlStatement);
+
         } catch (Exception e){
             e.printStackTrace();
             System.err.println(e.getClass().getName()+": "+e.getMessage());
