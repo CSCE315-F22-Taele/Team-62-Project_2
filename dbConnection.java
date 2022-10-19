@@ -84,8 +84,16 @@ public class dbConnection {
     }
 
     public void addItemToDatabase(int id, double quantity, String units, String newItem, int minQuantity) {
-        String sqlStatement = "INSERT INTO item VALUES ('Bo', 905, 'bob', '2000-01-01', '');";
-        System.out.println(sqlStatement);
+        try{
+            Statement stmt = conn.createStatement();
+            String sqlStatement = "INSERT INTO item VALUES (" + String.valueOf(id) +"," + String.valueOf(quantity) + "," + "'" + units + "'" + "," + "'" + newItem + "'" + "," + String.valueOf(minQuantity) + "," + "''" + ");";
+            ResultSet result = stmt.executeQuery(sqlStatement);
+        } catch (Exception e){
+            e.printStackTrace();
+            System.err.println(e.getClass().getName()+": "+e.getMessage());
+            System.exit(0);
+        }
+
     }
 
     /** *

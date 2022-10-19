@@ -278,36 +278,36 @@ public class GUI extends JFrame {
 	}
 	//Restock Report 
 	///////////////////////////////////////
-	public String[] restockitems(){
-
-		int min_restock=2;
-		int j=0;
-		String [] temp = new String [35];
-		try {
-			ResultSet size = db.sendCommand("SELECT COUNT(item) FROM item");
-			size.next();
-			Double[] curr_quantity = new Double[size.getInt("count")];
-			try {
-				ResultSet order_data = db.sendCommand("SELECT * FROM item ORDER BY id ASC");
-				int l = 0;
-				while (order_data.next()) {
-					curr_quantity[l] = (order_data.getDouble("quantity"));
-					if (curr_quantity[l] > min_restock) {
-						temp[j] = order_data.getString("name");
-						j += 1;
-					}
-					l += 1;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return temp;
-
-	}
+//	public String[] restockitems(){
+//
+//		int min_restock=2;
+//		int j=0;
+//		String [] temp = new String [35];
+//		try {
+//			ResultSet size = db.sendCommand("SELECT COUNT(item) FROM item");
+//			size.next();
+//			Double[] curr_quantity = new Double[size.getInt("count")];
+//			try {
+//				ResultSet order_data = db.sendCommand("SELECT * FROM item ORDER BY id ASC");
+//				int l = 0;
+//				while (order_data.next()) {
+//					curr_quantity[l] = (order_data.getDouble("quantity"));
+//					if (curr_quantity[l] > min_restock) {
+//						temp[j] = order_data.getString("name");
+//						j += 1;
+//					}
+//					l += 1;
+//				}
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//
+//		return temp;
+//
+//	}
 
 	////////////////////////////////////////
 
