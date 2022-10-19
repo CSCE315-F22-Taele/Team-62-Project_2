@@ -220,7 +220,7 @@ public class Inventory {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String newItem = textSeasonItem.getText();
-				db.addItemToDatabase(30, 34.34, "Kg", newItem, 2);
+				db.addItemToDatabase(101, 34.34, "Kg", newItem, 2);
 			}
 		});
 
@@ -242,7 +242,7 @@ public class Inventory {
 				name += result.getString("name") + "    " + result.getString("quantity") + " units\n";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 			JOptionPane.showMessageDialog(null, "Error accessing Database.");
 		}
 		return name;
@@ -263,7 +263,7 @@ public class Inventory {
 				name += result.getString("name") + "    " + result.getString("price") + "$\n";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 			JOptionPane.showMessageDialog(null, "Error accessing Database.");
 		}
 		return name;

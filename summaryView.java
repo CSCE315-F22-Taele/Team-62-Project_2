@@ -26,7 +26,7 @@ public class summaryView{
 			r.next();
 			todayDate = r.getString("current_timestamp");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
     }
@@ -52,7 +52,7 @@ public class summaryView{
                 result += r.getString("i1") + " & " + r.getString("i2") + ": " + r.getInt("count") + " occurrences\n";
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.log(e);
         }
 
         JTextArea contents = new JTextArea(result);
@@ -86,7 +86,7 @@ public class summaryView{
         mainPanel.add(restockPanel, BorderLayout.CENTER);
     }
 
-	//Restock Report 
+	//Restock Report
 	///////////////////////////////////////
 	public String restockitems(){
 
@@ -101,10 +101,10 @@ public class summaryView{
 					result+=(order_data.getString("name")+"\n");
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				Logger.log(e);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 		}
 
 		// String[] final_result = new String[j];
@@ -136,10 +136,10 @@ public class summaryView{
 					i += 1;
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				Logger.log(e);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 		}
 		Double[] quantity = new Double[i];
 		for (int k = 0; k < i; k += 1) {
@@ -163,10 +163,10 @@ public class summaryView{
 					l += 1;
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				Logger.log(e);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 		}
 		String[] final_result = new String[j];
 		for (int k = 0; k < j; k += 1) {
@@ -193,7 +193,7 @@ public class summaryView{
 		for(String item : excess){
 			result +=(item+"\n");
 		}
-		System.out.println("Here: " +date + result);
+		Logger.log("Here: " +date + result);
         JTextArea contents = new JTextArea(result, 5, 10);
 		contents.setEditable(false);
 		contents.setLineWrap(true);
@@ -222,7 +222,7 @@ public class summaryView{
 			r.next();
 			id = r.getInt("max");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 		try {
@@ -230,7 +230,7 @@ public class summaryView{
 			r.next();
 			date = r.getString("date");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 		try {
@@ -240,7 +240,7 @@ public class summaryView{
 				salesToday += r.getDouble("total");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 

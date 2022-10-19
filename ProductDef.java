@@ -1,3 +1,8 @@
+
+//Productdef is a class that takes in all the parameters for the item stored from the menu
+//This includes the id, name, price, base item/portions but also the includes the optional amount
+//as shown in Pom & Honey's menu
+//another class made to reference each product order
 public class ProductDef {
     public int id;
     public String name;

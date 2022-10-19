@@ -72,7 +72,7 @@ public class testGeneration {
         for (int i = 0; i < numProducts; i++) {
             Product p = addRandomProductToDatabase(db,date,orderid);
             if(p.id == -1){
-                System.out.println("Error adding order to database (product ID not assigned).");
+                Logger.log("Error adding order to database (product ID not assigned).");
                 System.exit(0);
             }
             productList[i] = p.id;
@@ -90,7 +90,7 @@ public class testGeneration {
         testGeneration.addItems(db);
         testGeneration.addProductDefs(db);
         if(startDay == 1){
-            System.out.println("Removing orders and products...");
+            Logger.log("Removing orders and products...");
             try {
                 db.sendUpdate("DELETE FROM orders;");
                 db.sendUpdate("DELETE FROM products;");
@@ -99,7 +99,7 @@ public class testGeneration {
                 error.printStackTrace();
                 System.exit(0);
             }
-            System.out.println("Successfully deleted.");
+            Logger.log("Successfully deleted.");
         }
         double price = 0;
         int num = 0;
@@ -111,7 +111,7 @@ public class testGeneration {
                 orderCount = 10;
             }
             String date = "2022-09-" + String.format("%2d", day).replace(" ", "0");
-            System.out.println("Adding orders for " + date);
+            Logger.log("Adding orders for " + date);
             for (int i = 0; i < orderCount; i++) {
                 num += 1;
                 addRandomOrderToDatabase(db, date);
@@ -133,8 +133,8 @@ public class testGeneration {
                 System.exit(0);
             }
             if(quantity < item.minquantity){
-               // System.out.println("Restocking " + item.name);
-               // System.out.println(" - Current Inventory: " + quantity);
+               // Logger.log("Restocking " + item.name);
+               // Logger.log(" - Current Inventory: " + quantity);
                 quantity += item.minquantity * 5;
                 try {
                     db.sendUpdate("UPDATE item SET quantity = " + quantity + " WHERE id = " + i + "");
@@ -143,7 +143,7 @@ public class testGeneration {
                     error.printStackTrace();
                     System.exit(0);
                 }
-               // System.out.println(" - New Inventory: " + quantity);
+               // Logger.log(" - New Inventory: " + quantity);
                 try {
                     db.sendUpdate("INSERT INTO inventory VALUES (" + i + ", " + quantity + ", '" + date + "', true)");
                 } catch (Exception error) {
@@ -152,11 +152,11 @@ public class testGeneration {
                 }
             }
         }
-       // System.out.println("Inventory taken for " + date + ", day ended.");
+       // Logger.log("Inventory taken for " + date + ", day ended.");
     }
 
     public static void addItems(dbConnection db) {
-        System.out.println("Resetting Items...");
+        Logger.log("Resetting Items...");
         try {
             db.sendUpdate("DELETE FROM inventory;");
             db.sendUpdate("DELETE FROM item;");
@@ -186,15 +186,15 @@ public class testGeneration {
             db.sendUpdate("INSERT INTO item VALUES (24, 2000, '', 'Plastic Bowl', 400)");
             db.sendUpdate("INSERT INTO item VALUES (25, 500, '', 'Pita Bread', 100)");
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.log(e);
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("Items Reset.");
+        Logger.log("Items Reset.");
     }
 
     public static void addProductDefs(dbConnection db) {
-        System.out.println("Resetting ProducDefs...");
+        Logger.log("Resetting ProducDefs...");
         try {
             db.sendUpdate("DELETE FROM productDef;");
             db.sendUpdate("INSERT INTO productDef VALUES (1, 'Gyro', 8.09, '{24, 25}', '{1.0, 1.0}', '{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22}', '{0.075, 0.075, 0.120, 0.120, 0.120, 2.0, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015}')");
@@ -205,11 +205,11 @@ public class testGeneration {
             db.sendUpdate("INSERT INTO productDef VALUES (6, 'Extra Dressing', 0.39, '{}', '{}', '{15,16,17,18,19,20,21,22}', '{0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015, 0.015}')");
             db.sendUpdate("INSERT INTO productDef VALUES (7, 'Fountain Drink', 2.45, '{23}', '{1.0}', '{}', '{}')");
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.log(e);
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-        System.out.println("ProducDefs Reset.");
+        Logger.log("ProducDefs Reset.");
     }
 
 }

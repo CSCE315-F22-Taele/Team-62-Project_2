@@ -5,7 +5,10 @@ import javax.swing.*;
 import java.util.HashMap;
 import java.awt.*;
 
-
+/**
+* The serverView class manages the UI and logic behind the server UI, which
+* allows the user to create and submit orders.
+*/
 public class serverView {
     private JPanel mainPanel;
     private JPanel productPanel;
@@ -29,9 +32,6 @@ public class serverView {
     Color customWhite = new Color(255, 255, 255);
     Color maroon = new Color(141, 6, 6);
 
-
-    private GUI gui;
-
     private void loadProductPanels(){
         for(ProductDef p : productDefs){
             JButton b = new JButton(p.name);
@@ -47,26 +47,24 @@ public class serverView {
         }
     }
 
-    public serverView(JPanel p, GUI g, dbConnection database){
-        mainPanel = p;
-        gui = g;
-        db = database;
-        init();
-    }
-
+    /**
+    * Create a new serverView inside of panel p.
+    * @param p  The JPanel in which to initialize the ServerView.
+    * @param database  A database connection to use.
+    */
     public serverView(JPanel p, dbConnection database) {
         mainPanel = p;
         mainPanel.setBackground(customWhite);
         mainPanel.setSize(1500, 750);
         db = database;
-        init2();
+        init();
     }
 
-    private void init2(){
+    private void init(){
         productPanels = new HashMap<>();
         productDataMap = new HashMap<>();
         mainPanel.removeAll();
-        GUI.refresh(mainPanel);
+        PomAndHoneyGUI.refresh(mainPanel);
         itemMap = db.getItemHashmap();
         productDefs = db.getProductDefs();
         productPanel = new JPanel(new GridLayout(0,1));
@@ -102,49 +100,15 @@ public class serverView {
 
         loadProductPanels();
     }
-    private void init(){
-        productPanels = new HashMap<>();
-        productDataMap = new HashMap<>();
-        mainPanel.removeAll();
-        GUI.refresh(mainPanel);
-        itemMap = db.getItemHashmap();
-        productDefs = db.getProductDefs();
-        productPanel = new JPanel(new GridLayout(0,1));
-        itemPanel = new JPanel();
-        receiptPanel = new JPanel(new GridLayout(0,1));
-        infoPanel = new JPanel();
-        infoPanel.add(new JLabel("Server View"));
-        productPanel.add(new JLabel("Products"));
-        receiptPanel.add(new JLabel("Receipts"));
-        subtotal = new JLabel("Subtotal: $0.00");
-        total = new JLabel("Total: $0.00");
-        receiptPanel.add(subtotal);
-        receiptPanel.add(total);
-        SpinnerModel model = new SpinnerNumberModel(0, 0, 100, 5);
-        discount = new JSpinner(model);
-        receiptPanel.add(new JLabel("Discount %:"));
-        receiptPanel.add(discount);
-        JButton switchButton = new JButton("Manager View");
-        switchButton.addActionListener(e -> gui.switchToManagerView());
-        JButton finalizeButton = new JButton("Finalize Order");
-        finalizeButton.addActionListener(e -> finalizeOrder());
 
-        infoPanel.add(switchButton);
-
-        mainPanel.add(infoPanel, BorderLayout.PAGE_START);
-        mainPanel.add(productPanel, BorderLayout.LINE_START);
-        mainPanel.add(receiptPanel, BorderLayout.LINE_END);
-        mainPanel.add(itemPanel, BorderLayout.CENTER);
-        itemPanel.setSize(800,800);
-        mainPanel.add(finalizeButton, BorderLayout.PAGE_END);
-
-        loadProductPanels();
-    }
+    /**
+    * Show or hide the server view.
+    */
     public void setVisible(boolean v){
         mainPanel.setVisible(v);
     }
 
-    public void addNewProduct(int id){
+    private void addNewProduct(int id){
         // Create and show a new product panel
         ProductDef p = productDefs[0];
         for(int i=0;i<productDefs.length;i++){
@@ -203,32 +167,32 @@ public class serverView {
         updatePrices();
     }
 
-    public void switchToProduct(JPanel p){
+    private void switchToProduct(JPanel p){
         // Hide every panel and show the one we want
         productPanels.forEach((i, panel) -> panel.setVisible(false));
         p.setVisible(true);
     }
 
-    public void removeProduct(JButton b){
+    private void removeProduct(JButton b){
         JPanel p = productPanels.get(b);
         productDataMap.remove(b);
         productPanels.remove(b);
-        GUI.deleteComponent(itemPanel, p);
-        GUI.deleteComponent(receiptPanel, b);
+        PomAndHoneyGUI.deleteComponent(itemPanel, p);
+        PomAndHoneyGUI.deleteComponent(receiptPanel, b);
         updatePrices();
     }
 
-    public void updatePrices(){
+    private void updatePrices(){
         int price = 0;
         for(Product p : productDataMap.values()){
             price += p.price;
         }
         subtotal.setText("Subtotal: $" + price);
         total.setText("Total: $" + (price * 1.0825));
-        GUI.refresh(receiptPanel);
+        PomAndHoneyGUI.refresh(receiptPanel);
     }
 
-    public void finalizeOrder(){
+    private void finalizeOrder(){
         int price = 0;
         int[] productList = new int[productDataMap.size()];
         int i = 0;
@@ -239,7 +203,7 @@ public class serverView {
 			r.next();
 			currentDate = r.getString("current_timestamp");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
         try {

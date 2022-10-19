@@ -63,7 +63,7 @@ public class Order {
 			upperDate = currentDate;
 			lowerDate = upperDate;
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 
@@ -154,7 +154,7 @@ public class Order {
 					prevOrders += r.getString("name") + ":       " + r.getDouble("sum")+"$\n";
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				Logger.log(e);
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			}
 

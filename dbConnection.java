@@ -3,6 +3,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.math.BigDecimal;
 
+/**
+* Manages the connection to the SQL database, and abstracts various read/write operations.
+*/
 public class dbConnection {
     private Connection conn;
     /**
@@ -22,17 +25,21 @@ public class dbConnection {
         try {
             conn = DriverManager.getConnection(dbConnectionString, dbSetup.user, dbSetup.pswd);
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.log(e);
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
 
-        System.out.println("Opened database successfully");
+        Logger.log("Opened database successfully");
     }
 
+    /**
+    * Pretty-prints a result set.
+    * @param result  The result set to print.
+    */
     public void printResultSet(ResultSet result) throws SQLException {
         // You will need to output the results differently depeninding on which function you use
-        System.out.println("--------------------Query Results--------------------");
+        Logger.log("--------------------Query Results--------------------");
         ResultSetMetaData rsmd = result.getMetaData();
         int columnsNumber = rsmd.getColumnCount();
 
@@ -42,7 +49,7 @@ public class dbConnection {
                 String columnValue = result.getString(i);
                 System.out.print(rsmd.getColumnName(i) + ": " + columnValue);
             }
-            System.out.println();
+            Logger.log();
         }
     }
     /**
@@ -87,9 +94,10 @@ public class dbConnection {
         try{
             Statement stmt = conn.createStatement();
             String sqlStatement = "INSERT INTO item VALUES (" + String.valueOf(id) +"," + String.valueOf(quantity) + "," + "'" + units + "'" + "," + "'" + newItem + "'" + "," + String.valueOf(minQuantity) + "," + "'2022-10-18'" + ")";
-            ResultSet result = stmt.executeQuery(sqlStatement);
+            int result = stmt.executeUpdate(sqlStatement);
+
         } catch (Exception e){
-            e.printStackTrace();
+            Logger.log(e);
             System.err.println(e.getClass().getName()+": "+e.getMessage());
             System.exit(0);
         }
@@ -97,7 +105,9 @@ public class dbConnection {
     }
 
     /** *
-    * <p>
+    *
+    * This Method allows a new product built up of items to be created which can then be added to individual orders in the database.
+    *
     * @param  name   Name of the product
     * @param  price price of the product
     * @param  itemList   List of items in the product
@@ -112,7 +122,7 @@ public class dbConnection {
             r.next();
             id = r.getInt("max") + 1;
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.log(e);
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
@@ -134,7 +144,7 @@ public class dbConnection {
             try {
                 sendUpdate("UPDATE item SET quantity = quantity-" + portionList[i] + " WHERE id = " + itemList[i]);
             } catch (Exception e) {
-                e.printStackTrace();
+                Logger.log(e);
                 System.err.println(e.getClass().getName() + ": " + e.getMessage());
                 System.exit(0);
             }
@@ -181,7 +191,7 @@ public class dbConnection {
         cmd += total + ", ";
         cmd += "'" + date + "'";
         String full = "INSERT INTO orders VALUES (" + cmd + ")";
-        //System.out.println(full);
+        //Logger.log(full);
         String prevDate = "";
         try {
             sendCommand(full);
@@ -200,6 +210,10 @@ public class dbConnection {
         return total;
     }
 
+    /**
+    * Creates a snapshot of all of the items and their current quantities
+    * @param date  the current date.
+    */
     public static void takeInventory(dbConnection db, String date){
         HashMap<Integer, Item> items = db.getItemHashmap();
         for(int i : items.keySet()){
@@ -212,8 +226,8 @@ public class dbConnection {
                 System.exit(0);
             }
             // // /*if(quantity < item.minquantity){
-            // //    // System.out.println("Restocking " + item.name);
-            // //    // System.out.println(" - Current Inventory: " + quantity);
+            // //    // Logger.log("Restocking " + item.name);
+            // //    // Logger.log(" - Current Inventory: " + quantity);
             // //     quantity += item.minquantity * 5;
             // //     try {
             // //         db.sendUpdate("UPDATE item SET quantity = " + quantity + " WHERE id = " + i + "");
@@ -222,7 +236,7 @@ public class dbConnection {
             // //         error.printStackTrace();
             // //         System.exit(0);
             // //     }*/
-            // //    // System.out.println(" - New Inventory: " + quantity);
+            // //    // Logger.log(" - New Inventory: " + quantity);
             //     try {
             //         db.sendUpdate("INSERT INTO inventory VALUES (" + i + ", " + quantity + ", '" + date + "', true)");
             //     } catch (Exception error) {
@@ -231,10 +245,14 @@ public class dbConnection {
             //     }
             // }
         }
-       // System.out.println("Inventory taken for " + date + ", day ended.");
+       // Logger.log("Inventory taken for " + date + ", day ended.");
     }
-    
 
+
+    /**
+    * Builds and returns a hash map representation of items from the database.
+    * Items are mapped by their IDs
+    */
     public HashMap<Integer, Item> getItemHashmap(){
         HashMap<Integer, Item> resultMap = new HashMap<>();
         try {
@@ -244,11 +262,14 @@ public class dbConnection {
                 resultMap.put(result.getInt("id"), newItem);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 		}
         return resultMap;
     }
 
+    /**
+    * Builds and returns an array of product definitions based on the ProductDef table in the database.
+    */
     public ProductDef[] getProductDefs() {
         try {
             ResultSet count = sendCommand("SELECT COUNT(productDef) FROM productDef");
@@ -271,16 +292,16 @@ public class dbConnection {
                 }
                 return data;
             } catch (Exception e) {
-                e.printStackTrace();
+                Logger.log(e);
             }
         } catch(Exception e) {
-            e.printStackTrace();
+            Logger.log(e);
         }
         ProductDef[] bad_data = new ProductDef[0];
         return bad_data;
     }
 
-    Double[] bigDecimalArrayToDoubleArray(BigDecimal[] in){
+    private Double[] bigDecimalArrayToDoubleArray(BigDecimal[] in){
         Double[] out = new Double[in.length];
         for(int i=0;i<in.length;i++){
             out[i] = in[i].doubleValue();
@@ -288,12 +309,15 @@ public class dbConnection {
         return out;
     }
 
+    /**
+    * Closes the database connection
+    */
     public void close() {
         try {
             conn.close();
-            System.out.println("Connection Closed.");
+            Logger.log("Connection Closed.");
         } catch (Exception e) {
-            System.out.println("Connection NOT Closed.");
+            Logger.log("Connection NOT Closed.");
         }//end try catch
     }
 }//end Class
