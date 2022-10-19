@@ -203,10 +203,9 @@ public class Inventory {
 		invetoryPanel.add(itemPanel);
 	}
 
-	//Retrieves every item from the database
 	/**
      * This allows you to add a new item to the database.
-     *
+     * Retrieves every item from the database
      * @author JP Pham
      */
 	private void seasonalMenuItems() {

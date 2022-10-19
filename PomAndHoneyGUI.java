@@ -1,6 +1,5 @@
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.uiDesigner.core.Spacer;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,11 +7,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
-import java.sql.*;
-import java.lang.Math;
 import java.util.Locale;
 
 /**
@@ -36,7 +32,6 @@ public class PomAndHoneyGUI extends JFrame {
     /**
     * Initialize the entire GUI
     */
-
 	public PomAndHoneyGUI(dbConnection database) {
 		db = database;
 		Border border = new LineBorder(customPurple, 2);
@@ -198,7 +193,9 @@ public class PomAndHoneyGUI extends JFrame {
 
 	}
 
-
+	/**
+	 * adds the inventory panel, summary panel, order panel and server view panel to the skeleton frame
+	 */
 	private void createUIComponents() {
 		InventoryComponents();
 		SummaryComponents();
@@ -206,6 +203,10 @@ public class PomAndHoneyGUI extends JFrame {
 		ServerComponents();
 	}
 
+	/**
+	 * creates the inventory panel using the inventory class
+	 * the inventory can view inventory, added new items, change price, and update quantity
+	 */
 	private void InventoryComponents() {
 		Inventory inventory = new Inventory(db, customPurple, customWhite);
 		JPanel verticalPanel = new JPanel(new BorderLayout());
@@ -214,11 +215,24 @@ public class PomAndHoneyGUI extends JFrame {
 		inventoryPanel.add(inventory.mainInventoryPanel(verticalPanel));
 	}
 
+	/**
+	 * summary panel using the summaryView class
+	 * displays the revenue and order today and of the week
+	 * displays commonly paired items
+	 * displays items that restocks
+	 * displays and generate excess sales
+	 */
 	private void SummaryComponents() {
 		sumView = new summaryView(db);
         summaryPanel = sumView.mainPanel;
 	}
 
+	/**
+	 * contains the server with all items to be ordered. uses the serverView class
+	 * contains all the product such as Gyro, bowls, falafels, etc.
+	 * contains the price of each item
+	 * once orders are added, it can be added to order panels
+	 */
 	private void ServerComponents() {
 		JPanel server_panel = new JPanel(new BorderLayout());
 		serverView serverView = new serverView(server_panel, db);
@@ -231,6 +245,9 @@ public class PomAndHoneyGUI extends JFrame {
 	}
 
 
+	/**
+	 * displays
+	 */
 	private void OrderComponents() {
 		Order order = new Order(db, customPurple, customWhite);
 		JPanel verticalPanel = new JPanel(new BorderLayout());

@@ -90,6 +90,14 @@ public class dbConnection {
 
     }
 
+    /**
+     * used for adding new items to the inventory
+     * @param id of new item
+     * @param quantity of new item
+     * @param units of new item
+     * @param newItem the item name being added
+     * @param minQuantity  the minimum quantity
+     */
     public void addItemToDatabase(int id, double quantity, String units, String newItem, int minQuantity) {
         try{
             Statement stmt = conn.createStatement();

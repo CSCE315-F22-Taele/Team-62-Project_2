@@ -1,5 +1,7 @@
 *.class
 dbSetup.java
 *.iml
-out/
+out
 .idea
+.vscode
+*.log
