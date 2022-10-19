@@ -15,6 +15,9 @@ import java.sql.*;
 import java.lang.Math;
 import java.util.Locale;
 
+/**
+* The PomAndHoneyGUI is the main class that initializes, controls, and maintains the GUI
+*/
 public class PomAndHoneyGUI extends JFrame {
 	private JPanel mainPanel;
 	private JButton btnServerView;
@@ -29,6 +32,10 @@ public class PomAndHoneyGUI extends JFrame {
 	private dbConnection db;
 	Color customPurple = new Color(65, 30, 122);
 	Color customWhite = new Color(255, 255, 255);
+
+    /**
+    * Initialize the entire GUI
+    */
 
 	public PomAndHoneyGUI(dbConnection database) {
 		db = database;
@@ -191,10 +198,7 @@ public class PomAndHoneyGUI extends JFrame {
 
 	}
 
-	/**
-	 * this is where to add our serverView, summary, inventory, orders
-	 * TODO: place custom component creation code here
-	 */
+
 	private void createUIComponents() {
 		InventoryComponents();
 		SummaryComponents();
@@ -234,16 +238,36 @@ public class PomAndHoneyGUI extends JFrame {
 		orderPanel.add(order.mainOrderPanel(verticalPanel));
 	}
 
+    /**
+    * Delete a component from a parent and ensure a refresh.
+    */
+    public static void deleteComponent(JComponent parent, JComponent child){
+        parent.remove(child);
+        parent.revalidate();
+        parent.repaint();
+    }
+
+    /**
+    * Refresh a UI component. Should be used after adding or removing components from a panel or frame.
+    */
+    public static void refresh(JComponent c){
+        c.revalidate();
+        c.repaint();
+    }
+
+    /**
+    * Initializes the database and UI
+    */
 	public static void main(String[] args) {
 
 		/*
 		 IMPORTANT NOTES!!!!!!!!
 		 must use to currently run, will prob need to add more stuff later:
 		 window:
-		 javac .\PomAndHoneyGUI.java .\dbConnection.java .\dbSetup.java .\Inventory.java .\GUI.java .\Product.java .\ProductDef.java .\serverView.java .\testGeneration.java .\Item.java .\addItems.java .\Order.java -cp ";forms_rt.jar"
+		 javac .\PomAndHoneyGUI.java .\dbConnection.java .\dbSetup.java .\Inventory.java .\Product.java .\ProductDef.java .\serverView.java .\testGeneration.java .\Item.java .\addItems.java .\Order.java -cp ";forms_rt.jar"
 
 		 Mac
-		 javac ./PomAndHoneyGUI.java ./dbConnection.java ./dbSetup.java ./Inventory.java ./GUI.java ./Product.java ./ProductDef.java ./serverView.java ./testGeneration.java ./Item.java ./addItems.java -cp ./Order.java ":forms_rt.jar"
+		 javac ./PomAndHoneyGUI.java ./dbConnection.java ./dbSetup.java ./Inventory.java ./Product.java ./ProductDef.java ./serverView.java ./testGeneration.java ./Item.java ./addItems.java -cp ./Order.java ":forms_rt.jar"
 
 		 windows
 		 java -cp ".;forms_rt.jar;postgresql-42.2.8.jar" .\PomAndHoneyGUI.java

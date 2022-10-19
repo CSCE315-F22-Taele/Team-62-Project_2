@@ -6,10 +6,10 @@ Change dbSetup.java to contain your username and password.
 
 # Commands to Run
 windows:<br>
-javac .\PomAndHoneyGUI.java .\dbConnection.java .\dbSetup.java .\Inventory.java .\GUI.java .\Product.java .\ProductDef.java .\serverView.java .\testGeneration.java .\Item.java .\Order.java -cp ";forms_rt.jar"
+javac .\PomAndHoneyGUI.java .\dbConnection.java .\dbSetup.java .\Inventory.java .\Product.java .\ProductDef.java .\serverView.java .\testGeneration.java .\Item.java .\Order.java -cp ";forms_rt.jar"
 <br><br>
 Mac/Linux<br>
-javac ./PomAndHoneyGUI.java ./dbConnection.java ./dbSetup.java ./Inventory.java ./GUI.java ./Product.java ./ProductDef.java ./serverView.java ./testGeneration.java ./Item.java ./Order.java -cp ":forms_rt.jar"
+javac ./PomAndHoneyGUI.java ./dbConnection.java ./dbSetup.java ./Inventory.java ./Product.java ./ProductDef.java ./serverView.java ./testGeneration.java ./Item.java ./Order.java -cp ":forms_rt.jar"
 <br><br>
 windows<br>
 java -cp ".;forms_rt.jar;postgresql-42.2.8.jar" .\PomAndHoneyGUI.java
