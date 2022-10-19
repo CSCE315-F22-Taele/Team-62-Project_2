@@ -1,9 +1,14 @@
 import java.util.HashMap;
 import java.sql.*;
 
+/**
+ * This class is used to create all of our test data.
+ */
 public class testGeneration {
-    /*
-     *
+    /**
+     * Creates an array of random integers.
+     * @param size the size of the array to be returned.
+     * @return an array of random integers.
      */
     public static int[] randomItemList(int size) {
         int[] result = new int[size];
@@ -13,8 +18,10 @@ public class testGeneration {
         return result;
     }
 
-    /*
-     *
+    /**
+     * Creates a random array of doubles.
+     * @param size size of the array to be returned.
+     * @return array of random doubles.
      */
     public static double[] randomPortionList(int size) {
         double[] result = new double[size];
@@ -24,8 +31,12 @@ public class testGeneration {
         return result;
     }
 
-    /*
-     *
+    /**
+     * Adds a random product to the database.
+     * @param db current database connection.
+     * @param date date that you want for the order.
+     * @param orderId order ID.
+     * @return the product that was added.
      */
     public static Product addRandomProductToDatabase(dbConnection db, String date, int orderId) {
         ProductDef[] productDefs = db.getProductDefs();
@@ -49,8 +60,11 @@ public class testGeneration {
         return p;
     }
 
-    /*
-     *
+    /**
+     * Adds a random order to the database.
+     * @param db current database connection.
+     * @param date date for the order.
+     * @return the total of the order.
      */
     public static double addRandomOrderToDatabase(dbConnection db, String date){
         // Returns the total price of the order.
@@ -83,8 +97,10 @@ public class testGeneration {
     }
 
 
-    /*
-     *
+    /**
+     * Populates the database with random orders.
+     * @param db current database connection.
+     * @param startDay what day to start adding to the database.
      */
     public static void populateDatabaseWithOrders(dbConnection db, int startDay) {
         testGeneration.addItems(db);
@@ -121,6 +137,11 @@ public class testGeneration {
         }
     }
 
+    /**
+     * Takes the inventory at for the inventory table in the database.
+     * @param db current database connection.
+     * @param date current date.
+     */
     public static void takeInventory(dbConnection db, String date){
         HashMap<Integer, Item> items = db.getItemHashmap();
         for(int i : items.keySet()){
@@ -155,6 +176,10 @@ public class testGeneration {
        // Logger.log("Inventory taken for " + date + ", day ended.");
     }
 
+    /**
+     * Adds the items into the database.
+     * @param db current database connection.
+     */
     public static void addItems(dbConnection db) {
         Logger.log("Resetting Items...");
         try {
@@ -193,6 +218,10 @@ public class testGeneration {
         Logger.log("Items Reset.");
     }
 
+    /**
+     * Adds the productDefs into the database.
+     * @param db current database connection.
+     */
     public static void addProductDefs(dbConnection db) {
         Logger.log("Resetting ProducDefs...");
         try {
