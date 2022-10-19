@@ -75,9 +75,8 @@ public class summaryView{
 		// Get the stock at the given date
 		try {
 			ResultSet size = db.sendCommand("SELECT COUNT(inventory) FROM inventory WHERE date='" + date + "'");
-			int s = size.getInt("count");
-			System.out.println("test: " +s);
-			Double[] temp_quantity = new Double[s];
+			size.next();
+			Double[] temp_quantity = new Double[size.getInt("count")];
 			try {
 				ResultSet data = db.sendCommand("SELECT * FROM inventory WHERE date='" + date + "'");
 				while (data.next()) {
@@ -98,18 +97,19 @@ public class summaryView{
 		//get the current stock
 		try {
 			ResultSet size2 = db.sendCommand("SELECT COUNT(item) FROM item");
+			size2.next();
 			Double[] curr_quantity = new Double[size2.getInt("count")];
 			try {
 				ResultSet data2 = db.sendCommand("SELECT * FROM item ORDER BY id ASC");
 				int l = 0;
 				while (data2.next()) {
 					curr_quantity[l] = (data2.getDouble("quantity"));
-					l += 1;
 					// This is where the less than 10% check happens
 					if (curr_quantity[l] > (quantity[l] * 0.9)) {
 						temp[j] = data2.getString("name");
 						j += 1;
 					}
+					l += 1;
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
