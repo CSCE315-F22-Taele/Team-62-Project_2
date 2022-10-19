@@ -246,7 +246,8 @@ public class PomAndHoneyGUI extends JFrame {
 
 
 	/**
-	 * displays
+	 * displays the order added from the serverView
+	 * can also change the date of the order placed
 	 */
 	private void OrderComponents() {
 		Order order = new Order(db, customPurple, customWhite);
