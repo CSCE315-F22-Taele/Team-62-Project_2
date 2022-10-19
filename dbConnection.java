@@ -3,6 +3,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.math.BigDecimal;
 
+/**
+* Manages the connection to the SQL database, and abstracts various read/write operations.
+*/
 public class dbConnection {
     private Connection conn;
     /**
@@ -30,6 +33,10 @@ public class dbConnection {
         System.out.println("Opened database successfully");
     }
 
+    /**
+    * Pretty-prints a result set.
+    * @param result  The result set to print.
+    */
     public void printResultSet(ResultSet result) throws SQLException {
         // You will need to output the results differently depeninding on which function you use
         System.out.println("--------------------Query Results--------------------");
@@ -98,7 +105,9 @@ public class dbConnection {
     }
 
     /** *
-    * <p>
+    *
+    * This Method allows a new product built up of items to be created which can then be added to individual orders in the database.
+    *
     * @param  name   Name of the product
     * @param  price price of the product
     * @param  itemList   List of items in the product
@@ -201,6 +210,10 @@ public class dbConnection {
         return total;
     }
 
+    /**
+    * Creates a snapshot of all of the items and their current quantities
+    * @param date  the current date.
+    */
     public static void takeInventory(dbConnection db, String date){
         HashMap<Integer, Item> items = db.getItemHashmap();
         for(int i : items.keySet()){
@@ -234,8 +247,12 @@ public class dbConnection {
         }
        // System.out.println("Inventory taken for " + date + ", day ended.");
     }
-    
 
+
+    /**
+    * Builds and returns a hash map representation of items from the database.
+    * Items are mapped by their IDs
+    */
     public HashMap<Integer, Item> getItemHashmap(){
         HashMap<Integer, Item> resultMap = new HashMap<>();
         try {
@@ -250,6 +267,9 @@ public class dbConnection {
         return resultMap;
     }
 
+    /**
+    * Builds and returns an array of product definitions based on the ProductDef table in the database.
+    */
     public ProductDef[] getProductDefs() {
         try {
             ResultSet count = sendCommand("SELECT COUNT(productDef) FROM productDef");
@@ -281,7 +301,7 @@ public class dbConnection {
         return bad_data;
     }
 
-    Double[] bigDecimalArrayToDoubleArray(BigDecimal[] in){
+    private Double[] bigDecimalArrayToDoubleArray(BigDecimal[] in){
         Double[] out = new Double[in.length];
         for(int i=0;i<in.length;i++){
             out[i] = in[i].doubleValue();
@@ -289,6 +309,9 @@ public class dbConnection {
         return out;
     }
 
+    /**
+    * Closes the database connection
+    */
     public void close() {
         try {
             conn.close();
