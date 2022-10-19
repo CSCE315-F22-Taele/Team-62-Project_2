@@ -26,6 +26,12 @@ public class Inventory {
 	Border border = new LineBorder(customPurple, 2);
 	dbConnection db;
 
+	/**
+     * This is the constructor for the inventory class
+     *
+     * @author JP Pham
+     * @param database  Connection to the database
+     */
 	public Inventory(dbConnection database) {
 		db = database;
 		mainFrame = new JFrame("Inventory GUI");
@@ -35,7 +41,14 @@ public class Inventory {
 
 		seasonalMenuItems();
 	}
-
+	/**
+     * This is the constructor for the inventory calss
+     *
+     * @author JP Pham
+     * @param database  Connection to the database
+	 * @param btnBackgroundColor  Background Color
+	 * @param btnForColor  Foreground Color
+     */
 	public Inventory(dbConnection database, Color btnBackgroundColor, Color btnForeColor) {
 		db = database;
 		mainFrame = new JFrame("Inventory GUI");
@@ -56,7 +69,13 @@ public class Inventory {
 		PriceUpdate.setForeground(btnForeColor);
 	}
 
-
+	/**
+     * This creates the main panel for inventory that outputs items and products
+     *
+     * @author Connor Callan
+     * @param verticalPanel  Connection to the database
+	 * @return A jPanel for the inventory results
+     */
 	public JPanel mainInventoryPanel(JPanel verticalPanel) {
 
 		mainPanel = verticalPanel;
@@ -166,6 +185,11 @@ public class Inventory {
     }*/
 
 	//Creates the item panel and generates the content needed
+	/**
+     * This function creates the initiaal values for the items panel
+     *
+     * @author Connor Callan
+     */
 	public void items() {
 		itemPanel = new JPanel();
 		JLabel title = new JLabel("Inventory");
@@ -180,6 +204,11 @@ public class Inventory {
 	}
 
 	//Retrieves every item from the database
+	/**
+     * This allows you to add a new item to the database.
+     *
+     * @author JP Pham
+     */
 	private void seasonalMenuItems() {
 
 		JButton seasonItemBtn = new JButton("Seasonal Menu Items");
@@ -198,7 +227,12 @@ public class Inventory {
 		seasonalItemPanel.add(seasonItemBtn);
 		seasonalItemPanel.add(textSeasonItem);
 	}
-
+	/**
+     * Retrieves the items from the database
+     *
+     * @author Connor Callan
+	 * @return A string with all items in the database and their quantities
+     */
 	public String retrivingDBItems() {
 		String name = "";
 		try {
@@ -214,6 +248,12 @@ public class Inventory {
 		return name;
 	}
 	//Retrieves every product definition from the database
+	/**
+     * Retrieves all products from the database
+     *
+     * @author Connor Callan
+	 * @return A string with the products and their prices.
+     */
 	public String retrivingDBItems2() {
 		String name = "";
 		try {

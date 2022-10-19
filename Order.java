@@ -23,7 +23,13 @@ public class Order {
     String upperDate = "";
 
 	dbConnection db;
-
+	
+	/**
+     * This is the constructor for the Order class
+     *
+     * @author JP Pham
+     * @param database  Connection to the database
+     */
 	public Order(dbConnection database) {
 		db = database;
 		mainFrame = new JFrame("Order GUI");
@@ -31,6 +37,14 @@ public class Order {
 		contentPanel = new JPanel();
 	}
 
+	/**
+     * This is the constructor for the order class
+     *
+     * @author JP Pham
+     * @param database  Connection to the database
+	 * @param btnBackgroundColor  Background color
+	 * @param btnForeColor  Foreground color
+     */
 	public Order(dbConnection database, Color btnBackgroundColor, Color btnForeColor) {
 		db = database;
 		mainFrame = new JFrame("order GUI");
@@ -62,7 +76,13 @@ public class Order {
 		orderUpdate.setForeground(btnForeColor);
 	}
 
-
+	/**
+     * This is the gets the values needed for the order tab
+     *
+     * @author Connor Callan
+     * @param verticalPanel  Main Panel
+	 * @return panel with values for the orders tab
+     */
 	public JPanel mainOrderPanel(JPanel verticalPanel) {
 
 		mainPanel = verticalPanel;
@@ -116,6 +136,14 @@ public class Order {
     }*/
 
     //Retrieves the sales for all orders placed between the two dates by the products sold.
+	/**
+     * This retrieves the data needed for sales within a window of time
+     *
+     * @author Connor Callan
+     * @param lowDate This is the lower bound date
+	 * @param highDate This is the upper bound date
+	 * @return String with the sales info
+     */
     public String retrieveOrders(String lowDate, String highDate){
 		//Get the smallest id on the starting date
 		double price = 0;
@@ -134,6 +162,13 @@ public class Order {
 	}
 
     //Generates the contents of the order panel
+	/**
+     * This retrieves the initial data for the tab.
+     *
+     * @author Connor Callan
+     * @param lowDate This is the lower bound date
+	 * @param highDate This is the upper bound date
+     */
 	public void orders(String lowDate, String highDate) {
 		orderPanel = new JPanel();
 		JLabel title = new JLabel("Orders");
