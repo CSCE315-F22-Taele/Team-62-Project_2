@@ -278,22 +278,25 @@ public class GUI extends JFrame {
 	}
 	//Restock Report 
 	///////////////////////////////////////
-	public String[] restockitems(String restock){
+	public String[] restockitems(){
 
 		int min_restock=2;
+		int j=0;
+		String [] temp = new String [35];
 		try {
 			ResultSet size = db.sendCommand("SELECT COUNT(item) FROM item");
+			size.next();
 			Double[] curr_quantity = new Double[size.getInt("count")];
 			try {
 				ResultSet order_data = db.sendCommand("SELECT * FROM item ORDER BY id ASC");
 				int l = 0;
 				while (order_data.next()) {
-					curr_quantity[l] = (order_data.getDouble("minquantity"));
-					l += 1;
+					curr_quantity[l] = (order_data.getDouble("quantity"));
 					if (curr_quantity[l] > min_restock) {
 						temp[j] = order_data.getString("name");
 						j += 1;
 					}
+					l += 1;
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -301,12 +304,8 @@ public class GUI extends JFrame {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		String[] final_result = new String[j];
-		for (int k = 0; k < j; k += 1) {
-			final_result[k] = temp[k];
-		}
-		return final_result;
+		
+		return temp;
 
 	}
 
