@@ -86,6 +86,8 @@ public class serverView {
         receiptPanel.add(discount);
 
         JButton finalizeButton = new JButton("Finalize Order");
+        finalizeButton.setOpaque(true);
+        finalizeButton.setBorderPainted(false);
         finalizeButton.addActionListener(e -> finalizeOrder());
         finalizeButton.setBackground(customPurple);
         finalizeButton.setForeground(customWhite);

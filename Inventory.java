@@ -179,6 +179,7 @@ public class Inventory {
 		invetoryPanel.add(itemPanel);
 	}
 
+	//Retrieves every item from the database
 	private void seasonalMenuItems() {
 
 		JButton seasonItemBtn = new JButton("Seasonal Menu Items");
