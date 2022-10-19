@@ -9,6 +9,9 @@ import java.awt.GridLayout;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
+/**
+ * The order class contains all methods that retrieve orders, creates panels, and change order date
+ */
 public class Order {
 
 	JPanel orderPanel;
