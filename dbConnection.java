@@ -86,7 +86,7 @@ public class dbConnection {
     public void addItemToDatabase(int id, double quantity, String units, String newItem, int minQuantity) {
         try{
             Statement stmt = conn.createStatement();
-            String sqlStatement = "INSERT INTO item VALUES (" + String.valueOf(id) +"," + String.valueOf(quantity) + "," + "'" + units + "'" + "," + "'" + newItem + "'" + "," + String.valueOf(minQuantity) + "," + "''" + ");";
+            String sqlStatement = "INSERT INTO item VALUES (" + String.valueOf(id) +"," + String.valueOf(quantity) + "," + "'" + units + "'" + "," + "'" + newItem + "'" + "," + String.valueOf(minQuantity) + "," + "'2022-10-18'" + ")";
             ResultSet result = stmt.executeQuery(sqlStatement);
         } catch (Exception e){
             e.printStackTrace();
