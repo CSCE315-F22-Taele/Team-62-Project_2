@@ -278,22 +278,6 @@ public class PomAndHoneyGUI extends JFrame {
     */
 	public static void main(String[] args) {
 
-		/*
-		 IMPORTANT NOTES!!!!!!!!
-		 must use to currently run, will prob need to add more stuff later:
-		 window:
-		 javac .\PomAndHoneyGUI.java .\dbConnection.java .\dbSetup.java .\Inventory.java .\Product.java .\ProductDef.java .\serverView.java .\testGeneration.java .\Item.java .\addItems.java .\Order.java -cp ";forms_rt.jar"
-
-		 Mac
-		 javac ./PomAndHoneyGUI.java ./dbConnection.java ./dbSetup.java ./Inventory.java ./Product.java ./ProductDef.java ./serverView.java ./testGeneration.java ./Item.java ./addItems.java -cp ./Order.java ":forms_rt.jar"
-
-		 windows
-		 java -cp ".;forms_rt.jar;postgresql-42.2.8.jar" .\PomAndHoneyGUI.java
-
-		 mac/linux
-		 java -cp ".:forms_rt.jar:postgresql-42.2.8.jar" ./PomAndHoneyGUI.java
-		 */
-
 		dbConnection db = new dbConnection();
 		db.connect();
 		PomAndHoneyGUI mainFrame = new PomAndHoneyGUI(db);
