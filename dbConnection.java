@@ -92,24 +92,47 @@ public class dbConnection {
 
     /**
      * used for adding new items to the inventory
-     * @param id of new item
      * @param quantity of new item
      * @param units of new item
      * @param newItem the item name being added
      * @param minQuantity  the minimum quantity
      */
-    public void addItemToDatabase(int id, double quantity, String units, String newItem, int minQuantity) {
+    public int addItemToDatabase(double quantity, String units, String newItem, int minQuantity) {
+        int id = 0;
+        try {
+            ResultSet r = sendCommand("SELECT MAX(id) FROM item");
+            r.next();
+            id = r.getInt("max") + 1;
+        } catch (Exception e) {
+            Logger.log(e);
+        }
         try{
             Statement stmt = conn.createStatement();
-            String sqlStatement = "INSERT INTO item VALUES (" + String.valueOf(id) +"," + String.valueOf(quantity) + "," + "'" + units + "'" + "," + "'" + newItem + "'" + "," + String.valueOf(minQuantity) + "," + "'2022-10-18'" + ")";
+            String sqlStatement = "INSERT INTO item VALUES (" + String.valueOf(id) +"," + String.valueOf(quantity) + "," + "'" + units + "'" + "," + "'" + newItem + "'" + "," + String.valueOf(minQuantity) + "," + "'" + currentDate() + "'" + ")";
             int result = stmt.executeUpdate(sqlStatement);
 
         } catch (Exception e){
             Logger.log(e);
-            System.err.println(e.getClass().getName()+": "+e.getMessage());
+        }
+        return id;
+    }
+
+    /**
+    * Given a table with id values, find the next highest ID to assign.
+    */
+    public int findNewId(String table){
+        // Returns the ID of the new product when done.
+        int id = 0;
+        try {
+            ResultSet r = sendCommand("SELECT MAX(id) FROM " + table);
+            r.next();
+            id = r.getInt("max") + 1;
+        } catch (Exception e) {
+            Logger.log(e);
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
-
+        return id;
     }
 
     /** *
@@ -124,16 +147,7 @@ public class dbConnection {
     */
     public int addProductToDatabase(String name, double price, int[] itemList, double[] portionList, String date, int orderId) {
         // Returns the ID of the new product when done.
-        int id = 0;
-        try {
-            ResultSet r = sendCommand("SELECT MAX(id) FROM products");
-            r.next();
-            id = r.getInt("max") + 1;
-        } catch (Exception e) {
-            Logger.log(e);
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
+        int id = findNewId("products");
 
         String cmd = "";
         cmd += id + ", ";
@@ -178,15 +192,7 @@ public class dbConnection {
     public double addOrderToDatabase(int[] productList, double discount, double subtotal, String date) {
         // Returns the total price of the new order when done.
         // Note that SQL Date is formatted as "YYYY-MM-DD"
-        int id = 0;
-        try {
-            ResultSet r = sendCommand("SELECT MAX(id) FROM orders");
-            r.next();
-            id = r.getInt("max") + 1;
-        } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
+        int id = findNewId("orders");
 
         // Apply discounts and then tax.
         double total = subtotal * (1 - discount) * 1.0825;
@@ -315,6 +321,22 @@ public class dbConnection {
             out[i] = in[i].doubleValue();
         }
         return out;
+    }
+
+    /**
+    * Gets the current Date
+    */
+    public String currentDate(){
+        String date = "";
+        try {
+			ResultSet r = sendCommand("SELECT CAST( (SELECT CURRENT_TIMESTAMP) AS Date )");
+			r.next();
+			date = r.getString("current_timestamp");
+		} catch (Exception e) {
+			Logger.log(e);
+			Logger.log(e.getClass().getName() + ": " + e.getMessage());
+		}
+        return date;
     }
 
     /**

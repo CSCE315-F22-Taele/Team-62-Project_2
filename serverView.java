@@ -60,7 +60,10 @@ public class serverView {
         init();
     }
 
-    private void init(){
+    /*
+    * Initializes the server view with the latest values.
+    */
+    public void init(){
         productPanels = new HashMap<>();
         productDataMap = new HashMap<>();
         mainPanel.removeAll();
