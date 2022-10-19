@@ -1,3 +1,7 @@
+///item class made to replicate the exact format that is in our database
+//a new item can be added through the gui with these parameters updating automatically
+//another class made to reference the main class for duplicate items.
+
 public class Item{
     public int id;
     public double quantity;
