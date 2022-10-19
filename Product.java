@@ -1,5 +1,8 @@
 import java.util.HashMap;
 
+/**
+* Contains information about the product entity that mirrors the format stored on the database.
+*/
 public class Product {
     public String name;
     public double price;

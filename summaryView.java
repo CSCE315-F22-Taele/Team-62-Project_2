@@ -8,6 +8,10 @@ import java.awt.*;
 import java.awt.GridLayout;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+
+/**
+ * Maintains the GUI for the Server view.
+ */
 public class summaryView{
     private dbConnection db;
     private JPanel summaryPanel;
@@ -17,6 +21,10 @@ public class summaryView{
 	Color customWhite = new Color(255, 255, 255);
 	String todayDate = "";
 
+	/**
+	 * Constructor for the summaryView class.
+	 * @param db current database connection.
+	 */
     public summaryView(dbConnection db){
         this.db = db;
         mainPanel = new JPanel();
@@ -31,6 +39,9 @@ public class summaryView{
 		}
     }
 
+	/**
+	 * Updates the summaryView page.
+	 */
     public void update(){
         mainPanel.removeAll();
         loadSummaryPanel();
@@ -41,6 +52,9 @@ public class summaryView{
         mainPanel.revalidate();
     }
 
+	/**
+	 * Loads the Pair panel for "What Sales together".
+	 */
     private void loadPairPanel(){
         JPanel pairPanel = new JPanel();
         pairPanel.add(new JLabel("Commmonly Paired Items"));
@@ -65,6 +79,9 @@ public class summaryView{
         mainPanel.add(pairPanel, BorderLayout.CENTER);
     }
 
+	/**
+	 * Loads the panel that shows which items that need to be restocked.
+	 */
 	private void loadRestockPanel(){
         JPanel restockPanel = new JPanel();
         restockPanel.add(new JLabel("Restock Items"));
@@ -83,11 +100,16 @@ public class summaryView{
 		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         restockPanel.add(pane);
-        mainPanel.add(restockPanel, BorderLayout.CENTER);
+        mainPanel.add(restockPanel, BorderLayout.EAST);
     }
 
 	//Restock Report
 	///////////////////////////////////////
+
+	/**
+	 * Queries the database for the items that needs to be restocked.
+	 * @return a string of all the items formatted for the panel that it will be displayed in.
+	 */
 	public String restockitems(){
 
 		int min_restock=2;
@@ -117,6 +139,11 @@ public class summaryView{
 
 	//Excess sales report
 
+	/**
+	 * Finds out which items have only sold less than 10% of their inventory from a certain date to now.
+	 * @param date The start date from when you want to start comparing.
+	 * @return an array of strings where each string is the name of each item.
+	 */
 	public String[] excessSales(String date) {
 		//NOTE for when you're coding: current date is stored in currentDate
 		String[] temp = new String[1000];
@@ -175,7 +202,10 @@ public class summaryView{
 		return final_result;
 	}
 
-
+	/**
+	 * Loads a panel that displays teh excess items.
+	 * @param date the date from which to start comparing.
+	 */
 	private void loadExcessPanel(String date){
         JPanel excessPanel = new JPanel();
 		JButton excessButton = new JButton("Generate Excess");
@@ -210,6 +240,9 @@ public class summaryView{
         mainPanel.add(excessPanel);
     }
 
+	/**
+	 * Loads the panel that displays the summary.
+	 */
     private void loadSummaryPanel(){
         int id = 0;
 		String date = "";

@@ -9,6 +9,9 @@ import java.awt.GridLayout;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
+/**
+Initializes, maintains, and updates the view for the inventory tab. 
+*/
 public class Inventory {
 
 	JPanel itemPanel;
@@ -27,21 +30,6 @@ public class Inventory {
 	dbConnection db;
 
 	/**
-     * This is the constructor for the inventory class
-     *
-     * @author JP Pham
-     * @param database  Connection to the database
-     */
-	public Inventory(dbConnection database) {
-		db = database;
-		mainFrame = new JFrame("Inventory GUI");
-		invetoryPanel = new JPanel();
-		contentPanel = new JPanel();
-		seasonalItemPanel = new JPanel();
-
-		seasonalMenuItems();
-	}
-	/**
      * This is the constructor for the inventory calss
      *
      * @author JP Pham
@@ -55,7 +43,7 @@ public class Inventory {
 		invetoryPanel = new JPanel();
 		contentPanel = new JPanel();
 
-		seasonalItemPanel = new JPanel();
+		seasonalItemPanel = new JPanel(new GridLayout(0, 1));
 		seasonalMenuItems();
 
 		invetoryPanel.setBackground(Color.white);
@@ -173,7 +161,7 @@ public class Inventory {
 
 		mainPanel3 = new JPanel(new BorderLayout());
 		mainPanel3.add(mainPanel2, BorderLayout.EAST);
-		mainPanel3.add(seasonalItemPanel, BorderLayout.NORTH);
+		mainPanel3.add(seasonalItemPanel, BorderLayout.WEST);
 
 		return mainPanel3;
 	}
@@ -203,15 +191,14 @@ public class Inventory {
 		invetoryPanel.add(itemPanel);
 	}
 
-	//Retrieves every item from the database
 	/**
      * This allows you to add a new item to the database.
-     *
+     * Retrieves every item from the database
      * @author JP Pham
      */
 	private void seasonalMenuItems() {
 
-		JButton seasonItemBtn = new JButton("Seasonal Menu Items");
+		JButton seasonItemBtn = new JButton("Add Seasonal Menu Item");
 		seasonItemBtn.setBackground(customPurple);
 		seasonItemBtn.setForeground(Color.white);
 		seasonItemBtn.setOpaque(true);
@@ -219,13 +206,32 @@ public class Inventory {
 		seasonItemBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String newItem = textSeasonItem.getText();
-				db.addItemToDatabase(101, 34.34, "Kg", newItem, 2);
+				String inputText = textSeasonItem.getText();
+                String[] input = inputText.split(" ");
+                String name = "";
+                double price = Double.parseDouble(input[input.length - 2]);
+                int amt = Integer.parseInt(input[input.length - 1]);
+                for(int i=0;i<input.length - 2;i++){
+                    name += input[i];
+                    if(i < input.length - 3){
+                        name += " ";
+                    }
+                }
+
+				int itemId = db.addItemToDatabase(amt, "", name, amt/5);
+                try{
+                    db.sendCommand("INSERT INTO productDef VALUES (" + db.findNewId("productDef") + ", '" + name + "', " + price + ", '{" + itemId + "}', '{1.0}', '{}', '{}')");
+                }
+                catch(Exception ex){
+                    Logger.log(ex);
+                }
 			}
 		});
 
-		seasonalItemPanel.add(seasonItemBtn);
+        seasonalItemPanel.add(new JLabel("Seasonal Items"));
+        seasonalItemPanel.add(new JLabel("Format: <Product Name> <Product Price> <Initial Amount>"));
 		seasonalItemPanel.add(textSeasonItem);
+        seasonalItemPanel.add(seasonItemBtn);
 	}
 	/**
      * Retrieves the items from the database
