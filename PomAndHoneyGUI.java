@@ -101,6 +101,10 @@ public class PomAndHoneyGUI extends JFrame {
 				orderPanel.setVisible(false);
 
                 // changed button colors
+				serverPanel.removeAll();
+				ServerComponents();
+				server.validate();
+				serverPanel.revalidate();
 				btnInventory.setBackground(customPurple);
 				btnInventory.setForeground(customWhite);
 				btnServerView.setBackground(customWhite);
