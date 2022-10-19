@@ -208,7 +208,7 @@ public class Inventory {
 				name += result.getString("name") + "    " + result.getString("quantity") + " units\n";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 			JOptionPane.showMessageDialog(null, "Error accessing Database.");
 		}
 		return name;
@@ -223,7 +223,7 @@ public class Inventory {
 				name += result.getString("name") + "    " + result.getString("price") + "$\n";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 			JOptionPane.showMessageDialog(null, "Error accessing Database.");
 		}
 		return name;

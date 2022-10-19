@@ -63,11 +63,11 @@ public class jdbcpostgreSQL {
 		//Output the result of each query
 		for (int i = 0; i < cmds.length; i++) {
 			String cmd = cmds[i];
-			System.out.println("Executing command: " + cmd);
+			Logger.log("Executing command: " + cmd);
 			try {
 				db.printResultSet(db.sendCommand(cmd));
 			} catch (Exception e) {
-				e.printStackTrace();
+				Logger.log(e);
 			}
 		}
 	}

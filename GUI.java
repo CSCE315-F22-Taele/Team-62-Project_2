@@ -36,7 +36,7 @@ public class GUI extends JFrame {
 			upperDate = currentDate;
 			lowerDate = upperDate;
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 		// create a new frame
@@ -132,12 +132,12 @@ public class GUI extends JFrame {
 				salesToday += r.getDouble("total");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
 
 		// create a new frame
-		//System.out.println(ordersToday + " " + salesToday);
+		//Logger.log(ordersToday + " " + salesToday);
 		String today = "                 TODAY                  \n Revenue: " + salesToday + "       Orders: " + ordersToday + "\n";
 		for (int i = 0; i < 7; i++) {
 			if(date!=""){
@@ -171,7 +171,7 @@ public class GUI extends JFrame {
                 pairs += r.getString("i1") + " & " + r.getString("i2") + ": " + r.getInt("count") + " occurrences\n";
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Logger.log(e);
         }
 		JTextArea contents2 = new JTextArea(pairs);
 		contents2.setEditable(false);
@@ -212,10 +212,10 @@ public class GUI extends JFrame {
 					prevOrders += r.getString("name") + ":       " + r.getDouble("sum")+"$\n";
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				Logger.log(e);
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			}
-		
+
 		return prevOrders;
 	}
 
@@ -239,10 +239,10 @@ public class GUI extends JFrame {
 					i += 1;
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				Logger.log(e);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 		}
 		Double[] quantity = new Double[i];
 		for (int k = 0; k < i; k += 1) {
@@ -265,10 +265,10 @@ public class GUI extends JFrame {
 					}
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				Logger.log(e);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 		}
 		String[] final_result = new String[j];
 		for (int k = 0; k < j; k += 1) {
@@ -276,7 +276,7 @@ public class GUI extends JFrame {
 		}
 		return final_result;
 	}
-	//Restock Report 
+	//Restock Report
 	///////////////////////////////////////
 //	public String[] restockitems(){
 //
@@ -299,10 +299,10 @@ public class GUI extends JFrame {
 //					l += 1;
 //				}
 //			} catch (Exception e) {
-//				e.printStackTrace();
+//				Logger.log(e);
 //			}
 //		} catch (Exception e) {
-//			e.printStackTrace();
+//			Logger.log(e);
 //		}
 //
 //		return temp;
@@ -322,7 +322,7 @@ public class GUI extends JFrame {
 		String prevOrders = retrieveOrders(lowDate,highDate);
 
 		// create a new frame
-		//System.out.println(ordersToday + " " + salesToday);
+		//Logger.log(ordersToday + " " + salesToday);
 		JButton dateUpdate = new JButton("Change dates");
 		JTextField text = new JTextField(10);
 		JTextArea contents = new JTextArea(prevOrders,20,20);
@@ -338,7 +338,7 @@ public class GUI extends JFrame {
 				managerViewOrders.validate();
 				managerViewOrders.revalidate();
 				loadManagerViewOrders(lowerDate,upperDate);
-				
+
 			}
 		});
 		contents.setEditable(false);
@@ -371,7 +371,7 @@ public class GUI extends JFrame {
 	 * switch panel to Summary
 	 */
 	public void switchToManagerViewSummary() {
-		System.out.println("Switching to manager summary");
+		Logger.log("Switching to manager summary");
 		hideAllPanels();
 		loadManagerViewSummary();
 		managerViewSummary.setVisible(true);
@@ -382,7 +382,7 @@ public class GUI extends JFrame {
 	 * switch panel to Orders
 	 */
 	public void switchToManagerViewOrders() {
-		System.out.println("Switching to manager orders");
+		Logger.log("Switching to manager orders");
 		hideAllPanels();
 		loadManagerViewOrders(lowerDate,upperDate);
 		managerViewOrders.setVisible(true);
@@ -393,7 +393,7 @@ public class GUI extends JFrame {
 	 * switch panel to Inventory
 	 */
 	public void switchToManagerViewInventory() {
-		System.out.println("Switching to manager inventory");
+		Logger.log("Switching to manager inventory");
 		hideAllPanels();
 		loadManagerViewInventory();
 		managerViewInventory.setVisible(true);
@@ -408,7 +408,7 @@ public class GUI extends JFrame {
 						result.getString("units") + "\n";
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 			JOptionPane.showMessageDialog(null, "Error accessing Database.");
 		}
 	}

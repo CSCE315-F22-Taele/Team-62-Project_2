@@ -239,7 +239,7 @@ public class serverView {
 			r.next();
 			currentDate = r.getString("current_timestamp");
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.log(e);
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 		}
         try {
