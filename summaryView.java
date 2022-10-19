@@ -119,8 +119,8 @@ public class summaryView{
 
 	public String[] excessSales(String date) {
 		//NOTE for when you're coding: current date is stored in currentDate
-		String[] temp = new String[100];
-		Double[] quantity_holder = new Double[100];
+		String[] temp = new String[1000];
+		Double[] quantity_holder = new Double[1000];
 		int j = 0; //used for iterating through temp array
 		int i = 0; //used for iterating through the quantity array
 		// Get the stock at the given date

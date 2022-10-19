@@ -5,19 +5,45 @@ public class Product {
     public double price;
     private HashMap<Integer, Double> itemsAndPortions = new HashMap<>(); // Maps items to their respective portions.
     public int id = -1;
+
+    /**
+     * This creates a Product object
+     *
+     * @author Kevin
+     * @param name This is the product name
+	 * @param price This is the product price
+     */
     public Product(String name, double price) {
         this.name = name;
         this.price = price;
     }
-
+    /**
+     * This adds an item to a product
+     *
+     * @author Kevin
+     * @param itemID This is the id of item to be added
+	 * @param portionSize This is the portion size of the item
+     */
     public void addItem(int itemID, double portionSize) {
         itemsAndPortions.put(itemID, portionSize);
     }
-
+    /**
+     * This adds removes an item
+     *
+     * @author Kevin
+     * @param itemID This is the id of item to be removed
+     */
     public void removeItem(int itemID){
         itemsAndPortions.remove(itemID);
     }
-
+    /**
+     * This toggles whether an item should be added or removed
+     *
+     * @author Kevin
+     * @param itemID This is the idem of item to be added or removed
+	 * @param portionSize This is the portion size of the item
+     * @param add Whether an item should be added or removed
+     */
     public void toggleItem(int itemID, double portionSize, boolean add){
         if(add){
             addItem(itemID, portionSize);
@@ -26,7 +52,15 @@ public class Product {
             removeItem(itemID);
         }
     }
-
+    /**
+     * This adds an item to a product
+     *
+     * @author Kevin
+     * @param db This is holds the connection to database.
+	 * @param date This is date of the sale
+     * @param orderId Id of order that holds the product
+     * @return Return the id of the added product
+     */
     public int addToDatabase(dbConnection db, String date, int orderId){
         int[] itemList = new int[itemsAndPortions.size()];
         double[] portionList = new double[itemsAndPortions.size()];
