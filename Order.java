@@ -132,16 +132,10 @@ public class Order {
 		return mainPanel2;
 	}
 
-    /*public JPanel mainpriceupdatepanel(JPanel verticalPanel){
 
-
-
-    }*/
-
-    //Retrieves the sales for all orders placed between the two dates by the products sold.
 	/**
      * This retrieves the data needed for sales within a window of time
-     *
+     * Retrieves the sales for all orders placed between the two dates by the products sold.
      * @author Connor Callan
      * @param lowDate This is the lower bound date
 	 * @param highDate This is the upper bound date
@@ -164,10 +158,9 @@ public class Order {
 		return prevOrders;
 	}
 
-    //Generates the contents of the order panel
 	/**
      * This retrieves the initial data for the tab.
-     *
+     * Generates the contents of the order panel
      * @author Connor Callan
      * @param lowDate This is the lower bound date
 	 * @param highDate This is the upper bound date
